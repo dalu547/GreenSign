@@ -1,6 +1,7 @@
-import 'package:GreenSign/project/view/pages/home_page.dart';
+import 'package:GreenSign/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'poc/splashScreen.dart';
+
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -8,10 +9,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: ThemeData(
-          primarySwatch: Colors.green
+          primarySwatch: Colors.blue
         ),
         debugShowCheckedModeBanner: false,
-        home: HomePage()
+        home: SplashScreen()
+
     );
   }
 }

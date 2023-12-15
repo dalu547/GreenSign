@@ -6,9 +6,11 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <application
-        android:label="GreenSign"
+        android:label="DigiSign"
         android:name="${applicationName}"
-        android:icon="@drawable/green_sign_icon">
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:icon="@drawable/app_icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"
