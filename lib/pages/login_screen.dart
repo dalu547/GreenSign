@@ -105,10 +105,10 @@ class _LoginState extends State<LoginScreen> {
                     if(passwordValidationMessage.isEmpty){
                       // isLoading = true;
 
-                      // login(_username, _password);
+                      login(_username, _password);
 
-                      Navigator.push(
-                          context, MaterialPageRoute(builder: (_) => HomePage("")));
+                      // Navigator.push(
+                      //     context, MaterialPageRoute(builder: (_) => HomePage("")));
 
 
                     }else{
@@ -193,7 +193,7 @@ class _LoginState extends State<LoginScreen> {
           prefs.setString("user_id", loginResponse!.data.id);
 
           Navigator.push(
-              context, MaterialPageRoute(builder: (_) => HomePage("")));
+              context, MaterialPageRoute(builder: (_) => HomePage(loginResponse!.data.id)));
 
         } else {
           // Handle invalid or empty JSON response

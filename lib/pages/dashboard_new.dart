@@ -1,11 +1,14 @@
 import 'dart:convert';
 
+import 'package:GreenSign/core/utils/size_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/user_controller.dart';
 import '../../model/envelope_count.dart';
+import '../widgets/emaillist_item_widget.dart';
+import '../widgets/userprofile_item_widget.dart';
 import 'inbox.dart';
 
 class DashBoardNew extends StatefulWidget {
@@ -38,6 +41,7 @@ class _DashBoardState extends State<DashBoardNew> {
     super.initState();
 
     getPrefsData();
+    user_id_prefs = "64cb5370930845c5c4b012c0";
     fetchEnvelopeCount(user_id_prefs);
   }
 
@@ -52,214 +56,94 @@ class _DashBoardState extends State<DashBoardNew> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: Image.asset('assets/images/greenko_logo_grade.png'),
+        automaticallyImplyLeading: false,
         title: Image.asset('assets/images/digisign_title_logo_small.png'),
-        actions: [
-          Image.asset('assets/images/profile_pic.png'),
-        ],
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(10.0),
-                        width: 150,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 1, color: Color(0xFFE2E8F0)),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                    'assets/images/action_required_icon.png'),
-                                SizedBox(width: 16),
-                                Text('$envelopeCount!.data.actionRequired',
-                                    style: TextStyle(fontSize: 24))
-                              ],
-                            ),
-                            SizedBox(height: 4),
-                            Text('Action Required',
-                                style: TextStyle(
-                                    fontSize: 12, color: Color(0xFF64748B)))
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(10.0),
-                        width: 150,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 1, color: Color(0xFFE2E8F0)),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                    'assets/images/waiting_for_others_icon.png'),
-                                SizedBox(width: 16),
-                                Text('$envelopeCount!.data.waitingForOthers',
-                                    style: TextStyle(fontSize: 24))
-                              ],
-                            ),
-                            SizedBox(height: 4),
-                            Text('Waiting for Others',
-                                style: TextStyle(
-                                    fontSize: 12, color: Color(0xFF64748B)))
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(10.0),
-                        width: 150,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 1, color: Color(0xFFE2E8F0)),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset(
-                                    'assets/images/expiring_soon_icon.png'),
-                                SizedBox(width: 16),
-                                Text('$envelopeCount!.data.expiringSoon',
-                                    style: TextStyle(fontSize: 24))
-                              ],
-                            ),
-                            SizedBox(height: 4),
-                            Text('Expiring soon',
-                                style: TextStyle(
-                                    fontSize: 12, color: Color(0xFF64748B)))
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(10.0),
-                        width: 150,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          border:
-                              Border.all(width: 1, color: Color(0xFFE2E8F0)),
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/images/completed_icon.png'),
-                                SizedBox(width: 16),
-                                Text('$envelopeCount!.data.completed',
-                                    style: TextStyle(fontSize: 24))
-                              ],
-                            ),
-                            SizedBox(height: 4),
-                            Text('Completed',
-                                style: TextStyle(
-                                    fontSize: 12, color: Color(0xFF64748B)))
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
+      body: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment(0.5, 0),
+              end: Alignment(0.5, 1),
+              colors: [Colors.deepPurple, Colors.blue],
             ),
-            Container(
-              width: 320,
-              height: 350,
-              padding: EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF725CF8),
-                    Color(0xFF1ED4D4),
-                  ],
+          ),
+          child: Column(
+            children: [
+              SizedBox(height: 16),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: _buildBoxes(context, envelopeCount),
+              ),
+              SizedBox(height: 24),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Recent Activities",
+                    style: TextStyle(fontSize: 24, color: Colors.white),
+                  ),
                 ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/images/envelope_icon.png'),
-                  SizedBox(height: 16),
-                  Text("You have " + '$envelopeCount!.data.actionRequired',
-                      style: TextStyle(fontSize: 24, color: Colors.white)),
-                  Text("Envelopes to finish",
-                      style: TextStyle(fontSize: 24, color: Colors.white)),
-                  SizedBox(height: 16),
-                  Container(
-                      child: Center(
-                    child: isLoading
-                        ? CircularProgressIndicator(
-                            color: Colors.black,
-                          )
-                        : Text(''),
-                  )),
-                  MaterialButton(
-                    color: Colors.white,
-                    minWidth: 200,
-                    height: 40,
-                    elevation: 8,
-                    onPressed: () {
-                      Navigator.push(
-                          context, MaterialPageRoute(builder: (_) => Inbox()));
-                    },
-                    child: Text(
-                      'Open',
-                      style: TextStyle(color: Colors.black, fontSize: 14),
+              SizedBox(height: 8),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: 361,
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                          20.0), // Adjust the radius as needed
-                    ),
-                  )
-                ],
+                    child: _buildRecentActivityList(context),
+                  ),
+                ),
               ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget _buildRecentActivityList(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 16),
+      child: ListView.separated(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        separatorBuilder: (context, index) {
+          return SizedBox(height: 1);
+        },
+        itemCount: 40,
+        itemBuilder: (context, index) {
+          // Replace the following line with your actual widget.
+          return ListTile(
+            title: EmaillistItemWidget(),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildBoxes(BuildContext context, EnvelopeCount? envelopeCount) {
+    return Expanded(
+        child: GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                mainAxisExtent: 109.v,
+                crossAxisCount: 2,
+                mainAxisSpacing: 8.h,
+                crossAxisSpacing: 8.h),
+            physics: BouncingScrollPhysics(),
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return UserprofileItemWidget(envelopeCount);
+            }));
   }
 
   void showModal(BuildContext context) {
@@ -280,6 +164,7 @@ class _DashBoardState extends State<DashBoardNew> {
   }
 
   fetchEnvelopeCount(String userId) async {
+
     setState(() {
       isLoading = true; // Show loading indicator
     });

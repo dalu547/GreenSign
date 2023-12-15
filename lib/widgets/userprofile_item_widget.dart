@@ -1,4 +1,5 @@
 import 'package:GreenSign/core/utils/size_utils.dart';
+import 'package:GreenSign/model/envelope_count.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/utils/image_constant.dart';
@@ -9,29 +10,30 @@ import '../../widgets/custom_image_view.dart';
 
 // ignore: must_be_immutable
 class UserprofileItemWidget extends StatelessWidget {
-  const UserprofileItemWidget({Key? key})
-      : super(
-          key: key,
-        );
+  EnvelopeCount? envelopeCount;
+
+  UserprofileItemWidget(this.envelopeCount);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: 38.h,
-        vertical: 20.v,
-      ),
+      // padding: EdgeInsets.symmetric(
+      //   horizontal: 38.h,
+      //   vertical: 20.v,
+      // ),
       decoration: AppDecoration.outlineIndigo.copyWith(
         borderRadius: BorderRadiusStyle.roundedBorder16,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
             padding: EdgeInsets.only(left: 5.h),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomImageView(
                   imagePath: ImageConstant.imgExclamationCircle,
@@ -45,7 +47,7 @@ class UserprofileItemWidget extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 25.h),
                   child: Text(
-                    "1",
+                    '1',
                     style: CustomTextStyles.displaySmallInter,
                   ),
                 ),

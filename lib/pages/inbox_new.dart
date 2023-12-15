@@ -12,6 +12,8 @@ import '../widgets/emaillist_item_widget.dart';
 import 'envelopedetails_screen.dart';
 
 class InboxNew extends StatefulWidget {
+  InboxNew(String s);
+
   @override
   _InboxState createState() => _InboxState();
 

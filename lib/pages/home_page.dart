@@ -1,30 +1,29 @@
+import 'package:GreenSign/pages/dashboard_new.dart';
 import 'package:GreenSign/pages/reports_web_view.dart';
 import 'package:flutter/material.dart';
 
-import 'dashboard.dart';
-import 'dashboard_screen.dart';
-import 'inbox.dart';
 import 'inbox_new.dart';
 import 'more.dart';
 
 class HomePage extends StatefulWidget {
-  var user_id;
-
+  String user_id;
 
   HomePage(this.user_id);
 
   @override
-  _HomePageState createState() =>
-      _HomePageState();
+  _HomePageState createState() => _HomePageState(user_id);
 }
 
 class _HomePageState extends State {
   int _selectedTab = 0;
+  String user_id = "";
+
+  _HomePageState(this.user_id);
 
   //Dashboard,Inbox,Reports and More.
   List _pages = [
-    DashboardScreen(),
-    InboxNew(),
+    DashBoardNew(""),
+    InboxNew(""),
     ReportsWebView(),
     More(),
   ];
@@ -32,7 +31,6 @@ class _HomePageState extends State {
   _changeTab(int index) {
     setState(() {
       _selectedTab = index;
-
     });
   }
 
@@ -48,32 +46,28 @@ class _HomePageState extends State {
         showSelectedLabels: true,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-              label: 'Home',
-              icon: Image.asset('assets/images/home_inactive.png'),
-              activeIcon: Image.asset('assets/images/home_active.png'),
-            ),
-            BottomNavigationBarItem(
-              label: 'Manage',
-              icon: Image.asset('assets/images/inbox_inactive.png'),
-              activeIcon: Image.asset('assets/images/inbox_active.png'),
-
-            ),
-            BottomNavigationBarItem(
-              label: 'Reports',
-              icon: Image.asset('assets/images/reports_inactive.png'),
-              activeIcon: Image.asset('assets/images/reports_active.png'),
-
-            ),
-            BottomNavigationBarItem(
-                label: 'More',
-                icon: Image.asset('assets/images/more_inactive.png'),
-              activeIcon: Image.asset('assets/images/more_active.png'),
-
-            ),
-
-          ],
+        items: [
+          BottomNavigationBarItem(
+            label: 'Home',
+            icon: Image.asset('assets/images/home_inactive.png'),
+            activeIcon: Image.asset('assets/images/home_active.png'),
+          ),
+          BottomNavigationBarItem(
+            label: 'Manage',
+            icon: Image.asset('assets/images/inbox_inactive.png'),
+            activeIcon: Image.asset('assets/images/inbox_active.png'),
+          ),
+          BottomNavigationBarItem(
+            label: 'Reports',
+            icon: Image.asset('assets/images/reports_inactive.png'),
+            activeIcon: Image.asset('assets/images/reports_active.png'),
+          ),
+          BottomNavigationBarItem(
+            label: 'More',
+            icon: Image.asset('assets/images/more_inactive.png'),
+            activeIcon: Image.asset('assets/images/more_active.png'),
+          ),
+        ],
       ),
     );
   }

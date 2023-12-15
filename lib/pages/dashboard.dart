@@ -33,7 +33,6 @@ class _DashBoardState extends State<DashBoard> {
 
   bool isLoading = false;
 
-
   @override
   void initState() {
     super.initState();

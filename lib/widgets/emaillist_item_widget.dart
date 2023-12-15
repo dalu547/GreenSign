@@ -65,10 +65,10 @@ class EmaillistItemWidget extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          CustomElevatedButton(
-                            width: 80.h,
-                            text: "Waiting for others",
-                          ),
+                          // CustomElevatedButton(
+                          //   width: 80.h,
+                          //   text: "Waiting for others",
+                          // ),
                           Spacer(),
                           Container(
                             height: 4.v,
