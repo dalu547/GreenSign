@@ -1,0 +1,13 @@
+{
+  "status": "SUCCESS",
+  "data": {
+    "message": "Logged in successfully",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgxMDk2NDcsImlhdCI6MTcwMjU1NzM0Nywic3ViIjoicmFqYXJzaGlAdGVzdC5jb20iLCJyb2xlIjoiNjRjNDhmYzI2NzBkM2Y4ZWJkM2YzM2Q3IiwiaXAiOiIxMC44MC4xMy4yOSIsInVzZXJfYWdlbnQiOiJNb3ppbGxhLzUuMCAoTWFjaW50b3NoOyBJbnRlbCBNYWMgT1MgWCAxMF8xNV83KSBBcHBsZVdlYktpdC81MzcuMzYgKEtIVE1MLCBsaWtlIEdlY2tvKSBDaHJvbWUvMTIwLjAuMC4wIFNhZmFyaS81MzcuMzYifQ.VXYPMddT6yFCezBNTSAqqm0QL0Lx0c_8RI0l5bA4Yz4",
+    "type": "Bearer",
+    "id": "64cb5370930845c5c4b012c0",
+    "first_name": "Rajarshi",
+    "last_name": "Rayi",
+    "email": "rajarshi@test.com",
+    "roles": "GS Sender"
+  }
+}

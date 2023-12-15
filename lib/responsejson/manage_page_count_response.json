@@ -1,0 +1,13 @@
+{
+  "status": "SUCCESS",
+  "data": {
+    "inbox": 93,
+    "completed": 14,
+    "sent": 100,
+    "draft": 43,
+    "voided": 0,
+    "expired": 0,
+    "deleted": 61,
+    "declined": 0
+  }
+}
