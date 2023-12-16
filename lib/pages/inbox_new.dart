@@ -1,14 +1,11 @@
 import 'dart:convert';
 
-import 'package:GreenSign/core/utils/size_utils.dart';
+import 'package:GreenSign/core/mock_responses.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../../model/envelope.dart';
 import '../../model/user.dart';
-import '../../theme/app_decoration.dart';
 import '../widgets/emaillist_item_widget.dart';
-import 'envelopedetails_screen.dart';
 
 class InboxNew extends StatefulWidget {
   InboxNew(String s);
@@ -28,13 +25,12 @@ class _InboxState extends State<InboxNew> {
   List<User> _users = [];
 
   List<User> _foundedUsers = [];
+  List<Envelope>? envelopes;
 
   @override
   void initState() {
     super.initState();
-
-    fetchInbox("64cb5370930845c5c4b012c0");
-
+    fetchInbox('64cb5370930845c5c4b012c0');
     setState(() {
       _foundedUsers = _users;
     });
@@ -60,67 +56,67 @@ class _InboxState extends State<InboxNew> {
       body: Center(
         child: Container(
           margin: EdgeInsets.all(10),
-          child: _buildEnvelopeList(context),
+          child: SingleChildScrollView(child: _buildEnvelopeList(context)),
         ),
       ),
     );
   }
 
   Widget _buildEnvelopeList(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.symmetric(horizontal: 16.h),
-        decoration: BoxDecoration(borderRadius: BorderRadiusStyle.roundedBorder10),
+    if (envelopes?.isNotEmpty == true) {
+      return Container(
+        margin: EdgeInsets.symmetric(horizontal: 16),
         child: ListView.separated(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           separatorBuilder: (context, index) {
             return SizedBox(height: 1);
           },
-          itemCount: 10,
+          itemCount: envelopes!.length,
           itemBuilder: (context, index) {
-            return InkWell(
-                onTap: () {
-                  print('Item clicked: $index');
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => EnvelopedetailsScreen()));
-                },
-                //child: EmaillistItemWidget());
-                child: Container());
+            return ListTile(
+              title: EmaillistItemWidget(envelopes![index]),
+            );
           },
-        ));
+        ),
+      );
+    } else {
+      return Offstage();
+    }
   }
 
-  fetchInbox(String user_id) async {
+  fetchInbox(String userId) async {
     setState(() {
-      isLoading = true; // Show loading indicator
+      isLoading = true;
     });
 
     try {
-      final response = await http.get(
-        Uri.parse('http://10.80.13.29:8000/inbox/$user_id'),
-        headers: {'Content-Type': 'application/json'},
-      );
+      // final response = await http.get(
+      //   Uri.parse('http://10.80.13.29:8000/home_page/$userId'),
+      //   headers: {'Content-Type': 'application/json'},
+      // );
+      final response = MockResponses.homePageInboxResponse;
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
+          Map<String, dynamic>? data = jsonResponse['data'];
+          List<dynamic>? resultList = data?['result'];
+          final envelopesList = resultList?.map((approvalJson) => Envelope.fromJson(approvalJson)).toList();
           setState(() {
-            envelope = Envelope.fromJson(jsonResponse);
+            envelopes = envelopesList;
           });
-
-          print(envelope?.documents[0].documentName);
         } else {
-          print('Invalid JSON response');
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
         }
       } else {
-        print('Envelope count failed $response.statusCode');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
       }
     } catch (error) {
       print('Error: $error');
     } finally {
       setState(() {
-        isLoading = false; // Hide loading indicator
+        isLoading = false;
       });
     }
   }

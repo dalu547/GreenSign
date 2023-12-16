@@ -1,6 +1,7 @@
 import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/model/required_approvals.dart';
+import 'package:GreenSign/model/envelope.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../core/utils/image_constant.dart';
 import '../../theme/custom_text_style.dart';
@@ -9,8 +10,8 @@ import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/custom_image_view.dart';
 
 class EmaillistItemWidget extends StatelessWidget {
-  final RequiredApproval requiredApproval;
-  const EmaillistItemWidget(this.requiredApproval);
+  final Envelope envelope;
+  const EmaillistItemWidget(this.envelope);
 
   @override
   Widget build(BuildContext context) {
@@ -35,22 +36,22 @@ class EmaillistItemWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(requiredApproval.recipientName, style: theme.textTheme.titleMedium),
+                        Text(envelope.envelopeName, style: theme.textTheme.titleMedium),
                         Padding(
                           padding: EdgeInsets.only(bottom: 3.v),
-                          child: Text("1d", style: CustomTextStyles.bodyMedium_2),
+                          child: Text(calculateDaysGap(envelope.lastChanged), style: CustomTextStyles.bodyMedium_2),
                         ),
                       ],
                     ),
                     SizedBox(height: 3.v),
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("From: Sandeep K", style: CustomTextStyles.bodyMedium_1)),
+                        child: Text("From: ${envelope.from}", style: CustomTextStyles.bodyMedium_1)),
                     SizedBox(height: 5.v),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomElevatedButton(width: 80.h, text: "Waiting for others"),
+                        CustomElevatedButton(width: 80.h, text: envelope.envelopePrivilegeName),
                         Spacer(),
                         Container(
                           height: 4.v,
@@ -62,7 +63,7 @@ class EmaillistItemWidget extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(2.h),
                             child: LinearProgressIndicator(
-                              value: 0.48,
+                              value: calculatePercentage(envelope.totalSignedDocuments, envelope.totalNumberDocuments),
                               backgroundColor: appTheme.blueGray10001,
                               valueColor: AlwaysStoppedAnimation<Color>(appTheme.greenA700),
                             ),
@@ -70,7 +71,8 @@ class EmaillistItemWidget extends StatelessWidget {
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 8.h, top: 6.v, bottom: 4.v),
-                          child: Text("1/3", style: theme.textTheme.bodySmall),
+                          child: Text('${envelope.totalSignedDocuments}/${envelope.totalNumberDocuments}',
+                              style: theme.textTheme.bodySmall),
                         ),
                       ],
                     ),
@@ -90,5 +92,19 @@ class EmaillistItemWidget extends StatelessWidget {
         Align(alignment: Alignment.centerRight, child: Divider(indent: 48.h)),
       ],
     );
+  }
+
+  String calculateDaysGap(String dateString) {
+    DateTime lastChangedDateTime = DateFormat("dd-MMM-yyyy HH:mm:ss").parse(dateString);
+    DateTime currentDate = DateTime.now();
+    Duration difference = currentDate.difference(lastChangedDateTime);
+    int daysGap = difference.inDays;
+    return '$daysGap d';
+  }
+
+  double calculatePercentage(int totalSignedDocuments, int totalNumberDocuments) {
+    final value = (totalSignedDocuments / totalNumberDocuments);
+    print('value: $value, $totalSignedDocuments, $totalNumberDocuments');
+    return value;
   }
 }

@@ -15,7 +15,7 @@ String envelopeCountToJson(Envelope data) => json.encode(data.toJson());
 class Envelope {
   String id;
   String envelopeId;
-  String orderId;
+  int orderId;
   String userId;
   String envelopeName;
   String groupId;

@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 Document documentFromJson(String str) => Document.fromJson(json.decode(str));
@@ -9,7 +8,7 @@ class Document {
   String id;
   String documentName;
   String document;
-  Cordinates cordinates;
+  //Cordinates cordinates;
   String timestamp;
   bool signature;
   bool status;
@@ -18,31 +17,31 @@ class Document {
     required this.id,
     required this.documentName,
     required this.document,
-    required this.cordinates,
+    //required this.cordinates,
     required this.timestamp,
     required this.signature,
     required this.status,
   });
 
   factory Document.fromJson(Map<String, dynamic> json) => Document(
-    id: json["_id"],
-    documentName: json["document_name"],
-    document: json["document"],
-    cordinates: Cordinates.fromJson(json["cordinates"]),
-    timestamp: json["timestamp"],
-    signature: json["signature"],
-    status: json["status"],
-  );
+        id: json["_id"],
+        documentName: json["document_name"],
+        document: json["document"],
+        //cordinates: Cordinates.fromJson(json["cordinates"]),
+        timestamp: json["timestamp"],
+        signature: json["signature"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "_id": id,
-    "document_name": documentName,
-    "document": document,
-    "cordinates": cordinates.toJson(),
-    "timestamp": timestamp,
-    "signature": signature,
-    "status": status,
-  };
+        "_id": id,
+        "document_name": documentName,
+        "document": document,
+        //"cordinates": cordinates.toJson(),
+        "timestamp": timestamp,
+        "signature": signature,
+        "status": status,
+      };
 }
 
 class Cordinates {
@@ -61,18 +60,18 @@ class Cordinates {
   });
 
   factory Cordinates.fromJson(Map<String, dynamic> json) => Cordinates(
-    x: json["x"]?.toDouble(),
-    y: json["y"]?.toDouble(),
-    page: json["page"],
-    x1: json["x1"]?.toDouble(),
-    y1: json["y1"]?.toDouble(),
-  );
+        x: json["x"]?.toDouble(),
+        y: json["y"]?.toDouble(),
+        page: json["page"],
+        x1: json["x1"]?.toDouble(),
+        y1: json["y1"]?.toDouble(),
+      );
 
   Map<String, dynamic> toJson() => {
-    "x": x,
-    "y": y,
-    "page": page,
-    "x1": x1,
-    "y1": y1,
-  };
+        "x": x,
+        "y": y,
+        "page": page,
+        "x1": x1,
+        "y1": y1,
+      };
 }

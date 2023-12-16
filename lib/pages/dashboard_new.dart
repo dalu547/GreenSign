@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:GreenSign/core/mock_responses.dart';
 import 'package:GreenSign/core/utils/size_utils.dart';
+import 'package:GreenSign/model/envelope.dart';
 import 'package:GreenSign/model/required_approvals.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,7 +29,7 @@ class _DashBoardState extends State<DashBoardNew> {
   _DashBoardState(this.user_id);
 
   EnvelopeCount? envelopeCount;
-  List<RequiredApproval>? requiredApprovals;
+  List<Envelope>? envelopes;
 
   bool isLoading = false;
 
@@ -108,7 +109,7 @@ class _DashBoardState extends State<DashBoardNew> {
   }
 
   Widget _buildRecentActivityList(BuildContext context) {
-    if (requiredApprovals?.isNotEmpty == true) {
+    if (envelopes?.isNotEmpty == true) {
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 16),
         child: ListView.separated(
@@ -117,10 +118,10 @@ class _DashBoardState extends State<DashBoardNew> {
           separatorBuilder: (context, index) {
             return SizedBox(height: 1);
           },
-          itemCount: requiredApprovals!.length,
+          itemCount: envelopes!.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: EmaillistItemWidget(requiredApprovals![index]),
+              title: EmaillistItemWidget(envelopes![index]),
             );
           },
         ),
@@ -215,18 +216,9 @@ class _DashBoardState extends State<DashBoardNew> {
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
           Map<String, dynamic>? data = jsonResponse['data'];
           List<dynamic>? resultList = data?['result'];
-          List<dynamic>? requiredApprovalsData =
-              resultList?.isNotEmpty == true ? resultList![0]['required_approvals'] : null;
-          if (requiredApprovalsData != null) {
-            requiredApprovals =
-                requiredApprovalsData.map((approvalJson) => RequiredApproval.fromJson(approvalJson)).toList();
-            print('requiredApprovals: $requiredApprovals');
-          }
-
-          print('Envelope count successful');
-          print(jsonResponse);
+          final envelopesList = resultList?.map((approvalJson) => Envelope.fromJson(approvalJson)).toList();
           setState(() {
-            envelopeCount = EnvelopeCount.fromJson(jsonResponse);
+            envelopes = envelopesList;
           });
           print(envelopeCount?.data.completed);
         } else {
