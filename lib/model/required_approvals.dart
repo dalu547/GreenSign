@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'dart:ffi';
 
 RequiredApproval requiredApprovalFromJson(String str) => RequiredApproval.fromJson(json.decode(str));
 
@@ -10,7 +11,7 @@ class RequiredApproval {
   String recipientName;
   String recipientTitle;
   String recipientEmail;
-  String orderId;
+  int orderId;
   String recipientPrivilegeId;
   String recipientPrivilegeName;
   String recipientLastTimestamp;

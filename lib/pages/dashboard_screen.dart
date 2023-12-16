@@ -93,10 +93,7 @@ class _DashBoardState extends State<DashBoardScreen> {
         },
         itemCount: 40,
         itemBuilder: (context, index) {
-          // Replace the following line with your actual widget.
-          return ListTile(
-            title: EmaillistItemWidget(),
-          );
+         // return ListTile(title: EmaillistItemWidget());
         },
       ),
     );
@@ -107,25 +104,21 @@ class _DashBoardState extends State<DashBoardScreen> {
         child: GridView.builder(
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisExtent: 109.v,
-                crossAxisCount: 2,
-                mainAxisSpacing: 8.h,
-                crossAxisSpacing: 8.h),
+                mainAxisExtent: 109.v, crossAxisCount: 2, mainAxisSpacing: 8.h, crossAxisSpacing: 8.h),
             physics: BouncingScrollPhysics(),
             itemCount: 4,
             itemBuilder: (context, index) {
-              return UserprofileItemWidget(envelopeCount);
+              return UserprofileItemWidget(envelopeCount, index);
             }));
   }
 
-  /// Navigates to the manageenvelopeScreen when the action is triggered.
   onTapManage(BuildContext context) {
     // Navigator.pushNamed(context, AppRoutes.manageenvelopeScreen);
   }
 
   fetchEnvelopeCount(String userId) async {
     setState(() {
-      isLoading = true; // Show loading indicator
+      isLoading = true;
     });
 
     try {
@@ -135,12 +128,8 @@ class _DashBoardState extends State<DashBoardScreen> {
       );
 
       if (response.statusCode == 200) {
-        // If the server did return a 200 OK response,
-        // then parse the JSON.
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
-          // Successful login
-          // You can handle the response here (e.g., store tokens, navigate to the next screen)
           print('Envelope count successful');
           print(jsonResponse);
 
@@ -150,26 +139,18 @@ class _DashBoardState extends State<DashBoardScreen> {
 
           print(envelopeCount?.data.completed);
         } else {
-          // Handle invalid or empty JSON response
           print('Invalid JSON response');
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
         }
       } else {
-        // If the server did not return a 200 OK response,
-        // then throw an exception.
-        // Failed login
-        // Handle error here (e.g., show an error message)
         print('Envelope count failed $response.statusCode');
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
       }
     } catch (error) {
-      // Handle network or other errors here
       print('Error: $error');
     } finally {
       setState(() {
-        isLoading = false; // Hide loading indicator
+        isLoading = false;
       });
     }
   }

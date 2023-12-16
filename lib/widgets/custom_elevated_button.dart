@@ -1,4 +1,3 @@
-import 'package:GreenSign/core/utils/size_utils.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/theme_helper.dart';
@@ -32,24 +31,20 @@ class CustomElevatedButton extends BaseButton {
         );
 
   final BoxDecoration? decoration;
-
   final Widget? leftIcon;
-
   final Widget? rightIcon;
 
   @override
   Widget build(BuildContext context) {
-    return alignment != null
-        ? Align(
-            alignment: alignment ?? Alignment.center,
-            child: buildElevatedButtonWidget,
-          )
-        : buildElevatedButtonWidget;
+    return Align(
+      alignment: alignment ?? Alignment.center,
+      child: buildElevatedButtonWidget,
+    );
   }
 
   Widget get buildElevatedButtonWidget => Container(
-        height: this.height ?? 26.v,
-        width: this.width ?? double.maxFinite,
+        width: 130,
+        height: 35,
         margin: margin,
         decoration: decoration,
         child: ElevatedButton(
@@ -59,12 +54,14 @@ class CustomElevatedButton extends BaseButton {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              leftIcon ?? const SizedBox.shrink(),
-              Text(
-                text,
-                style: buttonTextStyle ?? theme.textTheme.labelLarge,
+              leftIcon ?? Padding(padding: EdgeInsets.zero),
+              Expanded(
+                child: Text(
+                  text,
+                  style: buttonTextStyle ?? theme.textTheme.labelLarge?.copyWith(color: Colors.black),
+                ),
               ),
-              rightIcon ?? const SizedBox.shrink(),
+              rightIcon ?? Padding(padding: EdgeInsets.zero),
             ],
           ),
         ),

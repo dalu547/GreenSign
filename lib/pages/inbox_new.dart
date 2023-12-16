@@ -2,11 +2,10 @@ import 'dart:convert';
 
 import 'package:GreenSign/core/utils/size_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../../model/envelope.dart';
 import '../../model/user.dart';
-import 'package:http/http.dart' as http;
-
 import '../../theme/app_decoration.dart';
 import '../widgets/emaillist_item_widget.dart';
 import 'envelopedetails_screen.dart';
@@ -43,9 +42,7 @@ class _InboxState extends State<InboxNew> {
 
   onSearch(String search) {
     setState(() {
-      _foundedUsers = _users
-          .where((user) => user.name.toLowerCase().contains(search))
-          .toList();
+      _foundedUsers = _users.where((user) => user.name.toLowerCase().contains(search)).toList();
     });
   }
 
@@ -72,8 +69,7 @@ class _InboxState extends State<InboxNew> {
   Widget _buildEnvelopeList(BuildContext context) {
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 16.h),
-        decoration:
-            BoxDecoration(borderRadius: BorderRadiusStyle.roundedBorder10),
+        decoration: BoxDecoration(borderRadius: BorderRadiusStyle.roundedBorder10),
         child: ListView.separated(
           physics: NeverScrollableScrollPhysics(),
           shrinkWrap: true,
@@ -84,15 +80,11 @@ class _InboxState extends State<InboxNew> {
           itemBuilder: (context, index) {
             return InkWell(
                 onTap: () {
-                  // Handle item click here
                   print('Item clicked: $index');
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (_) => EnvelopedetailsScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => EnvelopedetailsScreen()));
                 },
-                child: EmaillistItemWidget());
+                //child: EmaillistItemWidget());
+                child: Container());
           },
         ));
   }
@@ -109,37 +101,22 @@ class _InboxState extends State<InboxNew> {
       );
 
       if (response.statusCode == 200) {
-        // If the server did return a 200 OK response,
-        // then parse the JSON.
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
-          // Successful login
-          // You can handle the response here (e.g., store tokens, navigate to the next screen)
-          print('get inbox successful');
-          print(jsonResponse);
-
           setState(() {
             envelope = Envelope.fromJson(jsonResponse);
           });
 
           print(envelope?.documents[0].documentName);
         } else {
-          // Handle invalid or empty JSON response
           print('Invalid JSON response');
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
         }
       } else {
-        // If the server did not return a 200 OK response,
-        // then throw an exception.
-        // Failed login
-        // Handle error here (e.g., show an error message)
         print('Envelope count failed $response.statusCode');
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
       }
     } catch (error) {
-      // Handle network or other errors here
       print('Error: $error');
     } finally {
       setState(() {
