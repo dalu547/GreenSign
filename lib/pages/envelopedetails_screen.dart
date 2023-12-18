@@ -1,4 +1,5 @@
 import 'package:GreenSign/model/document.dart';
+import 'package:GreenSign/model/required_approvals.dart';
 import 'package:GreenSign/pages/web_view.dart';
 import 'package:flutter/material.dart';
 
@@ -97,7 +98,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                                   Padding(
                                       padding: EdgeInsets.only(
                                           left: 8.h, top: 4.v, bottom: 2.v),
-                                      child: Text("Action Required",
+                                      child: Text(envelope!.envelopeStatusType,
                                           style: CustomTextStyles
                                               .bodyMediumBlack900))
                                 ])),
@@ -110,9 +111,20 @@ class EnvelopedetailsScreen extends StatelessWidget {
                                     style: theme.textTheme.titleMedium)),
                             SizedBox(height: 8.v),
                             // _buildDescription(context),
-                            Text(
-                                "Last changed by Full Name\nLast change on 7/3/2023 | 09:44:40 am\nSent on 6/30/2023 | 04:02:23 pm\nExpiring on\r11/21/2023 | 09:44:40 am"),
-                            SizedBox(height: 33.v),
+                            // "Last changed by Full Name\nLast change on 7/3/2023 | 09:44:40 am\nSent on 6/30/2023 | 04:02:23 pm\nExpiring on\r11/21/2023 | 09:44:40 am"),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Last changed by "+envelope!.lastChangedBy)),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Last change on "+envelope!.lastChanged)),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Sent on "+envelope!.sentOn)),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text("Expiring on "+envelope!.expiringOn)),
+                            SizedBox(height: 20.v),
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text("Documents",
@@ -120,7 +132,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                                         CustomTextStyles.titleMediumOnPrimary)),
                             SizedBox(height: 11.v),
                             _buildDocsList(context, envelope!.documents),
-                            SizedBox(height: 34.v),
+                            SizedBox(height: 20.v),
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text("Recipients",
@@ -160,9 +172,9 @@ class EnvelopedetailsScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildNeedToSign(BuildContext context) {
     return CustomElevatedButton(
-        width: 91.h,
-        text: "Need to Sign",
-        margin: EdgeInsets.symmetric(vertical: 12.v),
+        width: 80.h,
+        text: envelope!.statusName,
+        margin: EdgeInsets.only(left: 16.h),
         buttonStyle: CustomButtonStyles.fillBlueGray);
   }
 
@@ -170,7 +182,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
   Widget _buildSign(BuildContext context) {
     return CustomElevatedButton(
         height: 50.v,
-        width: 121.h,
+        width: 100.h,
         text: "Sign",
         margin: EdgeInsets.only(left: 16.h),
         buttonStyle: CustomButtonStyles.fillLightBlueA,
@@ -196,13 +208,16 @@ class EnvelopedetailsScreen extends StatelessWidget {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(2.h),
                   child: LinearProgressIndicator(
-                      value: 0.48,
+                      value: calculatePercentage(envelope!.totalSignedDocuments,
+                          envelope!.totalNumberDocuments),
                       backgroundColor: appTheme.blueGray10001,
                       valueColor:
                           AlwaysStoppedAnimation<Color>(appTheme.greenA700))))),
       Padding(
           padding: EdgeInsets.only(left: 8.h, top: 18.v, bottom: 15.v),
-          child: Text("1/3", style: theme.textTheme.bodyMedium)),
+          child: Text(
+              '${envelope?.totalSignedDocuments}/${envelope?.totalNumberDocuments}',
+              style: theme.textTheme.bodyMedium)),
       _buildSign(context)
     ]);
   }
@@ -232,10 +247,10 @@ class EnvelopedetailsScreen extends StatelessWidget {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: ListrowItemWidget(documents![index]),
+                title: ListrowItemWidget(documents![index],envelope),
                 onTap: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => WebView()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
                 },
               );
             }));
@@ -254,10 +269,10 @@ class EnvelopedetailsScreen extends StatelessWidget {
             itemCount: 4,
             itemBuilder: (context, index) {
               return ListTile(
-                title: _buildFrameEightySeven(context),
+                title: _buildFrameEightySeven(context,index,envelope.requiredApprovals.elementAt(index)),
                 onTap: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => WebView()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
                 },
               );
             }));
@@ -279,7 +294,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                   width: 283.h,
                   margin: EdgeInsets.only(left: 8.h, top: 2.v),
                   child: Text(
-                      "Envelope is with Kiran R and he/she needs to sign.",
+                      "Envelope is with "+ envelope!.lastChangedBy+" and he/she needs to sign.",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: CustomTextStyles.bodyLargeLightblue600)))
@@ -287,11 +302,11 @@ class EnvelopedetailsScreen extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildFrameEightySeven(BuildContext context) {
+  Widget _buildFrameEightySeven(BuildContext context, int index, RequiredApproval reciepient) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
           padding: EdgeInsets.only(top: 53.v, bottom: 52.v),
-          child: Text("1", style: CustomTextStyles.bodyMediumBluegray90001)),
+          child: Text((index+1).toString(), style: CustomTextStyles.bodyMediumBluegray90001)),
       Expanded(
           child: Container(
               margin: EdgeInsets.only(left: 18.h),
@@ -299,7 +314,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                   .copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
               child: Row(children: [
                 Container(
-                    height: 120.v,
+                    height: 80.v,
                     width: 8.h,
                     decoration: BoxDecoration(
                         color: appTheme.blueGray900,
@@ -309,10 +324,10 @@ class EnvelopedetailsScreen extends StatelessWidget {
                     padding:
                         EdgeInsets.only(left: 16.h, top: 11.v, bottom: 11.v),
                     child: _buildFrameSeventyOne(context,
-                        userName: "Ramesh K",
-                        email: "ramesh.k@greenkogroup.com",
-                        needsToSign: "Needs to Sign",
-                        price: "Signed on 7/1/2023 | 09:44:40 am"))
+                        userName: reciepient.recipientName,
+                        email: reciepient.recipientEmail,
+                        needsToSign: reciepient.recipientPrivilegeName,
+                        price: "Signed on "+reciepient.recipientLastTimestamp))
               ])))
     ]);
   }
@@ -355,6 +370,14 @@ class EnvelopedetailsScreen extends StatelessWidget {
   onTapSign(BuildContext context) {
     // Navigator.pushNamed(context, AppRoutes.documentviewScreen);
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) => WebView()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
+  }
+
+  double calculatePercentage(
+      int totalSignedDocuments, int totalNumberDocuments) {
+    final value = (totalSignedDocuments / totalNumberDocuments);
+    print('value: $value, $totalSignedDocuments, $totalNumberDocuments');
+    return value;
   }
 }

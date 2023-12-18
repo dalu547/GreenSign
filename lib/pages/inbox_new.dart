@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:GreenSign/core/mock_responses.dart';
 import 'package:GreenSign/pages/envelopedetails_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../../model/envelope.dart';
 import '../../model/profile.dart';
@@ -19,6 +21,8 @@ class InboxNew extends StatefulWidget {
 
 class _InboxState extends State<InboxNew> {
   int _currentIndex = 1;
+  String user_id_prefs = "";
+
   Envelope? envelope;
 
   bool isLoading = false;
@@ -31,9 +35,22 @@ class _InboxState extends State<InboxNew> {
   @override
   void initState() {
     super.initState();
-    fetchInbox('64cb5370930845c5c4b012c0');
+
+    getData();
     setState(() {
       _foundedUsers = _users;
+    });
+  }
+
+  void getData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id_prefs = prefs.getString('user_id')!;
+    print('user id from getData ${user_id_prefs}');
+    fetchInbox(user_id_prefs);
+
+    setState(() {
+      user_id_prefs = prefs.getString('user_id')!;
+      print('user id from getPrefsData setState ${user_id_prefs}');
     });
   }
 

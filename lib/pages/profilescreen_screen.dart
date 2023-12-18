@@ -12,6 +12,7 @@ import '../../theme/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../core/mock_responses.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilescreenScreen extends StatefulWidget {
   String user_id;
@@ -28,6 +29,7 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
   _ProfilescreenScreenState(String user_id);
 
   bool isLoading = false;
+  String user_id_prefs = "";
 
   Profile? profile;
 
@@ -37,8 +39,19 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
   void initState() {
     super.initState();
 
-    String user_id_prefs = "64cb5370930845c5c4b012c0";
+    getData();
+  }
+
+  void getData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id_prefs = prefs.getString('user_id')!;
+    print('user id from getData ${user_id_prefs}');
     fetchProfileData(user_id_prefs);
+
+    setState(() {
+      user_id_prefs = prefs.getString('user_id')!;
+      print('user id from getPrefsData setState ${user_id_prefs}');
+    });
   }
 
   @override
@@ -70,7 +83,8 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
                     // ),
                     CachedNetworkImage(
                       imageUrl: profile!.data.user.profile_image,
-                      placeholder: (context, url) => CircularProgressIndicator(),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                     SizedBox(height: 8.v),

@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WebView extends StatefulWidget {
+  String envelope_id = "";
+
+  WebView(this.envelope_id);
+
   @override
-  _WebviewState createState() => _WebviewState();
+  _WebviewState createState() => _WebviewState(envelope_id);
 }
 
 class _WebviewState extends State<WebView> {
@@ -11,9 +16,32 @@ class _WebviewState extends State<WebView> {
   var loadingPercentage = 0;
   bool isLoading = false;
 
+  String envelope_id = "";
+
+  _WebviewState(this.envelope_id);
+
   @override
   void initState() {
     super.initState();
+
+    getData();
+
+  }
+
+
+  Future<void> getData() async {
+    super.initState();
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String user_id_prefs = prefs.getString('user_id')!;
+
+    String web_url =
+        "http://10.80.16.166:4200/recipient-docs-list?envelope_id=" +
+            envelope_id +
+            "&sender_id=" +
+            user_id_prefs;
+    print("Web url in webview: " + web_url);
+    // 'http://10.80.16.166:4200/recipient-docs-list?envelope_id=656f1074e9be6c5ebec0d646&sender_id=64cb5370930845c5c4b012c0'),
 
     controller = WebViewController()
       ..setNavigationDelegate(NavigationDelegate(
@@ -21,20 +49,20 @@ class _WebviewState extends State<WebView> {
           _setLocalStorageItem();
           setState(() {
             loadingPercentage = 0;
-            isLoading =  true;
+            isLoading = true;
           });
         },
         onProgress: (progress) {
           setState(() {
             loadingPercentage = progress;
-            isLoading =  true;
+            isLoading = true;
             print('onProgress');
           });
         },
         onPageFinished: (url) {
           setState(() {
             loadingPercentage = 100;
-            isLoading =  false;
+            isLoading = false;
 
             print('onPageFinished');
 
@@ -63,8 +91,7 @@ class _WebviewState extends State<WebView> {
       ..loadRequest(
         // Uri.parse('http://10.80.16.166:4200/recipient-docs-list?envelope_id=655b2dfa556a19a9ccfa2c38&sender_id=64cb5370930845c5c4b012c0'),
         // Uri.parse('https://flutter.dev/'),
-        Uri.parse(
-            'http://10.80.16.166:4200/recipient-docs-list?envelope_id=656f1074e9be6c5ebec0d646&sender_id=64cb5370930845c5c4b012c0'),
+        Uri.parse(web_url),
       );
   }
 

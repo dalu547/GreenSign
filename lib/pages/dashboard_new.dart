@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:GreenSign/core/mock_responses.dart';
 import 'package:GreenSign/core/utils/size_utils.dart';
 import 'package:GreenSign/model/envelope.dart';
-import 'package:GreenSign/model/required_approvals.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
