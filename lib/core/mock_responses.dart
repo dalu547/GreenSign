@@ -34,6 +34,39 @@ class MockResponses {
     return http.Response(response, 200, headers: {'content-type': 'application/json'});
   }
 
+
+  static http.Response get profileResponse {
+    const response = '''{
+  "status": "SUCCESS",
+  "data": {
+    "message": "Retrieved successfully",
+    "user": {
+      "_id": "64cb5370930845c5c4b012c0",
+      "role_id": "64c48fc2670d3f8ebd3f33d7",
+      "first_name": "Rajarshi",
+      "last_name": "Rayi",
+      "email_address": "rajarshi@test.com",
+      "digital_signature": "http://10.80.13.29:8000/load_image/profile_signatures/65389f97072ea03ea6fa5c6a.jpg",
+      "profile_image": "http://10.80.13.29:8000/load_image/profile_pic/655ee34c3906161b692cec29.jpg",
+      "company": " Greenko",
+      "title": "Developer",
+      "address": "KPHB COLANY",
+      "landline": "",
+      "country_code": "+91",
+      "mobile": "9182323695",
+      "desk_number": "5F-WS-004",
+      "status": true,
+      "timestamp": "2023-08-03T12:38:48.556000",
+      "deleted": false,
+      "id": "64cb5370930845c5c4b012c0",
+      "role_name": "GS Sender"
+    }
+  }
+}
+    ''';
+    return http.Response(response, 200, headers: {'content-type': 'application/json'});
+  }
+
   static http.Response get homePageInboxResponse {
     const response = '''{
   "status": "SUCCESS",

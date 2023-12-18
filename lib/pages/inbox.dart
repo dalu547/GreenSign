@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../model/envelope.dart';
-import '../../model/user.dart';
+import '../../model/profile.dart';
 import 'package:http/http.dart' as http;
 
 class Inbox extends StatefulWidget {
@@ -37,7 +37,7 @@ class _InboxState extends State<Inbox> {
   onSearch(String search) {
     setState(() {
       _foundedUsers = _users
-          .where((user) => user.name.toLowerCase().contains(search))
+          .where((user) => user.first_name.toLowerCase().contains(search))
           .toList();
     });
   }

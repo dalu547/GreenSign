@@ -5,7 +5,7 @@ import 'package:GreenSign/pages/envelopedetails_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/envelope.dart';
-import '../../model/user.dart';
+import '../../model/profile.dart';
 import '../widgets/emaillist_item_widget.dart';
 
 class InboxNew extends StatefulWidget {
@@ -40,7 +40,7 @@ class _InboxState extends State<InboxNew> {
   onSearch(String search) {
     setState(() {
       _foundedUsers = _users
-          .where((user) => user.name.toLowerCase().contains(search))
+          .where((user) => user.first_name.toLowerCase().contains(search))
           .toList();
     });
   }
