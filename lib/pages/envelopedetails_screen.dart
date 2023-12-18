@@ -314,7 +314,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                   .copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
               child: Row(children: [
                 Container(
-                    height: 80.v,
+                    height: 120.v,
                     width: 8.h,
                     decoration: BoxDecoration(
                         color: appTheme.blueGray900,
