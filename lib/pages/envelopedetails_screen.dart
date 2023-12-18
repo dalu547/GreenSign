@@ -266,10 +266,10 @@ class EnvelopedetailsScreen extends StatelessWidget {
             separatorBuilder: (context, index) {
               return SizedBox(height: 1.v);
             },
-            itemCount: 4,
+            itemCount: envelope!.totalNumberRecipients,
             itemBuilder: (context, index) {
               return ListTile(
-                title: _buildFrameEightySeven(context,index,envelope.requiredApprovals.elementAt(index)),
+                title: _buildFrameEightySeven(context,index,envelope!.requiredApprovals.elementAt(index)),
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
