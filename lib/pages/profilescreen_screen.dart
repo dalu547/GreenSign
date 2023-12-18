@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:GreenSign/model/profile.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/utils/image_constant.dart';
@@ -59,13 +60,18 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
                 child: Column(
                   children: [
                     SizedBox(height: 16.v),
-                    CustomImageView(
-                      imagePath: ImageConstant.imgProfilepic21,
-                      height: 88.adaptSize,
-                      width: 88.adaptSize,
-                      radius: BorderRadius.circular(
-                        44.h,
-                      ),
+                    // CustomImageView(
+                    //   imagePath: ImageConstant.imgProfilepic21,
+                    //   height: 88.adaptSize,
+                    //   width: 88.adaptSize,
+                    //   radius: BorderRadius.circular(
+                    //     44.h,
+                    //   ),
+                    // ),
+                    CachedNetworkImage(
+                      imageUrl: profile!.data.user.profile_image,
+                      placeholder: (context, url) => CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
                     ),
                     SizedBox(height: 8.v),
                     Text(
@@ -114,9 +120,14 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(height: 2.v),
-          Text(
-            profile!.data.user.first_name,
-            style: theme.textTheme.displayLarge,
+          // Text(
+          //   profile!.data.user.first_name,
+          //   style: theme.textTheme.displayLarge,
+          // ),
+          CachedNetworkImage(
+            imageUrl: profile!.data.user.digital_signature,
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(Icons.error),
           ),
           SizedBox(height: 5.v),
           Row(

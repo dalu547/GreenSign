@@ -38,16 +38,22 @@ class _DashBoardState extends State<DashBoardNew> {
   void initState() {
     super.initState();
 
-    getPrefsData();
-    user_id_prefs = "64cb5370930845c5c4b012c0";
-    fetchEnvelopeCount(user_id_prefs);
-    fetchInbox(user_id_prefs);
+    getData();
+    // user_id_prefs = "64cb5370930845c5c4b012c0";
+    print('user id from prefs in dashboard ${user_id_prefs}');
+
   }
 
-  void getPrefsData() async {
+  void getData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id_prefs = prefs.getString('user_id')!;
+    print('user id from getPrefsData ${user_id_prefs}');
+    fetchEnvelopeCount(user_id_prefs);
+    fetchInbox(user_id_prefs);
+
     setState(() {
       user_id_prefs = prefs.getString('user_id')!;
+      print('user id from getPrefsData setState ${user_id_prefs}');
     });
   }
 
@@ -166,6 +172,8 @@ class _DashBoardState extends State<DashBoardNew> {
   }
 
   fetchEnvelopeCount(String userId) async {
+    print('user id from fetchEnvelopeCount ${userId}');
+
     setState(() {
       isLoading = true;
     });
@@ -204,6 +212,8 @@ class _DashBoardState extends State<DashBoardNew> {
   }
 
   fetchInbox(String userId) async {
+    print('user id from fetchInbox ${userId}');
+
     setState(() {
       isLoading = true;
     });

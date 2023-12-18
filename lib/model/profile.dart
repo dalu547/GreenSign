@@ -36,12 +36,12 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         message: json["message"],
-        user: json["user"],
+        user: User.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
         "message": message,
-        "user": user,
+        "user": user.toJson(),
       };
 }
 

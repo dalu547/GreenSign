@@ -9,6 +9,7 @@ class WebView extends StatefulWidget {
 class _WebviewState extends State<WebView> {
   late final WebViewController controller;
   var loadingPercentage = 0;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -20,23 +21,34 @@ class _WebviewState extends State<WebView> {
           _setLocalStorageItem();
           setState(() {
             loadingPercentage = 0;
+            isLoading =  true;
           });
         },
         onProgress: (progress) {
           setState(() {
             loadingPercentage = progress;
+            isLoading =  true;
             print('onProgress');
           });
         },
         onPageFinished: (url) {
           setState(() {
             loadingPercentage = 100;
+            isLoading =  false;
+
             print('onPageFinished');
 
             controller.runJavaScript("console.log('Test JavaScript Bridge');");
             // controller.runJavaScript("alert('Test JavaScript Bridge alert');");
 
             controller.runJavaScript("sendEnvelopeId();");
+          });
+        },
+        onWebResourceError: (WebResourceError error) {
+          print(error);
+          // Handle errors and dismiss loader
+          setState(() {
+            isLoading = false;
           });
         },
       ))
@@ -73,6 +85,10 @@ class _WebviewState extends State<WebView> {
                 value: loadingPercentage / 100.0,
                 backgroundColor: Colors.grey, // Set the background color
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.blue), //
+              ),
+            if (isLoading)
+              Center(
+                child: CircularProgressIndicator(),
               ),
           ],
         ));

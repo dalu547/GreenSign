@@ -9,6 +9,7 @@ class ReportsWebView extends StatefulWidget {
 class _WebviewState extends State<ReportsWebView> {
   late final WebViewController controller;
   var loadingPercentage = 0;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -20,23 +21,35 @@ class _WebviewState extends State<ReportsWebView> {
           _setLocalStorageItem();
           setState(() {
             loadingPercentage = 0;
+            isLoading = true;
           });
         },
         onProgress: (progress) {
           setState(() {
             loadingPercentage = progress;
+            isLoading = true;
+
             print('onProgress');
           });
         },
         onPageFinished: (url) {
           setState(() {
             loadingPercentage = 100;
+            isLoading = false;
+
             print('onPageFinished');
 
             controller.runJavaScript("console.log('Test JavaScript Bridge');");
             // controller.runJavaScript("alert('Test JavaScript Bridge alert');");
 
             controller.runJavaScript("sendEnvelopeId();");
+          });
+        },
+        onWebResourceError: (WebResourceError error) {
+          print(error);
+          // Handle errors and dismiss loader
+          setState(() {
+            isLoading = false;
           });
         },
       ))
@@ -51,8 +64,8 @@ class _WebviewState extends State<ReportsWebView> {
       ..loadRequest(
         // Uri.parse('http://10.80.16.166:4200/recipient-docs-list?envelope_id=655b2dfa556a19a9ccfa2c38&sender_id=64cb5370930845c5c4b012c0'),
         Uri.parse('http://10.80.16.166:4200/envelope-report'),
-      //   Uri.parse(
-      //       'http://10.80.16.166:4200/recipient-docs-list?envelope_id=656f1074e9be6c5ebec0d646&sender_id=64cb5370930845c5c4b012c0'),
+        //   Uri.parse(
+        //       'http://10.80.16.166:4200/recipient-docs-list?envelope_id=656f1074e9be6c5ebec0d646&sender_id=64cb5370930845c5c4b012c0'),
       );
   }
 
@@ -62,7 +75,7 @@ class _WebviewState extends State<ReportsWebView> {
         appBar: AppBar(
           title: const Text('Reports'),
           backgroundColor: Colors.white,
-            automaticallyImplyLeading: false,
+          automaticallyImplyLeading: false,
         ),
         body: Stack(
           children: [
@@ -74,6 +87,10 @@ class _WebviewState extends State<ReportsWebView> {
                 value: loadingPercentage / 100.0,
                 backgroundColor: Colors.grey, // Set the background color
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.blue), //
+              ),
+            if (isLoading)
+              Center(
+                child: CircularProgressIndicator(),
               ),
           ],
         ));
