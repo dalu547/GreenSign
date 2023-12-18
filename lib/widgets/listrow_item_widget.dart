@@ -1,4 +1,5 @@
 import 'package:GreenSign/core/utils/size_utils.dart';
+import 'package:GreenSign/model/document.dart';
 import 'package:flutter/material.dart';
 
 import '../core/utils/image_constant.dart';
@@ -9,10 +10,9 @@ import 'custom_image_view.dart';
 
 // ignore: must_be_immutable
 class ListrowItemWidget extends StatelessWidget {
-  const ListrowItemWidget({Key? key})
-      : super(
-          key: key,
-        );
+  Document document;
+
+  ListrowItemWidget(this.document);
 
   @override
   Widget build(BuildContext context) {
@@ -37,8 +37,7 @@ class ListrowItemWidget extends StatelessWidget {
                     left: 8.h,
                     top: 2.v,
                   ),
-                  child: Text(
-                    "CE_28.pdf",
+                  child: Text(document.documentName,
                     style: CustomTextStyles.bodyLargeBluegray90001,
                   ),
                 ),
@@ -49,7 +48,7 @@ class ListrowItemWidget extends StatelessWidget {
                     bottom: 2.v,
                   ),
                   child: Text(
-                    "11 pages",
+                    "4 pages",
                     style: theme.textTheme.bodyMedium,
                   ),
                 ),
