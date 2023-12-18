@@ -24,17 +24,17 @@ class ListrowItemWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SizedBox(height: 12.v),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CustomImageView(
-                  imagePath: ImageConstant.imgFilePdf,
-                  height: 24.adaptSize,
-                  width: 24.adaptSize,
-                ),
-                Padding(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomImageView(
+                imagePath: ImageConstant.imgFilePdf,
+                height: 24.adaptSize,
+                width: 24.adaptSize,
+              ),
+              Expanded(
+                flex: 5,
+                child: Padding(
                   padding: EdgeInsets.only(
                     left: 8.h,
                     top: 2.v,
@@ -44,8 +44,10 @@ class ListrowItemWidget extends StatelessWidget {
                     style: CustomTextStyles.bodyLargeBluegray90001,
                   ),
                 ),
-                Spacer(),
-                Padding(
+              ),
+              Expanded(
+                flex: 2,
+                child: Padding(
                   padding: EdgeInsets.only(
                     top: 5.v,
                     bottom: 2.v,
@@ -55,13 +57,19 @@ class ListrowItemWidget extends StatelessWidget {
                     style: theme.textTheme.bodyMedium,
                   ),
                 ),
-                CustomImageView(
+              ),
+              Expanded(
+                flex: 1,
+                child: CustomImageView(
                   imagePath: ImageConstant.imgFrame223,
                   height: 24.adaptSize,
                   width: 24.adaptSize,
                   margin: EdgeInsets.only(left: 10.h),
                 ),
-                CustomImageView(
+              ),
+              Expanded(
+                flex: 1,
+                child: CustomImageView(
                   imagePath: ImageConstant.img,
                   height: 17.v,
                   width: 9.h,
@@ -71,10 +79,9 @@ class ListrowItemWidget extends StatelessWidget {
                     bottom: 3.v,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          SizedBox(height: 11.v),
           Align(
             alignment: Alignment.centerRight,
             child: Divider(

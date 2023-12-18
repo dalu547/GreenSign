@@ -56,9 +56,11 @@ class CustomElevatedButton extends BaseButton {
             children: [
               leftIcon ?? Padding(padding: EdgeInsets.zero),
               Expanded(
-                child: Text(
-                  text,
-                  style: buttonTextStyle ?? theme.textTheme.labelLarge?.copyWith(color: Colors.black),
+                child: Center(
+                  child: Text(
+                    text,
+                    style: buttonTextStyle ?? theme.textTheme.labelLarge?.copyWith(color: Colors.black),
+                  ),
                 ),
               ),
               rightIcon ?? Padding(padding: EdgeInsets.zero),
