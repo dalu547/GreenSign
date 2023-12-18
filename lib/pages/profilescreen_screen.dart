@@ -27,48 +27,52 @@ class ProfilescreenScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text("Profile"),
         ),
-        body: SizedBox(
-          width: double.maxFinite,
-          child: Column(
-            children: [
-              SizedBox(height: 16.v),
-              CustomImageView(
-                imagePath: ImageConstant.imgProfilepic21,
-                height: 88.adaptSize,
-                width: 88.adaptSize,
-                radius: BorderRadius.circular(
-                  44.h,
+        body: SingleChildScrollView(
+            child: Column(
+              children: [ SizedBox(
+                width: double.maxFinite,
+                child: Column(
+                  children: [
+                    SizedBox(height: 16.v),
+                    CustomImageView(
+                      imagePath: ImageConstant.imgProfilepic21,
+                      height: 88.adaptSize,
+                      width: 88.adaptSize,
+                      radius: BorderRadius.circular(
+                        44.h,
+                      ),
+                    ),
+                    SizedBox(height: 8.v),
+                    Text(
+                      "Edit",
+                      style: CustomTextStyles.bodyMediumPrimary,
+                    ),
+                    SizedBox(height: 25.v),
+                    _buildCardWithBorder1(context),
+                    SizedBox(height: 16.v),
+                    _buildCardWithBorder(
+                      context,
+                      mobileNo: "Sandeep",
+                      value: "K",
+                      company: "sandeep.k@greenkogroup.com",
+                      deskNumber: "**********",
+                      address: "**********",
+                    ),
+                    SizedBox(height: 24.v),
+                    _buildCardWithBorder(
+                      context,
+                      mobileNo: "8642934411",
+                      value: "General Manager",
+                      company: "Company",
+                      deskNumber: "Desk Number",
+                      address: "Address",
+                    ),
+                    SizedBox(height: 5.v),
+                  ],
                 ),
-              ),
-              SizedBox(height: 8.v),
-              Text(
-                "Edit",
-                style: CustomTextStyles.bodyMediumPrimary,
-              ),
-              SizedBox(height: 25.v),
-              _buildCardWithBorder1(context),
-              SizedBox(height: 16.v),
-              _buildCardWithBorder(
-                context,
-                mobileNo: "Sandeep",
-                value: "K",
-                company: "sandeep.k@greenkogroup.com",
-                deskNumber: "**********",
-                address: "**********",
-              ),
-              SizedBox(height: 24.v),
-              _buildCardWithBorder(
-                context,
-                mobileNo: "8642934411",
-                value: "General Manager",
-                company: "Company",
-                deskNumber: "Desk Number",
-                address: "Address",
-              ),
-              SizedBox(height: 5.v),
-            ],
-          ),
-        ),
+              ),],
+            ))
+
       ),
     );
   }

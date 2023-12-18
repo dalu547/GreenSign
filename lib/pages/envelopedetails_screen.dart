@@ -10,10 +10,12 @@ import '../../widgets/custom_elevated_button.dart';
 import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/listrow_item_widget.dart';
+import '../model/envelope.dart';
 
 // ignore_for_file: must_be_immutable
 class EnvelopedetailsScreen extends StatelessWidget {
-  EnvelopedetailsScreen({Key? key}) : super(key: key);
+  EnvelopedetailsScreen(Envelope envelope, {Key? key}) : super(key: key);
+
 
   TextEditingController pageTitleController = TextEditingController();
 
@@ -104,7 +106,8 @@ class EnvelopedetailsScreen extends StatelessWidget {
                                 child: Text("Envelope Details",
                                     style: theme.textTheme.titleMedium)),
                             SizedBox(height: 8.v),
-                            _buildDescription(context),
+                            // _buildDescription(context),
+                            Text("Last changed by Full Name\nLast change on 7/3/2023 | 09:44:40 am\nSent on 6/30/2023 | 04:02:23 pm\nExpiring on\r11/21/2023 | 09:44:40 am"),
                             SizedBox(height: 33.v),
                             Align(
                                 alignment: Alignment.centerLeft,

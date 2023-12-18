@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:GreenSign/core/mock_responses.dart';
+import 'package:GreenSign/pages/envelopedetails_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/envelope.dart';
@@ -38,7 +39,9 @@ class _InboxState extends State<InboxNew> {
 
   onSearch(String search) {
     setState(() {
-      _foundedUsers = _users.where((user) => user.name.toLowerCase().contains(search)).toList();
+      _foundedUsers = _users
+          .where((user) => user.name.toLowerCase().contains(search))
+          .toList();
     });
   }
 
@@ -50,7 +53,18 @@ class _InboxState extends State<InboxNew> {
         leading: Image.asset('assets/images/inbox_icon.png'),
         title: Text('Inbox'),
         actions: [
-          Image.asset('assets/images/filter_icon.png'),
+          IconButton(
+            onPressed: () {
+              print('Search clicked');
+            },
+            icon: Icon(Icons.filter_list_alt),
+          ),
+          // Image.asset(
+          //   'assets/images/filter_icon.png',
+          // ),
+          SizedBox(
+            width: 16,
+          )
         ],
       ),
       body: Center(
@@ -76,6 +90,9 @@ class _InboxState extends State<InboxNew> {
           itemBuilder: (context, index) {
             return ListTile(
               title: EmaillistItemWidget(envelopes![index]),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_) => EnvelopedetailsScreen(envelopes![index])));
+              },
             );
           },
         ),
@@ -102,15 +119,19 @@ class _InboxState extends State<InboxNew> {
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
           Map<String, dynamic>? data = jsonResponse['data'];
           List<dynamic>? resultList = data?['result'];
-          final envelopesList = resultList?.map((approvalJson) => Envelope.fromJson(approvalJson)).toList();
+          final envelopesList = resultList
+              ?.map((approvalJson) => Envelope.fromJson(approvalJson))
+              .toList();
           setState(() {
             envelopes = envelopesList;
           });
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
       }
     } catch (error) {
       print('Error: $error');

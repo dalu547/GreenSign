@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/envelope_count.dart';
 import '../widgets/emaillist_item_widget.dart';
 import '../widgets/userprofile_item_widget.dart';
+import 'envelopedetails_screen.dart';
 
 class DashBoardNew extends StatefulWidget {
   String user_id;
@@ -122,6 +123,9 @@ class _DashBoardState extends State<DashBoardNew> {
           itemBuilder: (context, index) {
             return ListTile(
               title: EmaillistItemWidget(envelopes![index]),
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_) => EnvelopedetailsScreen(envelopes![index])));
+              },
             );
           },
         ),
