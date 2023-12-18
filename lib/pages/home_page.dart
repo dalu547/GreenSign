@@ -16,22 +16,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State {
   int _selectedTab = 0;
+  List<Widget> _pages = [];
+
   String user_id = "";
 
   _HomePageState(this.user_id);
-
-  //Dashboard,Inbox,Reports and More.
-  List _pages = [
-    DashBoardNew(""),
-    InboxNew(""),
-    ReportsWebView(),
-    More(),
-  ];
 
   _changeTab(int index) {
     setState(() {
       _selectedTab = index;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pages = [
+      DashBoardNew("", () => _changeTab(1)),
+      InboxNew(""),
+      ReportsWebView(),
+      More(),
+    ];
   }
 
   @override

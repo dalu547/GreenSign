@@ -5,13 +5,13 @@ import 'package:http/http.dart' as http;
 
 import '../../core/utils/size_utils.dart';
 import '../model/envelope_count.dart';
-import '../widgets/emaillist_item_widget.dart';
 import '../widgets/userprofile_item_widget.dart';
 
 class DashBoardScreen extends StatefulWidget {
   String user_id = "";
+  final VoidCallback onTapManageTab;
 
-  DashBoardScreen(String user_id);
+  DashBoardScreen(String user_id, this.onTapManageTab);
 
   @override
   _DashBoardState createState() => _DashBoardState();
@@ -48,7 +48,7 @@ class _DashBoardState extends State<DashBoardScreen> {
               SizedBox(height: 16),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: _buildBoxes(context),
+                child: _buildBoxes(context, widget.onTapManageTab),
               ),
               SizedBox(height: 24),
               Align(
@@ -93,13 +93,13 @@ class _DashBoardState extends State<DashBoardScreen> {
         },
         itemCount: 40,
         itemBuilder: (context, index) {
-         // return ListTile(title: EmaillistItemWidget());
+          // return ListTile(title: EmaillistItemWidget());
         },
       ),
     );
   }
 
-  Widget _buildBoxes(BuildContext context) {
+  Widget _buildBoxes(BuildContext context, VoidCallback onTapManageTab) {
     return Expanded(
         child: GridView.builder(
             shrinkWrap: true,
@@ -108,7 +108,7 @@ class _DashBoardState extends State<DashBoardScreen> {
             physics: BouncingScrollPhysics(),
             itemCount: 4,
             itemBuilder: (context, index) {
-              return UserprofileItemWidget(envelopeCount, index);
+              return UserprofileItemWidget(envelopeCount, index, onTapManageTab);
             }));
   }
 

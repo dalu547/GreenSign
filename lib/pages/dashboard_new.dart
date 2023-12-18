@@ -13,8 +13,9 @@ import 'envelopedetails_screen.dart';
 
 class DashBoardNew extends StatefulWidget {
   String user_id;
+  final VoidCallback onTapManageTab;
 
-  DashBoardNew(this.user_id);
+  DashBoardNew(this.user_id, this.onTapManageTab);
 
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +41,6 @@ class _DashBoardState extends State<DashBoardNew> {
     getData();
     // user_id_prefs = "64cb5370930845c5c4b012c0";
     print('user id from prefs in dashboard ${user_id_prefs}');
-
   }
 
   void getData() async {
@@ -128,7 +128,7 @@ class _DashBoardState extends State<DashBoardNew> {
           itemBuilder: (context, index) {
             return ListTile(
               title: EmaillistItemWidget(envelopes![index]),
-              onTap: (){
+              onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => EnvelopedetailsScreen(envelopes![index])));
               },
             );
@@ -149,7 +149,7 @@ class _DashBoardState extends State<DashBoardNew> {
             physics: BouncingScrollPhysics(),
             itemCount: 4,
             itemBuilder: (context, index) {
-              return UserprofileItemWidget(envelopeCount, index);
+              return UserprofileItemWidget(envelopeCount, index, widget.onTapManageTab);
             }));
   }
 
