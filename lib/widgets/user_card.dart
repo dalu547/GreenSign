@@ -17,12 +17,12 @@ class UserCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              user.name,
+              user.first_name,
               style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 8.0),
             Text(
-              user.name,
+              user.last_name,
               style: TextStyle(fontSize: 14.0),
             ),
           ],
