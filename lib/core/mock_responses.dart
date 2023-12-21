@@ -34,6 +34,24 @@ class MockResponses {
     return http.Response(response, 200, headers: {'content-type': 'application/json'});
   }
 
+  static http.Response get manageEnvelopeCountResponse {
+    const response = '''{
+  "status": "SUCCESS",
+  "data": {
+    "inbox": 93,
+    "completed": 14,
+    "sent": 100,
+    "draft": 43,
+    "voided": 0,
+    "expired": 0,
+    "deleted": 61,
+    "declined": 0
+  }
+}
+    ''';
+    return http.Response(response, 200, headers: {'content-type': 'application/json'});
+  }
+
 
   static http.Response get profileResponse {
     const response = '''{

@@ -104,26 +104,26 @@ class ImageConstant {
   static String imgFrame217BlueGray400 =
       '$imagePath/img_frame_217_blue_gray_400.svg';
 
-  static String imgFrame217 = '$imagePath/img_frame_217.svg';
+  static String imgFrame217 = '$imagePath/img_reports_inactive.svg';
 
   static String imgFrame219 = '$imagePath/img_frame_219.svg';
 
-  static String imgIcon = '$imagePath/img_icon.svg';
+  static String imgInbox = '$imagePath/img_inbox.svg';
 
-  static String imgIconBlueGray400 = '$imagePath/img_icon_blue_gray_400.svg';
+  static String imgSent = '$imagePath/img_sent.svg';
 
   static String imgIconBlueGray40024x24 =
       '$imagePath/img_icon_blue_gray_400_24x24.svg';
 
   static String imgIcon24x24 = '$imagePath/img_icon_24x24.svg';
 
-  static String imgIcon1 = '$imagePath/img_icon_1.svg';
+  static String imgVoided = '$imagePath/img_voided.svg';
 
-  static String imgInfoBlueGray400 = '$imagePath/img_info_blue_gray_400.svg';
+  static String imgExpired = '$imagePath/img_expired.svg';
 
-  static String imgIcon2 = '$imagePath/img_icon_2.svg';
+  static String imgDeleted = '$imagePath/img_deleted.svg';
 
-  static String imgIcon3 = '$imagePath/img_icon_3.svg';
+  static String imgDeclined = '$imagePath/img_declined.svg';
 
   static String imgHomeBlueGray400 = '$imagePath/img_home_blue_gray_400.svg';
 
@@ -141,5 +141,7 @@ class ImageConstant {
 
   static String imgMoreLogout = '$imagePath/more_logout.svg';
 
+  static String imgCompleted = '$imagePath/img_completed.svg';
 
+  static String imgDraft = '$imagePath/img_draft.svg';
 }

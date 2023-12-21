@@ -51,7 +51,7 @@ class EmaillistItemWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomElevatedButton(width: 80.h, text: envelope.envelopePrivilegeName),
+                        CustomElevatedButton(width: 80.h, text: envelope.envelopeStatusType),
                         Spacer(),
                         Container(
                           height: 4.v,

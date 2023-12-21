@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:GreenSign/core/mock_responses.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
 
 import '../../model/login.dart';
 import '../../utils/validator.dart';
@@ -24,8 +25,8 @@ class _LoginState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _usernameController.text = 'rajarshi@test.com';
-    _passwordController.text = 'Greenko@123';
+    // _usernameController.text = 'rajarshi@test.com';
+    // _passwordController.text = 'Greenko@123';
   }
 
   @override
@@ -142,16 +143,17 @@ class _LoginState extends State<LoginScreen> {
       isLoading = true; // Show loading indicator
     });
 
-    await Future.delayed(Duration(seconds: 3));
+    // await Future.delayed(Duration(seconds: 3));
 
     try {
       final response =
-          // await http.post(
-          //   Uri.parse('http://10.80.13.29:8000/login'),
-          //   body: jsonEncode({'email_address': username, 'password': password}),
-          //   headers: {'Content-Type': 'application/json'},
-          // );
-          MockResponses.mockLoginResponse;
+          await http.post(
+            Uri.parse('http://10.80.13.29:8000/login'),
+            body: jsonEncode({'email_address': username, 'password': password}),
+            headers: {'Content-Type': 'application/json'},
+          );
+
+         // final response =  MockResponses.mockLoginResponse;
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,

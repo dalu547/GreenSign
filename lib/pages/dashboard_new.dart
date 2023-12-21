@@ -10,9 +10,11 @@ import '../../model/envelope_count.dart';
 import '../widgets/emaillist_item_widget.dart';
 import '../widgets/userprofile_item_widget.dart';
 import 'envelopedetails_screen.dart';
+import 'package:http/http.dart' as http;
 
 class DashBoardNew extends StatefulWidget {
   String user_id;
+
   final VoidCallback onTapManageTab;
 
   DashBoardNew(this.user_id, this.onTapManageTab);
@@ -67,48 +69,56 @@ class _DashBoardState extends State<DashBoardNew> {
         title: Image.asset('assets/images/digisign_title_logo_small.png'),
       ),
       body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment(0.5, 0),
-              end: Alignment(0.5, 1),
-              colors: [Colors.deepPurple, Colors.blue],
-            ),
-          ),
-          child: Column(
-            children: [
-              SizedBox(height: 16),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: _buildBoxes(context, envelopeCount),
-              ),
-              SizedBox(height: 24),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    "Recent Activities",
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  ),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment(0.5, 0),
+                  end: Alignment(0.5, 1),
+                  colors: [Colors.deepPurple, Colors.blue],
                 ),
               ),
-              SizedBox(height: 8),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: 361,
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
+              child: Column(
+                children: [
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: _buildBoxes(context, envelopeCount),
+                  ),
+                  SizedBox(height: 24),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        "Recent Activities",
+                        style: TextStyle(fontSize: 24, color: Colors.white),
+                      ),
                     ),
-                    child: _buildRecentActivityList(context),
                   ),
-                ),
+                  SizedBox(height: 8),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        width: 361,
+                        padding: EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: _buildRecentActivityList(context),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            Container(
+                child: Center(
+                  child: isLoading ? CircularProgressIndicator() : Text(''),
+                ))
+          ],
         ),
       ),
     );
@@ -129,7 +139,11 @@ class _DashBoardState extends State<DashBoardNew> {
             return ListTile(
               title: EmaillistItemWidget(envelopes![index]),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => EnvelopedetailsScreen(envelopes![index])));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            EnvelopedetailsScreen(envelopes![index])));
               },
             );
           },
@@ -145,11 +159,15 @@ class _DashBoardState extends State<DashBoardNew> {
         child: GridView.builder(
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisExtent: 109.v, crossAxisCount: 2, mainAxisSpacing: 8.h, crossAxisSpacing: 8.h),
+                mainAxisExtent: 109.v,
+                crossAxisCount: 2,
+                mainAxisSpacing: 8.h,
+                crossAxisSpacing: 8.h),
             physics: BouncingScrollPhysics(),
             itemCount: 4,
             itemBuilder: (context, index) {
-              return UserprofileItemWidget(envelopeCount, index, widget.onTapManageTab);
+              return UserprofileItemWidget(
+                  envelopeCount, index, widget.onTapManageTab);
             }));
   }
 
@@ -178,11 +196,12 @@ class _DashBoardState extends State<DashBoardNew> {
     });
 
     try {
-      // final response = await http.get(
-      //   Uri.parse('http://10.80.13.29:8000/home_page/$userId'),
-      //   headers: {'Content-Type': 'application/json'},
-      // );
-      final response = MockResponses.homePageCountResponse;
+      final response = await http.get(
+        Uri.parse('http://10.80.13.29:8000/home_page/$userId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      // final response = MockResponses.homePageCountResponse;
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
@@ -195,18 +214,20 @@ class _DashBoardState extends State<DashBoardNew> {
           print(envelopeCount?.data.completed);
         } else {
           print('Invalid JSON response');
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
         }
       } else {
         print('Envelope count failed $response.statusCode');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
       }
     } catch (error) {
       print('Error: $error');
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      // setState(() {
+      //   isLoading = false;
+      // });
     }
   }
 
@@ -218,29 +239,35 @@ class _DashBoardState extends State<DashBoardNew> {
     });
 
     try {
-      // final response = await http.get(
-      //   Uri.parse('http://10.80.13.29:8000/home_page/$userId'),
-      //   headers: {'Content-Type': 'application/json'},
-      // );
-      final response = MockResponses.homePageInboxResponse;
+      final response = await http.get(
+        Uri.parse('http://10.80.13.29:8000/inbox/$userId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+      // final response = MockResponses.homePageInboxResponse;
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
+          print('Inbox successful');
+          print(jsonResponse);
           Map<String, dynamic>? data = jsonResponse['data'];
           List<dynamic>? resultList = data?['result'];
-          final envelopesList = resultList?.map((approvalJson) => Envelope.fromJson(approvalJson)).toList();
+          final envelopesList = resultList
+              ?.map((approvalJson) => Envelope.fromJson(approvalJson))
+              .toList();
           setState(() {
             envelopes = envelopesList;
           });
           print(envelopeCount?.data.completed);
         } else {
           print('Invalid JSON response');
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
         }
       } else {
         print('Envelope count failed $response.statusCode');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
       }
     } catch (error) {
       print('Error: $error');

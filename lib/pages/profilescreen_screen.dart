@@ -13,6 +13,8 @@ import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../core/mock_responses.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
 
 class ProfilescreenScreen extends StatefulWidget {
   String user_id;
@@ -358,11 +360,12 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
     });
 
     try {
-      // final response = await http.get(
-      //   Uri.parse('http://10.80.13.29:8000/home_page/$userId'),
-      //   headers: {'Content-Type': 'application/json'},
-      // );
-      final response = MockResponses.profileResponse;
+      final response = await http.get(
+        Uri.parse('http://10.80.13.29:8000/user/$userId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      // final response = MockResponses.profileResponse;
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);

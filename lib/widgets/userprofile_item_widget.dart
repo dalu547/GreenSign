@@ -1,6 +1,5 @@
 import 'package:GreenSign/core/utils/size_utils.dart';
 import 'package:GreenSign/model/envelope_count.dart';
-import 'package:GreenSign/pages/inbox_new.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/utils/image_constant.dart';
@@ -13,6 +12,13 @@ class UserprofileItemWidget extends StatelessWidget {
   final EnvelopeCount? envelopeCount;
   final int index;
   final VoidCallback onTapManageTab;
+
+  List<String> icons = [
+    ImageConstant.imgExclamationCircle,
+    ImageConstant.imgClock,
+    ImageConstant.imgInfo,
+    ImageConstant.imgCheck
+  ];
 
 
   UserprofileItemWidget(this.envelopeCount, this.index, this.onTapManageTab);
@@ -39,7 +45,7 @@ class UserprofileItemWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomImageView(
-                    imagePath: ImageConstant.imgExclamationCircle,
+                    imagePath: icons[index],
                     height: 24.adaptSize,
                     width: 24.adaptSize,
                     margin: EdgeInsets.only(top: 10.v, bottom: 9.v),
@@ -65,11 +71,11 @@ class UserprofileItemWidget extends StatelessWidget {
 
   String get _getCount {
     return [
-          envelopeCount?.data.actionRequired.toString(),
-          envelopeCount?.data.waitingForOthers.toString(),
-          envelopeCount?.data.expiringSoon.toString(),
-          envelopeCount?.data.completed.toString(),
-        ][index] ??
+      envelopeCount?.data.actionRequired.toString(),
+      envelopeCount?.data.waitingForOthers.toString(),
+      envelopeCount?.data.expiringSoon.toString(),
+      envelopeCount?.data.completed.toString(),
+    ][index] ??
         '0';
   }
 

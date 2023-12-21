@@ -1,5 +1,7 @@
 import 'package:GreenSign/model/document.dart';
 import 'package:GreenSign/model/required_approvals.dart';
+import 'package:GreenSign/pages/pdf_viewer.dart';
+import 'package:GreenSign/pages/sfpdf_viewer.dart';
 import 'package:GreenSign/pages/web_view.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,7 @@ import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/listrow_item_widget.dart';
 import '../model/envelope.dart';
+
 
 // ignore_for_file: must_be_immutable
 class EnvelopedetailsScreen extends StatelessWidget {
@@ -46,78 +49,102 @@ class EnvelopedetailsScreen extends StatelessWidget {
                         child: Column(children: [
                       // _buildPageTitle(context),
                       Container(
-                          padding: EdgeInsets.symmetric(horizontal: 5.h, vertical: 5.v),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 5.h, vertical: 5.v),
                           decoration: AppDecoration.fillGray,
                           child: Column(children: [
                             SizedBox(height: 2.v),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text(envelope!.envelopeName, style: CustomTextStyles.titleLargeSemiBold)),
+                                child: Text(envelope!.envelopeName,
+                                    style:
+                                        CustomTextStyles.titleLargeSemiBold)),
                             SizedBox(height: 3.v),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("From: ${envelope?.from}", style: CustomTextStyles.bodyMedium_1)),
+                                child: Text("From: ${envelope?.from}",
+                                    style: CustomTextStyles.bodyMedium_1)),
                             SizedBox(height: 7.v),
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Row(children: [
-                                  Text(envelope!.createdOn, style: theme.textTheme.bodyMedium),
-                                  Padding(
-                                      padding: EdgeInsets.only(left: 12.h),
-                                      child: Text("Expiring soon!", style: CustomTextStyles.bodySmallRed500))
-                                ])),
-                            SizedBox(height: 5.v),
-                            Align(
-                                alignment: Alignment.centerLeft,
-                                child: Row(children: [
-                                  CustomImageView(imagePath: ImageConstant.imgUser, height: 16.v, width: 17.h),
-                                  Padding(
-                                      padding: EdgeInsets.only(left: 4.h),
-                                      child: Text("Accounts", style: theme.textTheme.bodyMedium))
+                                  Text(envelope!.createdOn,
+                                      style: theme.textTheme.bodyMedium),
+                                  if (envelope!.expiringSoon)
+                                    Padding(
+                                        padding: EdgeInsets.only(left: 12.h),
+                                        child: Text("Expiring soon!",
+                                            style: CustomTextStyles
+                                                .bodySmallRed500))
                                 ])),
                             SizedBox(height: 5.v),
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Row(children: [
                                   CustomImageView(
-                                      imagePath: ImageConstant.imgExclamationCircle,
+                                      imagePath: ImageConstant.imgUser,
+                                      height: 16.v,
+                                      width: 17.h),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 4.h),
+                                      child: Text(envelope!.groupName,
+                                          style: theme.textTheme.bodyMedium))
+                                ])),
+                            SizedBox(height: 5.v),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(children: [
+                                  CustomImageView(
+                                      imagePath:
+                                          ImageConstant.imgExclamationCircle,
                                       height: 24.adaptSize,
                                       width: 24.adaptSize),
                                   Padding(
-                                      padding: EdgeInsets.only(left: 8.h, top: 4.v, bottom: 2.v),
-                                      child: Text(envelope!.envelopeStatusType, style: CustomTextStyles.bodyMediumBlack900))
+                                      padding: EdgeInsets.only(
+                                          left: 8.h, top: 4.v, bottom: 2.v),
+                                      child: Text(envelope!.envelopeStatusType,
+                                          style: CustomTextStyles
+                                              .bodyMediumBlack900))
                                 ])),
                             SizedBox(height: 4.v),
-                            _buildFrame(context),
+                            _buildFrame(context, envelope),
                             SizedBox(height: 34.v),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Envelope Details", style: theme.textTheme.titleMedium)),
+                                child: Text("Envelope Details",
+                                    style: theme.textTheme.titleMedium)),
                             SizedBox(height: 8.v),
                             // _buildDescription(context),
                             // "Last changed by Full Name\nLast change on 7/3/2023 | 09:44:40 am\nSent on 6/30/2023 | 04:02:23 pm\nExpiring on\r11/21/2023 | 09:44:40 am"),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Last changed by "+envelope!.lastChangedBy)),
+                                child: Text("Last changed by " +
+                                    envelope!.lastChangedBy)),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Last change on "+envelope!.lastChanged)),
+                                child: Text(
+                                    "Last change on " + envelope!.lastChanged)),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Sent on "+envelope!.sentOn)),
+                                child: Text("Sent on " + envelope!.sentOn)),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Expiring on "+envelope!.expiringOn)),
+                                child: Text(
+                                    "Expiring on " + envelope!.expiringOn)),
                             SizedBox(height: 20.v),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Documents", style: CustomTextStyles.titleMediumOnPrimary)),
+                                child: Text("Documents",
+                                    style:
+                                        CustomTextStyles.titleMediumOnPrimary)),
                             SizedBox(height: 11.v),
                             _buildDocsList(context, envelope!.documents),
                             SizedBox(height: 20.v),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Recipients", style: CustomTextStyles.titleMediumOnPrimary)),
+                                child: Text("Recipients",
+                                    style:
+                                        CustomTextStyles.titleMediumOnPrimary)),
                             SizedBox(height: 8.v),
                             _buildRecipients(context),
                             SizedBox(height: 8.v),
@@ -136,11 +163,15 @@ class EnvelopedetailsScreen extends StatelessWidget {
         hintStyle: CustomTextStyles.bodyLargePrimary_1,
         prefix: Container(
             margin: EdgeInsets.fromLTRB(16.h, 8.v, 6.h, 8.v),
-            child: CustomImageView(imagePath: ImageConstant.img27x14, height: 27.v, width: 14.h)),
+            child: CustomImageView(
+                imagePath: ImageConstant.img27x14, height: 27.v, width: 14.h)),
         prefixConstraints: BoxConstraints(maxHeight: 44.v),
         suffix: Container(
             margin: EdgeInsets.symmetric(horizontal: 30.h, vertical: 12.v),
-            child: CustomImageView(imagePath: ImageConstant.imgArrowdowndoc, height: 19.v, width: 15.h)),
+            child: CustomImageView(
+                imagePath: ImageConstant.imgArrowdowndoc,
+                height: 19.v,
+                width: 15.h)),
         suffixConstraints: BoxConstraints(maxHeight: 44.v),
         contentPadding: EdgeInsets.symmetric(vertical: 11.v));
   }
@@ -149,13 +180,15 @@ class EnvelopedetailsScreen extends StatelessWidget {
   Widget _buildNeedToSign(BuildContext context) {
     return CustomElevatedButton(
         width: 80.h,
+        alignment: Alignment.centerLeft,
         text: envelope!.statusName,
+        buttonTextStyle: TextStyle(color: Colors.white),
         margin: EdgeInsets.only(left: 16.h),
         buttonStyle: CustomButtonStyles.fillBlueGray);
   }
 
   /// Section Widget
-  Widget _buildSign(BuildContext context) {
+  Widget _buildSign(BuildContext context, Envelope envelope) {
     return CustomElevatedButton(
         height: 50.v,
         text: "Sign",
@@ -168,7 +201,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildFrame(BuildContext context) {
+  Widget _buildFrame(BuildContext context, Envelope? envelope) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -187,7 +220,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(2.h),
             child: LinearProgressIndicator(
               value: calculatePercentage(envelope!.totalSignedDocuments,
-                          envelope!.totalNumberDocuments),
+                  envelope!.totalNumberDocuments),
               backgroundColor: appTheme.blueGray10001,
               valueColor: AlwaysStoppedAnimation<Color>(appTheme.greenA700),
             ),
@@ -200,9 +233,10 @@ class EnvelopedetailsScreen extends StatelessWidget {
               style: theme.textTheme.bodyMedium),
         ),
         SizedBox(width: 10.v),
-        Expanded(
-          child: _buildSign(context),
-        ),
+        if (envelope.envelopeStatusType == "action_required")
+          Expanded(
+            child: _buildSign(context, envelope),
+          )
       ],
     );
   }
@@ -221,7 +255,8 @@ class EnvelopedetailsScreen extends StatelessWidget {
   /// Section Widget
   Widget _buildDocsList(BuildContext context, List<Document> documents) {
     return Container(
-        decoration: BoxDecoration(borderRadius: BorderRadiusStyle.roundedBorder10),
+        decoration:
+            BoxDecoration(borderRadius: BorderRadiusStyle.roundedBorder10),
         child: ListView.separated(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -231,9 +266,10 @@ class EnvelopedetailsScreen extends StatelessWidget {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: ListrowItemWidget(documents![index],envelope),
+                title: ListrowItemWidget(documents![index], envelope),
                 onTap: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => SFPDFScreen(documents![index].document,documents![index].documentName)));
                 },
               );
             }));
@@ -241,7 +277,8 @@ class EnvelopedetailsScreen extends StatelessWidget {
 
   Widget _buildReciepientsList(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(borderRadius: BorderRadiusStyle.roundedBorder10),
+        decoration:
+            BoxDecoration(borderRadius: BorderRadiusStyle.roundedBorder10),
         child: ListView.separated(
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -251,9 +288,10 @@ class EnvelopedetailsScreen extends StatelessWidget {
             itemCount: envelope!.totalNumberRecipients,
             itemBuilder: (context, index) {
               return ListTile(
-                title: _buildFrameEightySeven(context,index,envelope!.requiredApprovals.elementAt(index)),
+                title: _buildFrameEightySeven(context, index,
+                    envelope!.requiredApprovals.elementAt(index)),
                 onTap: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
+                  // Navigator.push(context,MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
                 },
               );
             }));
@@ -274,34 +312,44 @@ class EnvelopedetailsScreen extends StatelessWidget {
               child: Container(
                   width: 283.h,
                   margin: EdgeInsets.only(left: 8.h, top: 2.v),
-                  child: Text("Envelope is with "+ envelope!.lastChangedBy+" and he/she needs to sign.",
-                      maxLines: 2, overflow: TextOverflow.ellipsis, style: CustomTextStyles.bodyLargeLightblue600)))
+                  child: Text(
+                      "Envelope is with " +
+                          envelope!.lastChangedBy +
+                          " and he/she needs to sign.",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: CustomTextStyles.bodyLargeLightblue600)))
         ]));
   }
 
   /// Section Widget
-  Widget _buildFrameEightySeven(BuildContext context, int index, RequiredApproval reciepient) {
+  Widget _buildFrameEightySeven(
+      BuildContext context, int index, RequiredApproval reciepient) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
           padding: EdgeInsets.only(top: 53.v, bottom: 52.v),
-          child: Text((index+1).toString(), style: CustomTextStyles.bodyMediumBluegray90001)),
+          child: Text((index + 1).toString(),
+              style: CustomTextStyles.bodyMediumBluegray90001)),
       Expanded(
           child: Container(
               margin: EdgeInsets.only(left: 18.h),
-              decoration: AppDecoration.outlineIndigo.copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
+              decoration: AppDecoration.outlineIndigo
+                  .copyWith(borderRadius: BorderRadiusStyle.roundedBorder10),
               child: Row(children: [
                 Container(
                     height: 120.v,
                     width: 8.h,
                     decoration: BoxDecoration(
                         color: appTheme.blueGray900,
-                        borderRadius: BorderRadius.horizontal(left: Radius.circular(8.h)))),
+                        borderRadius: BorderRadius.horizontal(
+                            left: Radius.circular(8.h)))),
                 Expanded(
                     child: _buildFrameSeventyOne(context,
                         userName: reciepient.recipientName,
                         email: reciepient.recipientEmail,
                         needsToSign: reciepient.recipientPrivilegeName,
-                        price: "Signed on "+reciepient.recipientLastTimestamp))
+                        price:
+                            "Signed on " + reciepient.recipientLastTimestamp))
               ])))
     ]);
   }
@@ -325,11 +373,13 @@ class EnvelopedetailsScreen extends StatelessWidget {
             children: [
               Text(
                 userName,
-                style: CustomTextStyles.bodyLargeBluegray90001.copyWith(color: appTheme.blueGray90001),
+                style: CustomTextStyles.bodyLargeBluegray90001
+                    .copyWith(color: appTheme.blueGray90001),
               ),
               Text(
                 email,
-                style: theme.textTheme.bodyMedium!.copyWith(color: appTheme.blueGray500),
+                style: theme.textTheme.bodyMedium!
+                    .copyWith(color: appTheme.blueGray500),
               ),
             ],
           ),
@@ -340,11 +390,13 @@ class EnvelopedetailsScreen extends StatelessWidget {
             children: [
               Text(
                 needsToSign,
-                style: CustomTextStyles.bodyMediumBluegray90001.copyWith(color: appTheme.blueGray90001),
+                style: CustomTextStyles.bodyMediumBluegray90001
+                    .copyWith(color: appTheme.blueGray90001),
               ),
               Text(
                 price,
-                style: theme.textTheme.bodyMedium!.copyWith(color: appTheme.blueGray500),
+                style: theme.textTheme.bodyMedium!
+                    .copyWith(color: appTheme.blueGray500),
               ),
             ],
           ),
