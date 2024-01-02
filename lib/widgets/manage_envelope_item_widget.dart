@@ -62,14 +62,14 @@ class ManageEnvelopeItemWidget extends StatelessWidget {
 
   String get _getCount {
     return [
-          mEnvelopeCount?.data.inbox.toString(),
-          mEnvelopeCount?.data.completed.toString(),
-          mEnvelopeCount?.data.sent.toString(),
-          mEnvelopeCount?.data.draft.toString(),
-          mEnvelopeCount?.data.voided.toString(),
-          mEnvelopeCount?.data.expired.toString(),
-          mEnvelopeCount?.data.deleted.toString(),
-          mEnvelopeCount?.data.declined.toString(),
+          mEnvelopeCount?.data?.inbox.toString(),
+          mEnvelopeCount?.data?.completed.toString(),
+          mEnvelopeCount?.data?.sent.toString(),
+          mEnvelopeCount?.data?.draft.toString(),
+          mEnvelopeCount?.data?.voided.toString(),
+          mEnvelopeCount?.data?.expired.toString(),
+          mEnvelopeCount?.data?.deleted.toString(),
+          mEnvelopeCount?.data?.declined.toString(),
         ][index] ??
         '0';
   }

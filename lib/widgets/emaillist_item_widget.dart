@@ -36,10 +36,10 @@ class EmaillistItemWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(envelope.envelopeName, style: theme.textTheme.titleMedium),
+                        Text(envelope.envelopeName??"", style: theme.textTheme.titleMedium),
                         Padding(
                           padding: EdgeInsets.only(bottom: 3.v),
-                          child: Text(calculateDaysGap(envelope.lastChanged), style: CustomTextStyles.bodyMedium_2),
+                          child: Text(calculateDaysGap(envelope.lastChanged??""), style: CustomTextStyles.bodyMedium_2),
                         ),
                       ],
                     ),
@@ -51,7 +51,7 @@ class EmaillistItemWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomElevatedButton(width: 80.h, text: envelope.envelopeStatusType),
+                        CustomElevatedButton(width: 80.h, text: envelope.envelopeStatusType??""),
                         Spacer(),
                         Container(
                           height: 4.v,
@@ -63,7 +63,7 @@ class EmaillistItemWidget extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(2.h),
                             child: LinearProgressIndicator(
-                              value: calculatePercentage(envelope.totalSignedDocuments, envelope.totalNumberDocuments),
+                              value: calculatePercentage(envelope.totalSignedDocuments??0, envelope.totalNumberDocuments??0),
                               backgroundColor: appTheme.blueGray10001,
                               valueColor: AlwaysStoppedAnimation<Color>(appTheme.greenA700),
                             ),

@@ -1,21 +1,20 @@
 
 import 'dart:convert';
-import 'dart:ffi';
 
 RequiredApproval requiredApprovalFromJson(String str) => RequiredApproval.fromJson(json.decode(str));
 
 String requiredApprovalToJson(RequiredApproval data) => json.encode(data.toJson());
 
 class RequiredApproval {
-  String recipientId;
-  String recipientName;
-  String recipientTitle;
-  String recipientEmail;
-  int orderId;
-  String recipientPrivilegeId;
-  String recipientPrivilegeName;
-  String recipientLastTimestamp;
-  bool recipientAction;
+  String? recipientId;
+  String? recipientName;
+  String? recipientTitle;
+  String? recipientEmail;
+  int? orderId;
+  String? recipientPrivilegeId;
+  String? recipientPrivilegeName;
+  String? recipientLastTimestamp;
+  bool? recipientAction;
 
   RequiredApproval({
     required this.recipientId,

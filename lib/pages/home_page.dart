@@ -6,7 +6,7 @@ import 'inbox_new.dart';
 import 'more.dart';
 
 class HomePage extends StatefulWidget {
-  String user_id;
+  String? user_id;
 
   HomePage(this.user_id);
 
@@ -14,27 +14,38 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState(user_id);
 }
 
-class _HomePageState extends State {
+class _HomePageState extends State<HomePage> {
   int _selectedTab = 0;
   List<Widget> _pages = [];
 
-  String user_id = "";
+  String? user_id = "";
+  int type = 0;
 
   _HomePageState(this.user_id);
 
-  _changeTab(int index) {
+  _changeTab(int index, int box_index) {
     setState(() {
+      type = box_index;
       _selectedTab = index;
+      print("type in change tab $type");
     });
   }
 
   @override
   void initState() {
     super.initState();
+    _updatePages(); // Initialize pages
+  }
 
+  void _updatePages() {
     _pages = [
-      DashBoardNew("", () => _changeTab(1)),
-      InboxNew(""),
+      DashBoardNew("", (int box_index) {
+        _pages[1] = InboxNew(type);
+        print("type in home $box_index");
+        type = box_index;
+        _changeTab(1, box_index);
+      }),
+      InboxNew(type), // Create InboxNew widget dynamically
       ReportsWebView(),
       More(),
     ];
@@ -43,10 +54,10 @@ class _HomePageState extends State {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_selectedTab],
+      body: _pages.elementAt(_selectedTab),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedTab,
-        onTap: (index) => _changeTab(index),
+        onTap: (index) => _changeTab(index, type),
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
         showSelectedLabels: true,
@@ -78,3 +89,6 @@ class _HomePageState extends State {
     );
   }
 }
+
+
+

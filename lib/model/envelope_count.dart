@@ -9,8 +9,8 @@ EnvelopeCount envelopeCountFromJson(String str) => EnvelopeCount.fromJson(json.d
 String envelopeCountToJson(EnvelopeCount data) => json.encode(data.toJson());
 
 class EnvelopeCount {
-  String status;
-  Data data;
+  String? status;
+  Data? data;
 
   EnvelopeCount({
     required this.status,
@@ -24,15 +24,15 @@ class EnvelopeCount {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": data.toJson(),
+    "data": data?.toJson(),
   };
 }
 
 class Data {
-  int actionRequired;
-  int waitingForOthers;
-  int expiringSoon;
-  int completed;
+  int? actionRequired;
+  int? waitingForOthers;
+  int? expiringSoon;
+  int? completed;
 
   Data({
     required this.actionRequired,

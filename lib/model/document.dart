@@ -5,13 +5,13 @@ Document documentFromJson(String str) => Document.fromJson(json.decode(str));
 String documentToJson(Document data) => json.encode(data.toJson());
 
 class Document {
-  String id;
-  String documentName;
-  String document;
+  String? id;
+  String? documentName;
+  String? document;
   //Cordinates cordinates;
-  String timestamp;
-  bool signature;
-  bool status;
+  String? timestamp;
+  bool? signature;
+  bool? status;
 
   Document({
     required this.id,
@@ -45,7 +45,7 @@ class Document {
 }
 
 class Cordinates {
-  double x;
+  double? x;
   double? y;
   int? page;
   double? x1;

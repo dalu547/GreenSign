@@ -13,40 +13,40 @@ Envelope envelopeCountFromJson(String str) => Envelope.fromJson(json.decode(str)
 String envelopeCountToJson(Envelope data) => json.encode(data.toJson());
 
 class Envelope {
-  String id;
-  String envelopeId;
-  int orderId;
-  String userId;
-  String envelopeName;
-  String groupId;
-  String groupName;
-  String senderId;
-  String from;
-  String envelopePrivilege;
-  String envelopePrivilegeName;
-  String statusId;
-  String statusName;
-  int totalNumberDocuments;
-  int totalNumberRecipients;
-  int totalSignedDocuments;
-  String envelopeStatusType;
-  String timestamp;
-  bool status;
-  bool signingOrder;
-  String createdOn;
-  String expiringOn;
-  bool expiringSoon;
+  String? id;
+  String? envelopeId;
+  int? orderId;
+  String? userId;
+  String? envelopeName;
+  String? groupId;
+  String? groupName;
+  String? senderId;
+  String? from;
+  String? envelopePrivilege;
+  String? envelopePrivilegeName;
+  String? statusId;
+  String? statusName;
+  int? totalNumberDocuments;
+  int? totalNumberRecipients;
+  int? totalSignedDocuments;
+  String? envelopeStatusType;
+  String? timestamp;
+  bool? status;
+  bool? signingOrder;
+  String? createdOn;
+  String? expiringOn;
+  bool? expiringSoon;
 
-  List<Document> documents;//
+  List<Document>? documents;//
 
-  String sentOn;
-  String lastChanged;
+  String? sentOn;
+  String? lastChanged;
 
   // List<From> to;
 
-  String lastChangedBy;
+  String? lastChangedBy;
 
-  List<RequiredApproval> requiredApprovals;//
+  List<RequiredApproval>? requiredApprovals;//
 
   Envelope({
     required this.id,
@@ -136,11 +136,11 @@ class Envelope {
     "created_on": createdOn,
     "expiring_on": expiringOn,
     "expiring_soon": expiringSoon,
-    "documents": List<dynamic>.from(documents.map((x) => x.toJson())),
+    "documents": List<dynamic>.from(documents!.map((x) => x.toJson())),
     "sent_on": sentOn,
     "last_changed": lastChanged,
     // "to": List<dynamic>.from(to.map((x) => fromValues.reverse[x])),
     "last_changed_by": lastChangedBy,
-    "required_approvals": List<dynamic>.from(requiredApprovals.map((x) => x.toJson())),
+    "required_approvals": List<dynamic>.from(requiredApprovals!.map((x) => x.toJson())),
   };
 }

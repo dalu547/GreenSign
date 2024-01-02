@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:GreenSign/core/utils/size_utils.dart';
 import 'package:GreenSign/model/manage_envelope_count.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +12,9 @@ import 'manage_envelope_item_widget.dart';
 
 class ManageenvelopeScreen extends StatelessWidget {
   MEnvelopeCount mEnvelopeCount;
+  Function(String,String,String) callback;
 
-  ManageenvelopeScreen(this.mEnvelopeCount);
+  ManageenvelopeScreen(this.mEnvelopeCount, this.callback);
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +91,39 @@ class ManageenvelopeScreen extends StatelessWidget {
   /// Section Widget
 
   Widget _buildManageEnvelopeList(BuildContext context) {
+    List<String> env_filter = [
+      "inbox",
+      "completed_envelopes",
+      "sent_envelopes",
+      "draft_envelopes",
+      "envelope_voided",
+      "expired_envelopes",
+      "deleted_envelopes",
+      "declined_envelopes"
+    ];
+
+    List<String> env_type = [
+        'Inbox',
+        'Completed',
+        'Sent',
+        'Draft',
+        'Voided',
+        'Expired',
+        'Deleted',
+        'Declined',
+      ];
+
+  List<String> env_icon = [
+        ImageConstant.imgInbox,
+        ImageConstant.imgCompleted,
+        ImageConstant.imgSent,
+        ImageConstant.imgDraft,
+        ImageConstant.imgVoided,
+        ImageConstant.imgExpired,
+        ImageConstant.imgDeleted,
+        ImageConstant.imgDeclined,
+      ];
+
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
       child: ListView.separated(
@@ -101,11 +137,8 @@ class ManageenvelopeScreen extends StatelessWidget {
           return ListTile(
             title: ManageEnvelopeItemWidget(mEnvelopeCount, index),
             onTap: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //         builder: (_) =>
-              //             EnvelopedetailsScreen(envelopes![index])));
+              print("manage envelope $index");
+              callback(env_filter[index],env_type[index],env_icon[index]);
             },
           );
         },

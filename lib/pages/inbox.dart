@@ -36,9 +36,9 @@ class _InboxState extends State<Inbox> {
 
   onSearch(String search) {
     setState(() {
-      _foundedUsers = _users
-          .where((user) => user.first_name.toLowerCase().contains(search))
-          .toList();
+      // _foundedUsers = _users
+      //     .where((user) => user.first_name.toLowerCase().contains(search))
+      //     .toList();
     });
   }
 
@@ -139,7 +139,7 @@ class _InboxState extends State<Inbox> {
             envelope = Envelope.fromJson(jsonResponse);
           });
 
-          print(envelope?.documents[0].documentName);
+          print(envelope!.documents?[0].documentName);
         } else {
           // Handle invalid or empty JSON response
           print('Invalid JSON response');

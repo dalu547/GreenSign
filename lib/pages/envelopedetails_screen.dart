@@ -1,9 +1,10 @@
 import 'package:GreenSign/model/document.dart';
 import 'package:GreenSign/model/required_approvals.dart';
-import 'package:GreenSign/pages/pdf_viewer.dart';
 import 'package:GreenSign/pages/sfpdf_viewer.dart';
-import 'package:GreenSign/pages/web_view.dart';
+import 'package:GreenSign/pages/web_view_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/size_utils.dart';
@@ -16,11 +17,13 @@ import '../../widgets/custom_image_view.dart';
 import '../../widgets/custom_text_form_field.dart';
 import '../../widgets/listrow_item_widget.dart';
 import '../model/envelope.dart';
+import 'envelopes_history_screen.dart';
 
 
 // ignore_for_file: must_be_immutable
 class EnvelopedetailsScreen extends StatelessWidget {
   Envelope? envelope;
+  String user_id = "";
 
   EnvelopedetailsScreen(this.envelope);
 
@@ -29,6 +32,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
   TextEditingController descriptionController = TextEditingController();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +44,19 @@ class EnvelopedetailsScreen extends StatelessWidget {
             appBar: AppBar(
               backgroundColor: Colors.white,
               title: Image.asset('assets/images/digisign_title_logo_small.png'),
+              actions: [
+                IconButton(
+                  icon: Image.asset('assets/images/envelope_icon.png'), // Replace with your image asset
+                  onPressed: () {
+                    // Handle the button press
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                                EnvelopesHistoryScreen(envelope!.id)));
+                  },
+                ),
+              ],
             ),
             body: Form(
                 key: _formKey,
@@ -56,7 +73,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                             SizedBox(height: 2.v),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text(envelope!.envelopeName,
+                                child: Text(envelope?.envelopeName??"",
                                     style:
                                         CustomTextStyles.titleLargeSemiBold)),
                             SizedBox(height: 3.v),
@@ -68,9 +85,9 @@ class EnvelopedetailsScreen extends StatelessWidget {
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Row(children: [
-                                  Text(envelope!.createdOn,
+                                  Text(envelope!.createdOn??"",
                                       style: theme.textTheme.bodyMedium),
-                                  if (envelope!.expiringSoon)
+                                  if (envelope!.expiringSoon??false)
                                     Padding(
                                         padding: EdgeInsets.only(left: 12.h),
                                         child: Text("Expiring soon!",
@@ -87,7 +104,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                                       width: 17.h),
                                   Padding(
                                       padding: EdgeInsets.only(left: 4.h),
-                                      child: Text(envelope!.groupName,
+                                      child: Text(envelope!.groupName??"",
                                           style: theme.textTheme.bodyMedium))
                                 ])),
                             SizedBox(height: 5.v),
@@ -102,7 +119,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                                   Padding(
                                       padding: EdgeInsets.only(
                                           left: 8.h, top: 4.v, bottom: 2.v),
-                                      child: Text(envelope!.envelopeStatusType,
+                                      child: Text(envelope!.envelopeStatusType??"",
                                           style: CustomTextStyles
                                               .bodyMediumBlack900))
                                 ])),
@@ -119,18 +136,18 @@ class EnvelopedetailsScreen extends StatelessWidget {
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text("Last changed by " +
-                                    envelope!.lastChangedBy)),
+                                    (envelope!.lastChangedBy??""))),
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                    "Last change on " + envelope!.lastChanged)),
+                                    "Last change on " + (envelope!.lastChanged??""))),
                             Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Sent on " + envelope!.sentOn)),
+                                child: Text("Sent on " + (envelope!.sentOn??""))),
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                    "Expiring on " + envelope!.expiringOn)),
+                                    "Expiring on " + (envelope!.expiringOn??""))),
                             SizedBox(height: 20.v),
                             Align(
                                 alignment: Alignment.centerLeft,
@@ -181,7 +198,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
     return CustomElevatedButton(
         width: 80.h,
         alignment: Alignment.centerLeft,
-        text: envelope!.statusName,
+        text: envelope!.statusName??"",
         buttonTextStyle: TextStyle(color: Colors.white),
         margin: EdgeInsets.only(left: 16.h),
         buttonStyle: CustomButtonStyles.fillBlueGray);
@@ -219,8 +236,8 @@ class EnvelopedetailsScreen extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(2.h),
             child: LinearProgressIndicator(
-              value: calculatePercentage(envelope!.totalSignedDocuments,
-                  envelope!.totalNumberDocuments),
+              value: calculatePercentage(envelope!.totalSignedDocuments??0,
+                  envelope!.totalNumberDocuments??0),
               backgroundColor: appTheme.blueGray10001,
               valueColor: AlwaysStoppedAnimation<Color>(appTheme.greenA700),
             ),
@@ -253,7 +270,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildDocsList(BuildContext context, List<Document> documents) {
+  Widget _buildDocsList(BuildContext context, List<Document>? documents) {
     return Container(
         decoration:
             BoxDecoration(borderRadius: BorderRadiusStyle.roundedBorder10),
@@ -263,13 +280,13 @@ class EnvelopedetailsScreen extends StatelessWidget {
             separatorBuilder: (context, index) {
               return SizedBox(height: 1.v);
             },
-            itemCount: documents.length,
+            itemCount: documents!.length,
             itemBuilder: (context, index) {
               return ListTile(
                 title: ListrowItemWidget(documents![index], envelope),
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (_) => SFPDFScreen(documents![index].document,documents![index].documentName)));
+                      MaterialPageRoute(builder: (_) => SFPDFScreen(documents![index].document??"",documents![index].documentName??"")));
                 },
               );
             }));
@@ -285,11 +302,11 @@ class EnvelopedetailsScreen extends StatelessWidget {
             separatorBuilder: (context, index) {
               return SizedBox(height: 1.v);
             },
-            itemCount: envelope!.totalNumberRecipients,
+            itemCount: envelope!.totalNumberRecipients??0,
             itemBuilder: (context, index) {
               return ListTile(
                 title: _buildFrameEightySeven(context, index,
-                    envelope!.requiredApprovals.elementAt(index)),
+                    envelope!.requiredApprovals!.elementAt(index)),
                 onTap: () {
                   // Navigator.push(context,MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
                 },
@@ -314,7 +331,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                   margin: EdgeInsets.only(left: 8.h, top: 2.v),
                   child: Text(
                       "Envelope is with " +
-                          envelope!.lastChangedBy +
+                          (envelope!.lastChangedBy??"") +
                           " and he/she needs to sign.",
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -345,11 +362,11 @@ class EnvelopedetailsScreen extends StatelessWidget {
                             left: Radius.circular(8.h)))),
                 Expanded(
                     child: _buildFrameSeventyOne(context,
-                        userName: reciepient.recipientName,
-                        email: reciepient.recipientEmail,
-                        needsToSign: reciepient.recipientPrivilegeName,
+                        userName: reciepient.recipientName??"",
+                        email: reciepient.recipientEmail??"",
+                        needsToSign: reciepient.recipientPrivilegeName??"",
                         price:
-                            "Signed on " + reciepient.recipientLastTimestamp))
+                            "Signed on " + (reciepient.recipientLastTimestamp??"")))
               ])))
     ]);
   }
@@ -410,7 +427,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
     // Navigator.pushNamed(context, AppRoutes.documentviewScreen);
 
     Navigator.push(
-        context, MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
+        context, MaterialPageRoute(builder: (_) => WebViewScreen(envelope!.id,envelope!.senderId)));
   }
 
   double calculatePercentage(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:GreenSign/pages/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -25,8 +26,8 @@ class _LoginState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    // _usernameController.text = 'rajarshi@test.com';
-    // _passwordController.text = 'Greenko@123';
+    _usernameController.text = 'anilkumar.v@digitelenetworks.com';
+    _passwordController.text = 'Greenko@123';
   }
 
   @override
@@ -90,7 +91,8 @@ class _LoginState extends State<LoginScreen> {
                           login(_username, _password);
 
                           // Navigator.push(
-                          //     context, MaterialPageRoute(builder: (_) => HomePage("")));
+                          //     context, MaterialPageRoute(builder: (_) => WebViewScreen("","")));
+
                         } else {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text(passwordValidationMessage)));
@@ -165,13 +167,17 @@ class _LoginState extends State<LoginScreen> {
           print('Login successful');
           print(jsonResponse);
           loginResponse = Login.fromJson(jsonResponse);
-          print(loginResponse?.data.id);
+          print(loginResponse?.data?.id);
 
           final SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setString("loginUser", loginResponse!.data.id);
-          prefs.setString("user_id", loginResponse!.data.id);
+          prefs.setString("loginUser", loginResponse!.data!.id??"");
+          prefs.setString("user_id", loginResponse!.data!.id??"");
+          prefs.setString("auth_token", loginResponse!.data!.token??"");
 
-          Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage(loginResponse!.data.id)));
+          // Navigator.push(context, MaterialPageRoute(builder: (_) => WebView("")));
+
+
+          Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage(loginResponse!.data?.id)));
         } else {
           // Handle invalid or empty JSON response
           print('Invalid JSON response');

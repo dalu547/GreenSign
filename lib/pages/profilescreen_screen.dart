@@ -32,6 +32,7 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
 
   bool isLoading = false;
   String user_id_prefs = "";
+  String auth_token = "";
 
   Profile? profile;
 
@@ -47,8 +48,10 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
   void getData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id_prefs = prefs.getString('user_id')!;
+    auth_token = prefs.getString('auth_token')!;
+
     print('user id from getData ${user_id_prefs}');
-    fetchProfileData(user_id_prefs);
+    fetchProfileData(user_id_prefs,auth_token);
 
     setState(() {
       user_id_prefs = prefs.getString('user_id')!;
@@ -84,7 +87,7 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
                     //   ),
                     // ),
                     CachedNetworkImage(
-                      imageUrl: profile!.data.user.profile_image,
+                      imageUrl: profile!.data!.user?.profile_image??"",
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.error),
@@ -99,20 +102,20 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
                     SizedBox(height: 16.v),
                     _buildCardWithBorder(
                       context,
-                      mobileNo: profile!.data.user.first_name,
-                      value: profile!.data.user.last_name,
-                      company: profile!.data.user.email_address,
+                      mobileNo: profile!.data?.user?.first_name??"",
+                      value: profile!.data?.user?.last_name??"",
+                      company: profile!.data?.user?.email_address??"",
                       deskNumber: "**********",
                       address: "**********",
                     ),
                     SizedBox(height: 24.v),
                     _buildCardWithBorder(
                       context,
-                      mobileNo: profile!.data.user.mobile,
-                      value: profile!.data.user.role_name,
-                      company: profile!.data.user.company,
-                      deskNumber: profile!.data.user.desk_number,
-                      address: profile!.data.user.address,
+                      mobileNo: profile!.data?.user?.mobile??"",
+                      value: profile!.data?.user?.role_name??"",
+                      company: profile!.data!.user?.company??"",
+                      deskNumber: profile!.data!.user?.desk_number??"",
+                      address: profile!.data!.user?.address??"",
                     ),
                     SizedBox(height: 5.v),
                   ],
@@ -141,7 +144,7 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
           //   style: theme.textTheme.displayLarge,
           // ),
           CachedNetworkImage(
-            imageUrl: profile!.data.user.digital_signature,
+            imageUrl: profile!.data?.user?.digital_signature??"",
             placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),
@@ -354,7 +357,7 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
     );
   }
 
-  fetchProfileData(String userId) async {
+  fetchProfileData(String userId,String auth_token) async {
     setState(() {
       isLoading = true;
     });
@@ -362,7 +365,7 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
     try {
       final response = await http.get(
         Uri.parse('http://10.80.13.29:8000/user/$userId'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json','Authorization': 'Bearer $auth_token'},
       );
 
       // final response = MockResponses.profileResponse;

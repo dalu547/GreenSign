@@ -15,7 +15,7 @@ import 'package:http/http.dart' as http;
 class DashBoardNew extends StatefulWidget {
   String user_id;
 
-  final VoidCallback onTapManageTab;
+  final Function(int) onTapManageTab;
 
   DashBoardNew(this.user_id, this.onTapManageTab);
 
@@ -28,6 +28,7 @@ class DashBoardNew extends StatefulWidget {
 class _DashBoardState extends State<DashBoardNew> {
   String user_id;
   String user_id_prefs = "";
+  String auth_token = "";
 
   _DashBoardState(this.user_id);
 
@@ -48,9 +49,10 @@ class _DashBoardState extends State<DashBoardNew> {
   void getData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id_prefs = prefs.getString('user_id')!;
+    auth_token = prefs.getString('auth_token')!;
     print('user id from getPrefsData ${user_id_prefs}');
-    fetchEnvelopeCount(user_id_prefs);
-    fetchInbox(user_id_prefs);
+    fetchEnvelopeCount(user_id_prefs,auth_token);
+    fetchInbox(user_id_prefs,auth_token);
 
     setState(() {
       user_id_prefs = prefs.getString('user_id')!;
@@ -188,7 +190,7 @@ class _DashBoardState extends State<DashBoardNew> {
     );
   }
 
-  fetchEnvelopeCount(String userId) async {
+  fetchEnvelopeCount(String userId,String auth_token) async {
     print('user id from fetchEnvelopeCount ${userId}');
 
     setState(() {
@@ -196,9 +198,10 @@ class _DashBoardState extends State<DashBoardNew> {
     });
 
     try {
+
       final response = await http.get(
         Uri.parse('http://10.80.13.29:8000/home_page/$userId'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json','Authorization': 'Bearer $auth_token'},
       );
 
       // final response = MockResponses.homePageCountResponse;
@@ -211,7 +214,7 @@ class _DashBoardState extends State<DashBoardNew> {
           setState(() {
             envelopeCount = EnvelopeCount.fromJson(jsonResponse);
           });
-          print(envelopeCount?.data.completed);
+          print(envelopeCount?.data?.completed);
         } else {
           print('Invalid JSON response');
           ScaffoldMessenger.of(context)
@@ -231,7 +234,7 @@ class _DashBoardState extends State<DashBoardNew> {
     }
   }
 
-  fetchInbox(String userId) async {
+  fetchInbox(String userId,String auth_token) async {
     print('user id from fetchInbox ${userId}');
 
     setState(() {
@@ -241,7 +244,7 @@ class _DashBoardState extends State<DashBoardNew> {
     try {
       final response = await http.get(
         Uri.parse('http://10.80.13.29:8000/inbox/$userId'),
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json','Authorization': 'Bearer $auth_token'},
       );
       // final response = MockResponses.homePageInboxResponse;
 
@@ -258,7 +261,7 @@ class _DashBoardState extends State<DashBoardNew> {
           setState(() {
             envelopes = envelopesList;
           });
-          print(envelopeCount?.data.completed);
+          print(envelopeCount?.data?.completed);
         } else {
           print('Invalid JSON response');
           ScaffoldMessenger.of(context)

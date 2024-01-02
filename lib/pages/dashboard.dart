@@ -309,7 +309,7 @@ class _DashBoardState extends State<DashBoard> {
             envelopeCount = EnvelopeCount.fromJson(jsonResponse);
           });
 
-          print(envelopeCount?.data.completed);
+          print(envelopeCount?.data?.completed);
         } else {
           // Handle invalid or empty JSON response
           print('Invalid JSON response');

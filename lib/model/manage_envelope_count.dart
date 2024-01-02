@@ -9,8 +9,8 @@ MEnvelopeCount envelopeCountFromJson(String str) => MEnvelopeCount.fromJson(json
 String envelopeCountToJson(MEnvelopeCount data) => json.encode(data.toJson());
 
 class MEnvelopeCount {
-  String status;
-  Data data;
+  String? status;
+  Data? data;
 
   MEnvelopeCount({
     required this.status,
@@ -24,19 +24,19 @@ class MEnvelopeCount {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": data.toJson(),
+    "data": data?.toJson(),
   };
 }
 
 class Data {
-  int inbox;
-  int completed;
-  int sent;
-  int draft;
-  int voided;
-  int expired;
-  int deleted;
-  int declined;
+  int? inbox;
+  int? completed;
+  int? sent;
+  int? draft;
+  int? voided;
+  int? expired;
+  int? deleted;
+  int? declined;
 
   Data({
     required this.inbox,

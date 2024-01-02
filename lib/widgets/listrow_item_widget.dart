@@ -40,7 +40,7 @@ class ListrowItemWidget extends StatelessWidget {
                     top: 2.v,
                   ),
                   child: Text(
-                    document.documentName,
+                    document.documentName??"",
                     style: CustomTextStyles.bodyLargeBluegray90001,
                   ),
                 ),

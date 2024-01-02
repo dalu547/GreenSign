@@ -6,8 +6,8 @@ Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
 String profileToJson(Profile data) => json.encode(data.toJson());
 
 class Profile {
-  String status;
-  Data data;
+  String? status;
+  Data? data;
 
   Profile({
     required this.status,
@@ -21,13 +21,13 @@ class Profile {
 
   Map<String, dynamic> toJson() => {
         "status": status,
-        "data": data.toJson(),
+        "data": data?.toJson(),
       };
 }
 
 class Data {
-  String message;
-  User user;
+  String? message;
+  User? user;
 
   Data({
     required this.message,
@@ -41,29 +41,29 @@ class Data {
 
   Map<String, dynamic> toJson() => {
         "message": message,
-        "user": user.toJson(),
+        "user": user?.toJson(),
       };
 }
 
 class User {
-  String id;
-  String role_id;
-  String first_name;
-  String last_name;
-  String email_address;
-  String digital_signature;
-  String profile_image;
-  String company;
-  String title;
-  String address;
-  String landline;
-  String country_code;
-  String mobile;
-  String desk_number;
-  bool status;
-  String timestamp;
-  bool deleted;
-  String role_name;
+  String? id;
+  String? role_id;
+  String? first_name;
+  String? last_name;
+  String? email_address;
+  String? digital_signature;
+  String? profile_image;
+  String? company;
+  String? title;
+  String? address;
+  String? landline;
+  String? country_code;
+  String? mobile;
+  String? desk_number;
+  bool? status;
+  String? timestamp;
+  bool? deleted;
+  String? role_name;
 
   User({
     required this.id,

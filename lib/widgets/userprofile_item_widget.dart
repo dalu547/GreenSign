@@ -11,7 +11,7 @@ import '../../widgets/custom_image_view.dart';
 class UserprofileItemWidget extends StatelessWidget {
   final EnvelopeCount? envelopeCount;
   final int index;
-  final VoidCallback onTapManageTab;
+  final Function(int) onTapManageTab;
 
   List<String> icons = [
     ImageConstant.imgExclamationCircle,
@@ -27,7 +27,8 @@ class UserprofileItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        onTapManageTab();
+        print("box index $index");
+        onTapManageTab(index + 1);
       },
       child: Container(
         decoration: AppDecoration.outlineIndigo.copyWith(
@@ -71,10 +72,10 @@ class UserprofileItemWidget extends StatelessWidget {
 
   String get _getCount {
     return [
-      envelopeCount?.data.actionRequired.toString(),
-      envelopeCount?.data.waitingForOthers.toString(),
-      envelopeCount?.data.expiringSoon.toString(),
-      envelopeCount?.data.completed.toString(),
+      envelopeCount?.data?.actionRequired.toString(),
+      envelopeCount?.data?.waitingForOthers.toString(),
+      envelopeCount?.data?.expiringSoon.toString(),
+      envelopeCount?.data?.completed.toString(),
     ][index] ??
         '0';
   }

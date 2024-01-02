@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "306653220218",
+    "project_id": "digisign-greenko",
+    "storage_bucket": "digisign-greenko.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306653220218:android:cbb07793e3938dedd79ac3",
+        "android_client_info": {
+          "package_name": "com.greenko.greensignpoc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxt8-ucLIroHx7WzNmZg8SgBsAduhfsas"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,49 +2,80 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class WebView extends StatefulWidget {
-  String envelope_id = "";
+class WebViewScreen extends StatefulWidget {
+  String? envelope_id = "";
+  String? sender_id = "";
+  String? user_id = "";
 
-  WebView(this.envelope_id);
+  WebViewScreen(this.envelope_id,this.sender_id);
 
   @override
-  _WebviewState createState() => _WebviewState(envelope_id);
+  _WebviewState createState() => _WebviewState(envelope_id,sender_id);
 }
 
-class _WebviewState extends State<WebView> {
-  late final WebViewController controller;
+class _WebviewState extends State<WebViewScreen> {
+  late WebViewController controller;
   var loadingPercentage = 0;
   bool isLoading = false;
 
-  String envelope_id = "";
+  String? envelope_id = "";
+  String? user_id = "";
+  String? sender_id = "";
+  String? user_id_prefs = "";
 
-  _WebviewState(this.envelope_id);
+  _WebviewState(this.envelope_id, this.sender_id);
 
   @override
   void initState() {
     super.initState();
 
-    getData();
-
+    getUserData();
   }
-
 
   Future<void> getData() async {
     super.initState();
-
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String user_id_prefs = prefs.getString('user_id')!;
+    user_id_prefs = prefs.getString('user_id')!;
+  }
+
+  void getUserData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id_prefs = prefs.getString('user_id')!;
+    print('user id from SF ${user_id_prefs}');
+
+    // http://10.80.16.166:4200/recipient-docs-list?
+    // envelope_id=658ea8a948e8f9187d6a882f
+    // &sender_id=64cded5d24f228a98a501b6c
+    // &user_id=64cdecf924f228a98a501b68
+
 
     String web_url =
-        "http://10.80.16.166:4200/recipient-docs-list?envelope_id=" +
-            envelope_id +
+        "http://10.80.16.245:4200/recipient-docs-list?envelope_id=" +
+            envelope_id! +
             "&sender_id=" +
-            user_id_prefs;
+            sender_id! +
+            "&user_id=" +
+            user_id_prefs!;
+
+
+    // String web_url  = 'http://10.80.16.166:4200/recipient-docs-list?envelope_id=658eaa4748e8f9187d6a883f&sender_id=64cdecf924f228a98a501b68&user_id=64cdecf924f228a98a501b68';
     print("Web url in webview: " + web_url);
-    // 'http://10.80.16.166:4200/recipient-docs-list?envelope_id=656f1074e9be6c5ebec0d646&sender_id=64cb5370930845c5c4b012c0'),
 
     controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel(
+        "messageHandler",
+        onMessageReceived: (JavaScriptMessage javaScriptMessage) {
+          print("message from the web view=\"${javaScriptMessage.message}\"");
+        },
+      )
+      ..loadRequest(
+        Uri.parse(web_url),
+      )
+
+      //Navigation Delegate
       ..setNavigationDelegate(NavigationDelegate(
+        //page start
         onPageStarted: (url) {
           _setLocalStorageItem();
           setState(() {
@@ -52,6 +83,8 @@ class _WebviewState extends State<WebView> {
             isLoading = true;
           });
         },
+
+        //page inprogress
         onProgress: (progress) {
           setState(() {
             loadingPercentage = progress;
@@ -59,6 +92,8 @@ class _WebviewState extends State<WebView> {
             print('onProgress');
           });
         },
+
+        //page finished
         onPageFinished: (url) {
           setState(() {
             loadingPercentage = 100;
@@ -66,12 +101,13 @@ class _WebviewState extends State<WebView> {
 
             print('onPageFinished');
 
-            controller.runJavaScript("console.log('Test JavaScript Bridge');");
+            controller.runJavaScript("console.log('Login test');");
             // controller.runJavaScript("alert('Test JavaScript Bridge alert');");
 
-            controller.runJavaScript("sendEnvelopeId();");
+            controller.runJavaScript("login();");
           });
         },
+        //webresource error
         onWebResourceError: (WebResourceError error) {
           print(error);
           // Handle errors and dismiss loader
@@ -79,20 +115,8 @@ class _WebviewState extends State<WebView> {
             isLoading = false;
           });
         },
-      ))
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..addJavaScriptChannel(
-        'SnackBar',
-        onMessageReceived: (message) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(message.message)));
-        },
-      )
-      ..loadRequest(
-        // Uri.parse('http://10.80.16.166:4200/recipient-docs-list?envelope_id=655b2dfa556a19a9ccfa2c38&sender_id=64cb5370930845c5c4b012c0'),
-        // Uri.parse('https://flutter.dev/'),
-        Uri.parse(web_url),
-      );
+
+      ));
   }
 
   @override

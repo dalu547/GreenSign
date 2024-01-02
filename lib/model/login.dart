@@ -9,8 +9,8 @@ Login loginFromJson(String str) => Login.fromJson(json.decode(str));
 String loginToJson(Login data) => json.encode(data.toJson());
 
 class Login {
-  String status;
-  Data data;
+  String? status;
+  Data? data;
 
   Login({
     required this.status,
@@ -24,19 +24,19 @@ class Login {
 
   Map<String, dynamic> toJson() => {
     "status": status,
-    "data": data.toJson(),
+    "data": data?.toJson(),
   };
 }
 
 class Data {
-  String message;
-  String token;
-  String type;
-  String id;
-  String firstName;
-  String lastName;
-  String email;
-  String roles;
+  String? message;
+  String? token;
+  String? type;
+  String? id;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? roles;
 
   Data({
     required this.message,
