@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:GreenSign/constants/app_constants.dart';
 import 'package:GreenSign/pages/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,8 +27,8 @@ class _LoginState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _usernameController.text = 'anilkumar.v@digitelenetworks.com';
-    _passwordController.text = 'Greenko@123';
+    // _usernameController.text = 'anilkumar.v@digitelenetworks.com';
+    // _passwordController.text = 'Anil@1234';
   }
 
   @override
@@ -150,7 +151,7 @@ class _LoginState extends State<LoginScreen> {
     try {
       final response =
           await http.post(
-            Uri.parse('http://10.80.13.29:8000/login'),
+            Uri.parse(AppConstants.API_BASE_URL+"/login"),
             body: jsonEncode({'email_address': username, 'password': password}),
             headers: {'Content-Type': 'application/json'},
           );
@@ -173,11 +174,14 @@ class _LoginState extends State<LoginScreen> {
           prefs.setString("loginUser", loginResponse!.data!.id??"");
           prefs.setString("user_id", loginResponse!.data!.id??"");
           prefs.setString("auth_token", loginResponse!.data!.token??"");
+          prefs.setBool("is_logged_in", true);
+
 
           // Navigator.push(context, MaterialPageRoute(builder: (_) => WebView("")));
 
 
           Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage(loginResponse!.data?.id)));
+
         } else {
           // Handle invalid or empty JSON response
           print('Invalid JSON response');

@@ -246,7 +246,7 @@ class _DashBoardState extends State<DashBoard> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => Inbox()));
+                              builder: (_) => Inbox(0)));
                     },
                     child: Text(
                       'Open',

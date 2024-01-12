@@ -94,17 +94,28 @@ class EmaillistItemWidget extends StatelessWidget {
     );
   }
 
-  String calculateDaysGap(String dateString) {
-    DateTime lastChangedDateTime = DateFormat("dd-MMM-yyyy HH:mm:ss").parse(dateString);
-    DateTime currentDate = DateTime.now();
-    Duration difference = currentDate.difference(lastChangedDateTime);
-    int daysGap = difference.inDays;
-    return '$daysGap d';
+  String calculateDaysGap(String dateString){
+    try{
+      print('dateString $dateString');
+      DateTime lastChangedDateTime = DateFormat("dd-MMM-yyyy HH:mm:ss").parse(dateString);
+      DateTime currentDate = DateTime.now();
+      Duration difference = currentDate.difference(lastChangedDateTime);
+      int daysGap = difference.inDays;
+      return '$daysGap d';
+    }catch (e) {
+      // Catch the exception and handle it
+      print('Error: $e');
+      return "0d";
+    }
   }
 
   double calculatePercentage(int totalSignedDocuments, int totalNumberDocuments) {
-    final value = (totalSignedDocuments / totalNumberDocuments);
-    print('value: $value, $totalSignedDocuments, $totalNumberDocuments');
-    return value;
+    print('totalSignedDocuments $totalNumberDocuments totalSignedDocuments$totalNumberDocuments');
+    if(totalSignedDocuments > 0  && totalNumberDocuments > 0){
+      final value = (totalSignedDocuments / totalNumberDocuments);
+      print('value: $value, $totalSignedDocuments, $totalNumberDocuments');
+      return value;
+    }
+    return 0;
   }
 }

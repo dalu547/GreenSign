@@ -53,7 +53,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                             builder: (_) =>
-                                EnvelopesHistoryScreen(envelope!.id)));
+                                EnvelopesHistoryScreen(envelope?.id)));
                   },
                 ),
               ],
@@ -436,4 +436,5 @@ class EnvelopedetailsScreen extends StatelessWidget {
     print('value: $value, $totalSignedDocuments, $totalNumberDocuments');
     return value;
   }
+
 }

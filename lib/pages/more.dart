@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import '../../theme/app_decoration.dart';
 import '../widgets/more_item_widget.dart';
 import 'login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class More extends StatefulWidget {
   @override
@@ -64,9 +66,9 @@ class _MoreState extends State<More> {
                       break;
                     case 2:
                       //Logout
-                    // logoutAndNavigateToLogin(context);
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => LoginScreen()));
+                    logoutAndNavigateToLogin(context);
+                    // Navigator.push(
+                    //     context, MaterialPageRoute(builder: (_) => LoginScreen()));
                     break;
                       break;
                   }
@@ -77,11 +79,14 @@ class _MoreState extends State<More> {
         ));
   }
 
-  void logoutAndNavigateToLogin(BuildContext context) {
+ logoutAndNavigateToLogin(BuildContext context) async {
     // Clear user authentication details or perform any necessary cleanup
     // For example, you might clear the user token or reset the authentication state
 
     // Navigate to the login screen
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("is_logged_in", false);
+
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => LoginScreen()),

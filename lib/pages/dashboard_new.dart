@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:GreenSign/constants/app_constants.dart';
 import 'package:GreenSign/core/mock_responses.dart';
 import 'package:GreenSign/core/utils/size_utils.dart';
 import 'package:GreenSign/model/envelope.dart';
@@ -48,11 +49,12 @@ class _DashBoardState extends State<DashBoardNew> {
 
   void getData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt("dashboard_box_no", 0);
     user_id_prefs = prefs.getString('user_id')!;
     auth_token = prefs.getString('auth_token')!;
     print('user id from getPrefsData ${user_id_prefs}');
     fetchEnvelopeCount(user_id_prefs,auth_token);
-    fetchInbox(user_id_prefs,auth_token);
+    fetchActionRequiredEnvelopes(user_id_prefs,auth_token);
 
     setState(() {
       user_id_prefs = prefs.getString('user_id')!;
@@ -200,7 +202,7 @@ class _DashBoardState extends State<DashBoardNew> {
     try {
 
       final response = await http.get(
-        Uri.parse('http://10.80.13.29:8000/home_page/$userId'),
+        Uri.parse(AppConstants.API_BASE_URL+"/home_page/$userId"),
         headers: {'Content-Type': 'application/json','Authorization': 'Bearer $auth_token'},
       );
 
@@ -234,7 +236,7 @@ class _DashBoardState extends State<DashBoardNew> {
     }
   }
 
-  fetchInbox(String userId,String auth_token) async {
+  fetchActionRequiredEnvelopes(String userId,String auth_token) async {
     print('user id from fetchInbox ${userId}');
 
     setState(() {
@@ -243,15 +245,16 @@ class _DashBoardState extends State<DashBoardNew> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://10.80.13.29:8000/inbox/$userId'),
+        Uri.parse(AppConstants.API_BASE_URL+"/inbox_action_required/$userId"),
         headers: {'Content-Type': 'application/json','Authorization': 'Bearer $auth_token'},
       );
+
       // final response = MockResponses.homePageInboxResponse;
 
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
-          print('Inbox successful');
+          print('Action required successful');
           print(jsonResponse);
           Map<String, dynamic>? data = jsonResponse['data'];
           List<dynamic>? resultList = data?['result'];

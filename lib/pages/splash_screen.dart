@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:GreenSign/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
 import 'login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -12,10 +14,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
-        Duration(seconds: 3),
-        () => Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (BuildContext context) => LoginScreen())));
+
+    navigateToNextPage();
   }
 
   @override
@@ -64,5 +64,21 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+ navigateToNextPage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isLoggedIn = prefs.getBool('is_logged_in')??false;
+
+    if (isLoggedIn) {
+      Timer(
+          Duration(seconds: 3),
+          () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => HomePage(""))));
+    } else {
+      Timer(
+          Duration(seconds: 3),
+          () => Navigator.of(context).pushReplacement(MaterialPageRoute(
+              builder: (BuildContext context) => LoginScreen())));
+    }
   }
 }

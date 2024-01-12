@@ -10,11 +10,21 @@ import '../theme/custom_text_style.dart';
 import 'custom_image_view.dart';
 import 'manage_envelope_item_widget.dart';
 
-class ManageenvelopeScreen extends StatelessWidget {
+class ManageenvelopeScreen extends StatefulWidget {
   MEnvelopeCount mEnvelopeCount;
-  Function(String,String,String) callback;
-
+  Function(String, String, String) callback;
   ManageenvelopeScreen(this.mEnvelopeCount, this.callback);
+
+  @override
+  _ManageenvelopeScreenState createState() => _ManageenvelopeScreenState(mEnvelopeCount,callback);
+}
+
+class _ManageenvelopeScreenState extends State<ManageenvelopeScreen> {
+  MEnvelopeCount?  mEnvelopeCount;
+  int selectedIndex = 2;
+  Function(String, String, String) callback;
+
+  _ManageenvelopeScreenState(this.mEnvelopeCount, this.callback);
 
   @override
   Widget build(BuildContext context) {
@@ -103,26 +113,26 @@ class ManageenvelopeScreen extends StatelessWidget {
     ];
 
     List<String> env_type = [
-        'Inbox',
-        'Completed',
-        'Sent',
-        'Draft',
-        'Voided',
-        'Expired',
-        'Deleted',
-        'Declined',
-      ];
+      'Inbox',
+      'Completed',
+      'Sent',
+      'Draft',
+      'Voided',
+      'Expired',
+      'Deleted',
+      'Declined',
+    ];
 
-  List<String> env_icon = [
-        ImageConstant.imgInbox,
-        ImageConstant.imgCompleted,
-        ImageConstant.imgSent,
-        ImageConstant.imgDraft,
-        ImageConstant.imgVoided,
-        ImageConstant.imgExpired,
-        ImageConstant.imgDeleted,
-        ImageConstant.imgDeclined,
-      ];
+    List<String> env_icon = [
+      ImageConstant.imgInbox,
+      ImageConstant.imgCompleted,
+      ImageConstant.imgSent,
+      ImageConstant.imgDraft,
+      ImageConstant.imgVoided,
+      ImageConstant.imgExpired,
+      ImageConstant.imgDeleted,
+      ImageConstant.imgDeclined,
+    ];
 
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 16),
@@ -136,13 +146,19 @@ class ManageenvelopeScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             title: ManageEnvelopeItemWidget(mEnvelopeCount, index),
+            tileColor: selectedIndex == index
+                ? Colors.blue.withOpacity(0.3)
+                : Colors.blue,
             onTap: () {
-              print("manage envelope $index");
-              callback(env_filter[index],env_type[index],env_icon[index]);
+              // setState(() {
+              //   selectedIndex = index; // Update the selected index
+              // });
+              callback(env_filter[index], env_type[index], env_icon[index]);
             },
           );
         },
       ),
     );
   }
+
 }

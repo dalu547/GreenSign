@@ -1,3 +1,4 @@
+import 'package:GreenSign/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -63,7 +64,7 @@ class _WebviewState extends State<ReportsWebView> {
       )
       ..loadRequest(
         // Uri.parse('http://10.80.16.166:4200/recipient-docs-list?envelope_id=655b2dfa556a19a9ccfa2c38&sender_id=64cb5370930845c5c4b012c0'),
-        Uri.parse('http://10.80.16.166:4200/envelope-report'),
+        Uri.parse(AppConstants.ENVELOPE_WEB_URL+"/envelope-report"),
         //   Uri.parse(
         //       'http://10.80.16.166:4200/recipient-docs-list?envelope_id=656f1074e9be6c5ebec0d646&sender_id=64cb5370930845c5c4b012c0'),
       );

@@ -7,6 +7,8 @@ import '../../theme/app_decoration.dart';
 import '../../theme/custom_text_style.dart';
 import '../../theme/theme_helper.dart';
 import '../../widgets/custom_image_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class UserprofileItemWidget extends StatelessWidget {
   final EnvelopeCount? envelopeCount;
@@ -26,10 +28,13 @@ class UserprofileItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         print("box index $index");
         onTapManageTab(index + 1);
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setInt("dashboard_box_no", index +1);
       },
+
       child: Container(
         decoration: AppDecoration.outlineIndigo.copyWith(
           borderRadius: BorderRadiusStyle.roundedBorder16,

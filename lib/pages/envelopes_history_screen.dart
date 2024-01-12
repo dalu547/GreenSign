@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/envelope.dart';
 import '../../model/profile.dart';
+import '../constants/app_constants.dart';
 import '../model/EnvelopeHistory.dart';
 import '../model/manage_envelope_count.dart';
 
@@ -101,7 +102,7 @@ class _EnvelopesHistoryState extends State<EnvelopesHistoryScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Envelope: "+envelopeHistory!.data!.result!.envelopeName!,
+                  "Envelope: "+envelopeHistory!.data!.result!.envelopeName!??"",
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -167,7 +168,7 @@ class _EnvelopesHistoryState extends State<EnvelopesHistoryScreen> {
     });
 
     try {
-      String request_url = "http://10.80.13.29:8000/env_history/$env_id";
+      String request_url = AppConstants.API_BASE_URL+"/env_history/$env_id";
       print(request_url);
       final response = await http.get(
         Uri.parse(request_url),

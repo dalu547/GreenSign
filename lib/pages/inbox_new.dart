@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:GreenSign/constants/app_constants.dart';
 import 'package:GreenSign/core/mock_responses.dart';
 import 'package:GreenSign/core/utils/image_constant.dart';
 import 'package:GreenSign/core/utils/size_utils.dart';
@@ -18,21 +19,20 @@ import 'package:http/http.dart' as http;
 
 class InboxNew extends StatefulWidget {
   int type = 0;
-  InboxNew (this.type);
 
+  InboxNew(this.type);
 
   @override
   _InboxState createState() => _InboxState(type);
-
 
 //make list view items
 }
 
 class _InboxState extends State<InboxNew> {
-
   int _currentIndex = 1;
   String user_id_prefs = "";
   String auth_token = "";
+  int box_index = 0;
 
   Envelope? envelope;
 
@@ -40,7 +40,6 @@ class _InboxState extends State<InboxNew> {
 
   bool isLoading = false;
 
-  List<User> _users = [];
   TextEditingController _searchController = TextEditingController();
 
   List<Envelope>? _filteredList = [];
@@ -52,10 +51,12 @@ class _InboxState extends State<InboxNew> {
   String envelope_filter_name = "inbox";
   String envelope_type = "Inbox";
   String envelope_icon = ImageConstant.imgInbox;
+  String from = "navigation";
 
   _InboxState(int type);
 
-  void updateData(String env_filter,env_type,env_icon) {
+  //This method will trigger if it is from dialog selection.
+  void updateData(String env_filter, env_type, env_icon) {
     setState(() {
       envelope_filter_name = env_filter;
       envelope_type = env_type;
@@ -63,9 +64,8 @@ class _InboxState extends State<InboxNew> {
       print("dataFromChild $envelope_filter_name");
       //dismiss dialog
       Navigator.pop(context);
-      getData(envelope_filter_name);
+      getData("fromFilter", envelope_filter_name);
     });
-
   }
 
   @override
@@ -73,22 +73,55 @@ class _InboxState extends State<InboxNew> {
     super.initState();
     print("Type $type");
 
-    getData(envelope_filter_name);
+    box_index = 0;
+    getData(from, envelope_filter_name);
 
     setState(() {
-      // _foundedUsers = _users;
-
+      _filteredList = envelopes;
     });
   }
 
-  void getData(String envelopeType) async {
+  void getData(String from, String envelopeType) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     user_id_prefs = prefs.getString('user_id')!;
     auth_token = prefs.getString('auth_token')!;
+    box_index = prefs.getInt('dashboard_box_no') ?? 0;
+    print(box_index);
 
     print('user id from getData ${user_id_prefs}');
-    fetchInbox(user_id_prefs,envelopeType,auth_token);
-    fetchManageEnvelopeCount(user_id_prefs,auth_token);
+
+    if (from == "navigation") {
+      switch (box_index) {
+        case 0:
+          envelopeType = "inbox";
+          envelope_type = "Inbox";
+          envelope_icon = ImageConstant.imgInbox;
+          break;
+        case 1: //Action required
+          envelopeType = "inbox_action_required";
+          envelope_type = "Action Required";
+          envelope_icon = ImageConstant.imgExclamationCircle;
+          break;
+        case 2: //Waiting for others
+          envelopeType = "inbox_waiting_for_others";
+          envelope_type = "Waiting For Others";
+          envelope_icon = ImageConstant.imgClock;
+          break;
+        case 3: //Expiring Soon
+          envelopeType = "inbox_expiring_soon";
+          envelope_type = "Expiring Soon";
+          envelope_icon = ImageConstant.imgInfo;
+          break;
+        case 4: //Completed
+          envelopeType = "completed_envelopes";
+          envelope_type = "Completed";
+          envelope_icon = ImageConstant.imgCheck;
+          break;
+      }
+    }
+
+    fetchInbox(user_id_prefs, envelopeType, auth_token);
+    fetchManageEnvelopeCount(user_id_prefs, auth_token);
 
     setState(() {
       user_id_prefs = prefs.getString('user_id')!;
@@ -96,18 +129,14 @@ class _InboxState extends State<InboxNew> {
     });
   }
 
-  // onSearch(String searchText) {
-  //   setState(() {
-  //     _filteredList = envelopes
-  //         !.where((envelope) => envelope.envelopeName.toLowerCase().contains(searchText))
-  //         .toList();
-  //   });
-  // }
-
   void onSearch(String searchText) {
     setState(() {
       _filteredList = envelopes
-          ?.where((item) => item.envelopeName?.toLowerCase().contains(searchText.toLowerCase())??false)
+          ?.where((item) =>
+              item.envelopeName
+                  ?.toLowerCase()
+                  .contains(searchText.toLowerCase()) ??
+              false)
           .toList();
     });
   }
@@ -117,7 +146,7 @@ class _InboxState extends State<InboxNew> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading:   Padding(
+        leading: Padding(
           padding: const EdgeInsets.all(16.0),
           child: CustomImageView(
             imagePath: envelope_icon,
@@ -131,7 +160,8 @@ class _InboxState extends State<InboxNew> {
             onPressed: () {
               print('filter tap');
               // Show the custom dialog
-              _showCustomDialog(context,callback: updateData); // ScaffoldMessenger.of(context)
+              _showCustomDialog(context,
+                  callback: updateData); // ScaffoldMessenger.of(context)
               //     .showSnackBar(SnackBar(content: Text('Dialog text')));
             },
             icon: Icon(Icons.filter_list_alt),
@@ -144,33 +174,35 @@ class _InboxState extends State<InboxNew> {
           )
         ],
       ),
-      body: Stack(
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: TextField(
-          //     controller: _searchController,
-          //     onChanged: (value) {
-          //       onSearch(value);
-          //     },
-          //     decoration: InputDecoration(
-          //       labelText: 'Search',
-          //       hintText: 'Search...',
-          //       prefixIcon: Icon(Icons.search),
-          //     ),
-          //   ),
-          // ),
-          Container(
-            margin: EdgeInsets.all(10),
-            child: SingleChildScrollView(child: _buildEnvelopeList(context)),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.0), // Adjust the value as needed
+            child: TextField(
+              controller: _searchController,
+              onChanged: (value) {
+                onSearch(value);
+              },
+              decoration: InputDecoration(
+                hintText: 'Search by envelope name',
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              margin: EdgeInsets.all(10),
+              child: SingleChildScrollView(child: _buildEnvelopeList(context)),
+            ),
           ),
           Container(
-              child: Center(
-            child: isLoading ? CircularProgressIndicator() : Text(''),
-          ))
+            child: Center(
+              child: isLoading ? CircularProgressIndicator() : Text(''),
+            ),
+          ),
         ],
-      ),
-    );
+      ),    );
   }
 
   Widget _buildEnvelopeList(BuildContext context) {
@@ -183,16 +215,16 @@ class _InboxState extends State<InboxNew> {
           separatorBuilder: (context, index) {
             return SizedBox(height: 1);
           },
-          itemCount: envelopes!.length,
+          itemCount: _filteredList!.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: EmaillistItemWidget(envelopes![index]),
+              title: EmaillistItemWidget(_filteredList![index]),
               onTap: () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (_) =>
-                            EnvelopedetailsScreen(envelopes![index])));
+                            EnvelopedetailsScreen(_filteredList![index])));
               },
             );
           },
@@ -203,27 +235,33 @@ class _InboxState extends State<InboxNew> {
     }
   }
 
-  void _showCustomDialog(BuildContext context, {required void Function(String env_filter,String env_type,String env_icon) callback}) {
+  void _showCustomDialog(BuildContext context,
+      {required void Function(
+              String env_filter, String env_type, String env_icon)
+          callback}) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return ManageenvelopeScreen(
-            menvelopeCount!,callback); // Your custom dialog widget
+            menvelopeCount!, callback); // Your custom dialog widget
       },
     );
   }
 
-  fetchInbox(String userId,String envelopeType,String auth_token) async {
+  fetchInbox(String userId, String envelopeType, String auth_token) async {
     setState(() {
       isLoading = true;
     });
 
     try {
-      String request_url = "http://10.80.13.29:8000/$envelopeType/$userId";
+      String request_url = AppConstants.API_BASE_URL + "/$envelopeType/$userId";
       print(request_url);
       final response = await http.get(
         Uri.parse(request_url),
-        headers: {'Content-Type': 'application/json','Authorization': 'Bearer $auth_token'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $auth_token'
+        },
       );
 
       // final response = MockResponses.homePageInboxResponse;
@@ -241,13 +279,16 @@ class _InboxState extends State<InboxNew> {
             envelopes = envelopesList;
             _filteredList = envelopes;
           });
+          print(_filteredList?.length);
+
         } else {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Response incorrect$envelopeType')));
         }
       } else {
+        print(response.statusCode);
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+            .showSnackBar(SnackBar(content: Text('$response.statusCode')));
       }
     } catch (error) {
       print('Error: $error');
@@ -258,15 +299,18 @@ class _InboxState extends State<InboxNew> {
     }
   }
 
-  fetchManageEnvelopeCount(String userId,String auth_token) async {
+  fetchManageEnvelopeCount(String userId, String auth_token) async {
     setState(() {
       isLoading = true;
     });
 
     try {
       final response = await http.get(
-        Uri.parse('http://10.80.13.29:8000/mange_count/$userId'),
-        headers: {'Content-Type': 'application/json','Authorization': 'Bearer $auth_token'},
+        Uri.parse(AppConstants.API_BASE_URL + "/mange_count/$userId"),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $auth_token'
+        },
       );
 
       // final response = MockResponses.manageEnvelopeCountResponse;
