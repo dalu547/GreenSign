@@ -1,8 +1,8 @@
-import 'package:GreenSign/pages/dashboard_new.dart';
-import 'package:GreenSign/pages/reports_web_view.dart';
+import 'package:DigiSign/pages/dashboard_new.dart';
+import 'package:DigiSign/pages/profilescreen_screen.dart';
+import 'package:DigiSign/pages/reports_web_view.dart';
 import 'package:flutter/material.dart';
 
-import 'inbox.dart';
 import 'inbox_new.dart';
 import 'more.dart';
 
@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
         _changeTab(1, box_index);
       }),
       InboxNew(type), // Create InboxNew widget dynamically
-      ReportsWebView(),
+      ProfilescreenScreen(""),
       More(),
     ];
   }
@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
               activeIcon: Image.asset('assets/images/inbox_active.png'),
             ),
             BottomNavigationBarItem(
-              label: 'Reports',
+              label: 'Profile',
               icon: Image.asset('assets/images/reports_inactive.png'),
               activeIcon: Image.asset('assets/images/reports_active.png'),
             ),

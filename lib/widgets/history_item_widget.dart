@@ -1,6 +1,6 @@
-import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/model/EnvelopeHistory.dart';
-import 'package:GreenSign/model/envelope.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/model/EnvelopeHistory.dart';
+import 'package:DigiSign/model/envelope.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

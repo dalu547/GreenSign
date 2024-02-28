@@ -1,5 +1,5 @@
-import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/model/envelope_count.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/model/envelope_count.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/utils/image_constant.dart';
@@ -65,7 +65,7 @@ class ManageEnvelopeItemWidget extends StatelessWidget {
           mEnvelopeCount?.data?.inbox.toString(),
           mEnvelopeCount?.data?.completed.toString(),
           mEnvelopeCount?.data?.sent.toString(),
-          mEnvelopeCount?.data?.draft.toString(),
+          // mEnvelopeCount?.data?.draft.toString(),
           mEnvelopeCount?.data?.voided.toString(),
           mEnvelopeCount?.data?.expired.toString(),
           mEnvelopeCount?.data?.deleted.toString(),
@@ -76,14 +76,14 @@ class ManageEnvelopeItemWidget extends StatelessWidget {
 
   String get _getText {
     return [
-      'inbox',
-      'completed',
-      'sent',
-      'draft',
-      'voided',
-      'expired',
-      'deleted',
-      'declined',
+      'Inbox',
+      'Completed',
+      'Sent',
+      // 'draft',
+      'Voided',
+      'Expired',
+      'Deleted',
+      'Declined',
     ][index];
   }
 
@@ -92,7 +92,7 @@ class ManageEnvelopeItemWidget extends StatelessWidget {
       ImageConstant.imgInbox,
       ImageConstant.imgCompleted,
       ImageConstant.imgSent,
-      ImageConstant.imgDraft,
+      // ImageConstant.imgDraft,
       ImageConstant.imgVoided,
       ImageConstant.imgExpired,
       ImageConstant.imgDeleted,

@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:GreenSign/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
+import 'home_page.dart';
 import 'login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Powered by GreenkoGroup',
+            Text('© Greenko Group. All rights reserved',
                 style: TextStyle(
                     fontSize: 16,
                     color: Colors.white,

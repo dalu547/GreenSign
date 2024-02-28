@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:GreenSign/pages/profilescreen_screen.dart';
+import 'package:DigiSign/pages/profilescreen_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -37,18 +37,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
-  const TakePictureScreen({
-    super.key,
-    required this.camera,
-  });
+
+
+  // const TakePictureScreen({
+  //   super.key,
+  //   required this.camera,
+  // });
 
   final CameraDescription camera;
+  bool isSignatureSelected;
+  String sign_type;
+
+  TakePictureScreen(this.camera,this.isSignatureSelected,this.sign_type);
+
 
   @override
-  TakePictureScreenState createState() => TakePictureScreenState();
+  TakePictureScreenState createState() => TakePictureScreenState(isSignatureSelected,sign_type);
 }
 
 class TakePictureScreenState extends State<TakePictureScreen> {
+
+  bool isSignatureSelected;
+  String sign_type;
+
+  TakePictureScreenState(this.isSignatureSelected, this.sign_type);
+
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
 
@@ -116,7 +129,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                     DisplayPictureScreen(
                       // Pass the automatically generated path to
                       // the DisplayPictureScreen widget.
-                      imagePath: image.path,
+                      imagePath: image.path, isSignatureSelected: isSignatureSelected, sign_type: sign_type,
                     ),
               ),
             );
@@ -137,9 +150,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;
 
+  bool isSignatureSelected;
+  String sign_type;
 
-  const DisplayPictureScreen({super.key, required this.imagePath});
-
+  DisplayPictureScreen({super.key, required this.imagePath,required this.isSignatureSelected,required this.sign_type});
 
 
   @override
@@ -166,7 +180,7 @@ class DisplayPictureScreen extends StatelessWidget {
                 // Check if the file exists
                 if (imageFile.existsSync()) {
                   print('File exists');
-                  uploadImage(imageFile, auth_token, user_id_prefs,context);
+                  uploadImage(imageFile, auth_token, user_id_prefs,isSignatureSelected,sign_type,context);
                   // You can use the imageFile as needed
                 } else {
                   print('File does not exist');
@@ -184,9 +198,9 @@ class DisplayPictureScreen extends StatelessWidget {
 }
 
 Future<void> uploadImage(File imageFile, String auth_token,
-    String user_id,BuildContext context) async {
+    String user_id,bool is_default,String sign_type,BuildContext context) async {
   // Replace the URL with your server endpoint
-  final String url = AppConstants.API_BASE_URL + "/update_signature_path";
+  final String url = AppConstants.API_BASE_URL + "/upload_sign_path_mobile";
 
   // Create a multipart request
   var request = http.MultipartRequest('POST', Uri.parse(url));
@@ -200,12 +214,14 @@ Future<void> uploadImage(File imageFile, String auth_token,
   var fileStream = http.ByteStream(imageFile.openRead());
   var length = await imageFile.length();
   var multipartFile = http.MultipartFile(
-      'image', fileStream, length, filename: 'image.jpg');
+      'file', fileStream, length, filename: 'image.jpg');
   request.files.add(multipartFile);
   request.headers.addAll(headers);
 
   // You can add additional fields to the request if needed
   request.fields['user_id'] = user_id;
+  request.fields['is_default'] = is_default.toString();
+  request.fields['sign_type'] = sign_type;
 
   // Send the request
   try {

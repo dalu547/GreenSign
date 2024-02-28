@@ -7,12 +7,30 @@ class AppConstants {
   static const standardPadding = 16.0;
   static const standardMargin = 8.0;
 
+  //Dev
+  // static const API_BASE_URL = "http://3.6.220.0:5001";
+  // static const ENVELOPE_WEB_URL = "http://dev-digisign.greenko.net/test";
 
-  static const API_BASE_URL = "http://3.6.220.0:5001";
+  //Test
+  // static const API_BASE_URL = "http://3.6.220.0:5001";
 
-  // static const ENVELOPE_WEB_URL = "http://10.91.97.94:5555";
+  static const API_BASE_URL = "http://10.91.97.94:8001";
 
-  static const ENVELOPE_WEB_URL = "http://10.91.97.94:5555";
+  // static const ENVELOPE_WEB_URL = "http://3.6.220.0:5002/test";
+
+  //Maneesha system
+  // static const ENVELOPE_WEB_URL = "http://10.91.97.160:4200";
+
+  //Test
+  static const ENVELOPE_WEB_URL = "http://test-digisign.greenko.net";
+
+  //Dev
+  // static const ENVELOPE_WEB_URL = "http://dev-digisign.greenko.net";
+
+
+//UAT
+  // static const API_BASE_URL = "http://3.6.220.0:5005";
+  // static const ENVELOPE_WEB_URL = "http://digisign.greenko.net";
 
 }
 

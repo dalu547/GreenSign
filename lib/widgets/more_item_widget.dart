@@ -1,4 +1,4 @@
-import 'package:GreenSign/core/utils/size_utils.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/utils/image_constant.dart';
@@ -21,7 +21,7 @@ class MoreItemWidget extends StatelessWidget {
    MoreItemWidget({required this.index});
 
    List<String> icons = [ImageConstant.imgMoreProfile, ImageConstant.imgMoreSettings, ImageConstant.imgMoreLogout];
-   List<String> titles = ['My Profile', 'Settings', 'Logout'];
+   List<String> titles = ['My Signatures', 'Settings', 'Logout'];
 
   @override
   Widget build(BuildContext context) {

@@ -1,12 +1,15 @@
-import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/pages/profilescreen_screen.dart';
-import 'package:GreenSign/pages/settings_screen.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/pages/long_signatures_screen.dart';
+import 'package:DigiSign/pages/my_signatures_screen.dart';
+import 'package:DigiSign/pages/profilescreen_screen.dart';
+import 'package:DigiSign/pages/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/app_decoration.dart';
 import '../widgets/more_item_widget.dart';
 import 'login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:package_info/package_info.dart';
 
 
 class More extends StatefulWidget {
@@ -15,9 +18,34 @@ class More extends StatefulWidget {
 }
 
 class _MoreState extends State<More> {
+
+  String? _version;
+  String? _buildNumber;
+  String? _appName;
+  String? _packageName;
+
   @override
   void initState() {
     super.initState();
+
+    _getAppVersion();
+
+  }
+
+  void _getAppVersion() async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    final version = packageInfo.version;
+    final buildNumber = packageInfo.buildNumber;
+    final appName = packageInfo.appName;
+    final packageName = packageInfo.packageName;
+
+    setState(() {
+      _version = version;
+      _buildNumber = buildNumber;
+      _appName = appName;
+      _packageName = packageName;
+    });
   }
 
   @override
@@ -28,9 +56,14 @@ class _MoreState extends State<More> {
         title: Text('More'),
           automaticallyImplyLeading: false,
       ),
-      body: Container(
-        margin: EdgeInsets.all(10),
-        child: _buildMoreList(context),
+      body: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.all(10),
+            child: _buildMoreList(context),
+          ),
+          Text('Version $_version ($_buildNumber)'),
+        ],
       ),
     );
   }
@@ -57,7 +90,7 @@ class _MoreState extends State<More> {
                     case 0:
                       //My Profile
                       Navigator.push(
-                          context, MaterialPageRoute(builder: (_) => ProfilescreenScreen("")));
+                          context, MaterialPageRoute(builder: (_) => MySignaturesScreen("")));
                       break;
                     case 1:
                       //Settings
@@ -87,10 +120,15 @@ class _MoreState extends State<More> {
      SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool("is_logged_in", false);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-    );
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => LoginScreen()),
+    // );
+
+     Navigator.of(context).pushAndRemoveUntil(
+       MaterialPageRoute(builder: (context) => LoginScreen()),
+           (Route<dynamic> route) => false,
+     );
   }
 }
 

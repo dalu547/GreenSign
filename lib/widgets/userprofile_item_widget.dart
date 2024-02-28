@@ -1,5 +1,5 @@
-import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/model/envelope_count.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/model/envelope_count.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/utils/image_constant.dart';

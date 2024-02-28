@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'login_screen.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
 
@@ -47,7 +50,7 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
-                    hintText: 'Enter valid email id as abc@gmail.com'),
+                    hintText: 'Enter valid email id.'),
               ),
             ),
             SizedBox(
@@ -60,8 +63,9 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
                   color: Colors.blue, borderRadius: BorderRadius.circular(30)),
               child: MaterialButton(
                 onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => HomePage("")));
+
+                    logoutAndNavigateToLogin(context);
+
                 },
                 child: Text(
                   'Send',
@@ -75,6 +79,7 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
             MaterialButton(
               onPressed: (){
                 //TODO FORGOT PASSWORD SCREEN GOES HERE
+                logoutAndNavigateToLogin(context);
               },
               child: Text(
                 'Back to Login',
@@ -96,4 +101,20 @@ class _ForgotPasswordState extends State<ForgotPasswordScreen> {
   void dispose() {
     super.dispose();
   }
+
+  logoutAndNavigateToLogin(BuildContext context) async {
+    // Clear user authentication details or perform any necessary cleanup
+    // For example, you might clear the user token or reset the authentication state
+
+    // Navigate to the login screen
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool("is_logged_in", false);
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+          (Route<dynamic> route) => false,
+    );
+
+  }
+
 }

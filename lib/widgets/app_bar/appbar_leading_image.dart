@@ -1,4 +1,4 @@
-import 'package:GreenSign/core/utils/size_utils.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
 import 'package:flutter/material.dart';
 
 import '../custom_image_view.dart';

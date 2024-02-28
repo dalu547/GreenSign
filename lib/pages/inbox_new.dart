@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-import 'package:GreenSign/constants/app_constants.dart';
-import 'package:GreenSign/core/mock_responses.dart';
-import 'package:GreenSign/core/utils/image_constant.dart';
-import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/pages/envelopedetails_screen.dart';
+import 'package:DigiSign/constants/app_constants.dart';
+import 'package:DigiSign/core/mock_responses.dart';
+import 'package:DigiSign/core/utils/image_constant.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/pages/envelopedetails_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -92,7 +92,7 @@ class _InboxState extends State<InboxNew> {
 
     if (from == "navigation") {
       switch (box_index) {
-        case 0:
+        case 0: //Inbox
           envelopeType = "inbox";
           envelope_type = "Inbox";
           envelope_icon = ImageConstant.imgInbox;
@@ -178,7 +178,8 @@ class _InboxState extends State<InboxNew> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32.0), // Adjust the value as needed
+            padding: EdgeInsets.symmetric(horizontal: 32.0),
+            // Adjust the value as needed
             child: TextField(
               controller: _searchController,
               onChanged: (value) {
@@ -202,7 +203,8 @@ class _InboxState extends State<InboxNew> {
             ),
           ),
         ],
-      ),    );
+      ),
+    );
   }
 
   Widget _buildEnvelopeList(BuildContext context) {
@@ -218,7 +220,7 @@ class _InboxState extends State<InboxNew> {
           itemCount: _filteredList!.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: EmaillistItemWidget(_filteredList![index]),
+              title: EmaillistItemWidget(_filteredList![index], envelope_type),
               onTap: () {
                 Navigator.push(
                     context,
@@ -280,7 +282,6 @@ class _InboxState extends State<InboxNew> {
             _filteredList = envelopes;
           });
           print(_filteredList?.length);
-
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text('Response incorrect$envelopeType')));
@@ -334,8 +335,10 @@ class _InboxState extends State<InboxNew> {
     } catch (error) {
       print('Error: $error');
     } finally {
-      setState(() {
-        isLoading = false;
+      Future.delayed(Duration(seconds: 5), () {
+        setState(() {
+          isLoading = false;
+        });
       });
     }
   }

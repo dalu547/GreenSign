@@ -1,5 +1,5 @@
-import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/theme/theme_helper.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/theme/theme_helper.dart';
 import 'package:flutter/material.dart';
 
 /// A collection of pre-defined text styles for customizing text appearance,

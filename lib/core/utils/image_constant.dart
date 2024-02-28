@@ -144,4 +144,17 @@ class ImageConstant {
   static String imgCompleted = '$imagePath/img_completed.svg';
 
   static String imgDraft = '$imagePath/img_draft.svg';
+
+  static String imgUncheckedSignatutre = '$imagePath/img_user_white_a700.svg';
+
+  static String imgCheckedSignature = '$imagePath/checked_rb.svg';
+
+
+  static String imgPencil = '$imagePath/img_pencil.svg';
+
+  static String imgFrame136 = '$imagePath/img_frame_136.svg';
+
+  static String imgIcon = '$imagePath/img_icon.svg';
+
+
 }

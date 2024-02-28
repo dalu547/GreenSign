@@ -1,6 +1,6 @@
-import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/model/document.dart';
-import 'package:GreenSign/model/envelope.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/model/document.dart';
+import 'package:DigiSign/model/envelope.dart';
 import 'package:flutter/material.dart';
 
 import '../core/utils/image_constant.dart';
@@ -45,19 +45,21 @@ class ListrowItemWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              Expanded(
-                flex: 2,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    top: 5.v,
-                    bottom: 2.v,
-                  ),
-                  child: Text(
-                    envelope!.totalNumberDocuments.toString(),
-                    style: theme.textTheme.bodyMedium,
-                  ),
-                ),
-              ),
+              // Expanded(
+              //   flex: 2,
+              //   child: Padding(
+              //     padding: EdgeInsets.only(
+              //       top: 5.v,
+              //       bottom: 2.v,
+              //     ),
+              //     child: Text(
+              //       envelope!.totalNumberDocuments.toString(),
+              //       style: theme.textTheme.bodyMedium,
+              //     ),
+              //   ),
+              // ),
+
+              if(document.signature??false)
               Expanded(
                 flex: 1,
                 child: CustomImageView(
@@ -67,6 +69,7 @@ class ListrowItemWidget extends StatelessWidget {
                   margin: EdgeInsets.only(left: 10.h),
                 ),
               ),
+
               Expanded(
                 flex: 1,
                 child: CustomImageView(

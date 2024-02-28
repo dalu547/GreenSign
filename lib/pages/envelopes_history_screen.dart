@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:GreenSign/core/utils/image_constant.dart';
-import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/widgets/history_item_widget.dart';
+import 'package:DigiSign/core/utils/image_constant.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/widgets/history_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -102,7 +102,7 @@ class _EnvelopesHistoryState extends State<EnvelopesHistoryScreen> {
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  "Envelope: "+envelopeHistory!.data!.result!.envelopeName!??"",
+                  "Envelope: ${envelopeHistory?.data?.result?.envelopeName ?? 'N/A'}",
                   style: TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -147,7 +147,7 @@ class _EnvelopesHistoryState extends State<EnvelopesHistoryScreen> {
           separatorBuilder: (context, index) {
             return SizedBox(height: 1);
           },
-          itemCount: envelopeHistory!.data!.result!.activites!.length,
+          itemCount: envelopeHistory?.data?.result?.activites?.length ?? 0,
           itemBuilder: (context, index) {
             return ListTile(
               title: HistorylistItemWidget(

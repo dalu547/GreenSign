@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:GreenSign/constants/app_constants.dart';
-import 'package:GreenSign/pages/web_view_screen.dart';
+import 'package:DigiSign/constants/app_constants.dart';
+import 'package:DigiSign/pages/forgot_password_screen_new.dart';
+import 'package:DigiSign/pages/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -20,15 +21,15 @@ class LoginScreen extends StatefulWidget {
 class _LoginState extends State<LoginScreen> {
   bool isLoading = false;
   Login? loginResponse;
-
+  bool _isPasswordVisible = false;
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    // _usernameController.text = 'anilkumar.v@digitelenetworks.com';
-    // _passwordController.text = 'Anil@1234';
+    _usernameController.text = 'anilkumar.v@digitelenetworks.com';
+    _passwordController.text = 'Anil@123';
   }
 
   @override
@@ -57,7 +58,7 @@ class _LoginState extends State<LoginScreen> {
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
-                        hintText: 'Enter valid email id as abc@gmail.com'),
+                        hintText: 'Email'),
                   ),
                 ),
                 Padding(
@@ -65,9 +66,21 @@ class _LoginState extends State<LoginScreen> {
                   //padding: EdgeInsets.symmetric(horizontal: 15),
                   child: TextField(
                     controller: _passwordController,
-                    obscureText: true,
+                    obscureText: !_isPasswordVisible,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(), labelText: 'Password', hintText: 'Enter secure password'),
+                        border: OutlineInputBorder(),
+                        labelText: 'Password',
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                        ),
+                        hintText: 'Password'),
                   ),
                 ),
                 SizedBox(
@@ -115,7 +128,7 @@ class _LoginState extends State<LoginScreen> {
                 ),
                 MaterialButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => ForgotPasswordScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => ForgotPasswordScreenNew()));
                   },
                   child: Text(
                     'Forgot Password?',
@@ -188,12 +201,25 @@ class _LoginState extends State<LoginScreen> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
         }
       } else {
-        // If the server did not return a 200 OK response,
-        // then throw an exception.
-        // Failed login
-        // Handle error here (e.g., show an error message)
-        print('Login failed $response.statusCode');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong')));
+        print(response.body);
+        String jsonResponse = response.body;
+        Map<String, dynamic> decodedResponse = jsonDecode(jsonResponse);
+        // Check if the response contains the 'error' key
+        if (decodedResponse.containsKey('error')) {
+          // Access the 'message' key inside the 'error' map
+          String errorMessage = decodedResponse['error']['message'];
+
+          // Access the 'status' key in the top-level map
+          String status = decodedResponse['status'];
+
+          print('Status: $status');
+          print('Error Message: $errorMessage');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
+
+        } else {
+          // Handle other cases if needed
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Some thing went wrong.Please try after some time.')));
+        }
       }
     } catch (error) {
       // Handle network or other errors here
@@ -205,3 +231,8 @@ class _LoginState extends State<LoginScreen> {
     }
   }
 }
+
+
+
+
+

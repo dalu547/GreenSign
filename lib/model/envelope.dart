@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:GreenSign/model/required_approvals.dart';
+import 'package:DigiSign/model/required_approvals.dart';
 
 import 'document.dart';
 

@@ -1,4 +1,4 @@
-package com.greenko.greensignpoc
+package com.greenko.digisign
 
 import io.flutter.embedding.android.FlutterActivity
 

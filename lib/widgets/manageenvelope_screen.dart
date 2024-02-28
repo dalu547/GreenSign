@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
-import 'package:GreenSign/core/utils/size_utils.dart';
-import 'package:GreenSign/model/manage_envelope_count.dart';
+import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/model/manage_envelope_count.dart';
 import 'package:flutter/material.dart';
 
 import '../core/utils/image_constant.dart';
@@ -83,7 +83,7 @@ class _ManageenvelopeScreenState extends State<ManageenvelopeScreen> {
                   child: Padding(
                     padding: EdgeInsets.only(right: 16.h),
                     child: Text(
-                      "*completed in last one month",
+                      "*Completed in last one month",
                       style: CustomTextStyles.titleSmallBluegray500,
                     ),
                   ),
@@ -105,7 +105,7 @@ class _ManageenvelopeScreenState extends State<ManageenvelopeScreen> {
       "inbox",
       "completed_envelopes",
       "sent_envelopes",
-      "draft_envelopes",
+      // "draft_envelopes",
       "envelope_voided",
       "expired_envelopes",
       "deleted_envelopes",
@@ -116,7 +116,7 @@ class _ManageenvelopeScreenState extends State<ManageenvelopeScreen> {
       'Inbox',
       'Completed',
       'Sent',
-      'Draft',
+      // 'Draft',
       'Voided',
       'Expired',
       'Deleted',
@@ -127,7 +127,7 @@ class _ManageenvelopeScreenState extends State<ManageenvelopeScreen> {
       ImageConstant.imgInbox,
       ImageConstant.imgCompleted,
       ImageConstant.imgSent,
-      ImageConstant.imgDraft,
+      // ImageConstant.imgDraft,
       ImageConstant.imgVoided,
       ImageConstant.imgExpired,
       ImageConstant.imgDeleted,
@@ -142,7 +142,7 @@ class _ManageenvelopeScreenState extends State<ManageenvelopeScreen> {
         separatorBuilder: (context, index) {
           return SizedBox(height: 1);
         },
-        itemCount: 8,
+        itemCount: 7,
         itemBuilder: (context, index) {
           return ListTile(
             title: ManageEnvelopeItemWidget(mEnvelopeCount, index),

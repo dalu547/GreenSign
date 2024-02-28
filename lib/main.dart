@@ -1,4 +1,4 @@
-import 'package:GreenSign/pages/splash_screen.dart';
+import 'package:DigiSign/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 

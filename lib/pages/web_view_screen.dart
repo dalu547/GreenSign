@@ -1,4 +1,4 @@
-import 'package:GreenSign/constants/app_constants.dart';
+import 'package:DigiSign/constants/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +33,7 @@ class _WebviewState extends State<WebViewScreen> {
   void initState() {
     super.initState();
 
+    controller = WebViewController();
     getUserData();
   }
 
@@ -47,28 +48,18 @@ class _WebviewState extends State<WebViewScreen> {
     user_id_prefs = prefs.getString('user_id')!;
     print('user id from SF ${user_id_prefs}');
     auth_token = prefs.getString('auth_token')!;
-    // http://10.80.16.166:4200/recipient-docs-list?
-    // envelope_id=658ea8a948e8f9187d6a882f
-    // &sender_id=64cded5d24f228a98a501b6c
-    // &user_id=64cdecf924f228a98a501b68
 
-    String web_url =
-        AppConstants.ENVELOPE_WEB_URL+"/recipient-docs-list?envelope_id=" +
-            envelope_id! +
-            "&sender_id=" +
-            sender_id! +
-            "&user_id=" +
-            user_id_prefs! +
-            "&token=" +
-            auth_token! +
-            "&type=mobile";
+    // String webUrl =
+    //     "${AppConstants.ENVELOPE_WEB_URL}/recipient-docs-list?envelope_id=${envelope_id!}&sender_id=${sender_id!}&user_id=${user_id_prefs!}&token=${auth_token!}&type=mobile";
 
-    // String web_url  = 'http://10.80.16.166:4200/recipient-docs-list?envelope_id=658eaa4748e8f9187d6a883f&sender_id=64cdecf924f228a98a501b68&user_id=64cdecf924f228a98a501b68';
-    print("Web url in webview: " + web_url);
+    String webUrl =
+        "${AppConstants.ENVELOPE_WEB_URL}/mobile-interface?envelope_id=${envelope_id!}&sender_id=${sender_id!}&user_id=${user_id_prefs!}&token=${auth_token!}&type=mobile&page=recipient-docs-list";
 
-    controller = WebViewController()
+    print("Web url in webview: " + webUrl);
+
+    controller
       ..loadRequest(
-        Uri.parse(web_url),
+        Uri.parse(webUrl),
       )
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel(
@@ -76,9 +67,7 @@ class _WebviewState extends State<WebViewScreen> {
         onMessageReceived: (JavaScriptMessage javaScriptMessage) {
           print("message from the web view=\"${javaScriptMessage.message}\"");
           if(javaScriptMessage.message=="FINISH"){
-
               Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage("")));
-
           }
         },
       )

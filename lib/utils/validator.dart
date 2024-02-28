@@ -1,20 +1,20 @@
 class Validators {
   static String validateEmail(String value) {
     if (value.isEmpty) {
-      return 'Email cannot be empty';
+      return 'Please enter valid Email.';
     }
     if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(value)) {
-      return 'Invalid email address';
+      return 'Please enter valid Email.';
     }
     return "";
   }
 
   static String validatePassword(String value) {
     if (value.isEmpty) {
-      return 'Password cannot be empty';
+      return 'Please enter valid Password.';
     }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters';
+    if (value.length < 8) {
+      return 'Please enter valid Password.';
     }
     return "";
   }
