@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:DigiSign/core/utils/size_utils.dart';
 import 'package:DigiSign/pages/initial_signatures_screen.dart';
 import 'package:DigiSign/pages/long_signatures_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,18 +26,15 @@ import 'package:http/http.dart' as http;
 import '../widgets/mobile_image_converter.dart';
 
 class MySignaturesScreen extends StatefulWidget {
-  String user_id;
-
-  MySignaturesScreen(this.user_id);
 
   @override
   State<StatefulWidget> createState() {
-    return _MySignaturesScreenState(this.user_id);
+    return _MySignaturesScreenState();
   }
 }
 
 class _MySignaturesScreenState extends State<MySignaturesScreen> {
-  _MySignaturesScreenState(String user_id);
+  _MySignaturesScreenState();
 
   bool isLoading = false;
   String user_id_prefs = "";
@@ -176,7 +174,13 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                            child: Image.network(profile!.data!.user?.digital_signature ?? ""),
+                            child: CachedNetworkImage(
+                              imageUrl: profile!.data!.user!.digital_signature! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -189,9 +193,12 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
                       onPressed: () {
                         // Add your button onPressed logic here
                         print('Button clicked');
+
+                        Navigator.pop(context);
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => LongSignaturesScreen(profile!)));
+                            context, MaterialPageRoute(builder: (_) => LongSignaturesScreen()));
                       },
+
                       child: Text(
                         'Edit LongSignature',
                         style: TextStyle(
@@ -264,7 +271,13 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                            child: Image.network(profile!.data!.user?.initial ?? ""),
+                            child: CachedNetworkImage(
+                              imageUrl: profile!.data!.user!.initial! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -278,7 +291,7 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
                         // Add your button onPressed logic here
                         print('Button clicked');
                         Navigator.push(
-                            context, MaterialPageRoute(builder: (_) => InitialSignaturesScreen(profile!)));
+                            context, MaterialPageRoute(builder: (_) => InitialSignaturesScreen()));
                       },
                       child: Text(
                         'Edit Initial',
@@ -299,6 +312,7 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
   }
 
   fetchProfileData(String userId, String auth_token) async {
+    print('fetch profile in my signatures screen');
     setState(() {
       isLoading = true;
     });
@@ -326,6 +340,7 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
             profile = Profile.fromJson(jsonResponse);
             print(profile?.data?.user?.long_signature_1);
           });
+
         } else {
           print('Invalid JSON response');
           ScaffoldMessenger.of(context as BuildContext)

@@ -12,6 +12,9 @@ import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'initial_signatures_screen.dart';
+import 'long_signatures_screen.dart';
+
 
 // Future<void> main() async {
 //   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -47,20 +50,22 @@ class TakePictureScreen extends StatefulWidget {
   final CameraDescription camera;
   bool isSignatureSelected;
   String sign_type;
+  String from;
 
-  TakePictureScreen(this.camera,this.isSignatureSelected,this.sign_type);
+  TakePictureScreen(this.camera,this.isSignatureSelected,this.sign_type,this.from);
 
 
   @override
-  TakePictureScreenState createState() => TakePictureScreenState(isSignatureSelected,sign_type);
+  TakePictureScreenState createState() => TakePictureScreenState(isSignatureSelected,sign_type,from);
 }
 
 class TakePictureScreenState extends State<TakePictureScreen> {
 
   bool isSignatureSelected;
   String sign_type;
+  String from;
 
-  TakePictureScreenState(this.isSignatureSelected, this.sign_type);
+  TakePictureScreenState(this.isSignatureSelected, this.sign_type,this.from);
 
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
@@ -123,13 +128,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
             if (!mounted) return;
 
             // If the picture was taken, display it on a new screen.
+            Navigator.pop(context);
             await Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) =>
                     DisplayPictureScreen(
                       // Pass the automatically generated path to
                       // the DisplayPictureScreen widget.
-                      imagePath: image.path, isSignatureSelected: isSignatureSelected, sign_type: sign_type,
+                      imagePath: image.path, isSignatureSelected: isSignatureSelected, sign_type: sign_type, from: from,
                     ),
               ),
             );
@@ -152,8 +158,9 @@ class DisplayPictureScreen extends StatelessWidget {
 
   bool isSignatureSelected;
   String sign_type;
+  String from;
 
-  DisplayPictureScreen({super.key, required this.imagePath,required this.isSignatureSelected,required this.sign_type});
+  DisplayPictureScreen({super.key, required this.imagePath,required this.isSignatureSelected,required this.sign_type,required this.from});
 
 
   @override
@@ -180,7 +187,7 @@ class DisplayPictureScreen extends StatelessWidget {
                 // Check if the file exists
                 if (imageFile.existsSync()) {
                   print('File exists');
-                  uploadImage(imageFile, auth_token, user_id_prefs,isSignatureSelected,sign_type,context);
+                  uploadImage(imageFile, auth_token, user_id_prefs,isSignatureSelected,sign_type,context,from);
                   // You can use the imageFile as needed
                 } else {
                   print('File does not exist');
@@ -198,7 +205,7 @@ class DisplayPictureScreen extends StatelessWidget {
 }
 
 Future<void> uploadImage(File imageFile, String auth_token,
-    String user_id,bool is_default,String sign_type,BuildContext context) async {
+    String user_id,bool is_default,String sign_type,BuildContext context,String from) async {
   // Replace the URL with your server endpoint
   final String url = AppConstants.API_BASE_URL + "/upload_sign_path_mobile";
 
@@ -231,7 +238,16 @@ Future<void> uploadImage(File imageFile, String auth_token,
     if (response.statusCode == 200) {
       print('Signature from capture successfully');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature updated successfully')));
-      Navigator.push(context, MaterialPageRoute(builder: (_) => ProfilescreenScreen("")));
+      Navigator.pop(context);
+
+      if(from == "long_signature"){
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => LongSignaturesScreen()));
+      }else if(from == "initial"){
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => InitialSignaturesScreen()));
+      }
+
 
     } else {
       print('Failed to upload image. Status code: ${response.statusCode}');

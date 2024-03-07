@@ -10,16 +10,20 @@ import 'package:http/http.dart' as http;
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'initial_signatures_screen.dart';
+import 'long_signatures_screen.dart';
+
 class ImagePickerScreen extends StatefulWidget {
 
   bool isSignatureSelected;
   String sign_type;
+  String from;
 
-  ImagePickerScreen(this.isSignatureSelected,this.sign_type);
+  ImagePickerScreen(this.isSignatureSelected,this.sign_type,this.from);
 
 
   @override
-  _ImagePickerScreenState createState() => _ImagePickerScreenState(isSignatureSelected,sign_type);
+  _ImagePickerScreenState createState() => _ImagePickerScreenState(isSignatureSelected,sign_type,from);
 }
 
 class _ImagePickerScreenState extends State<ImagePickerScreen> {
@@ -29,8 +33,32 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
 
   bool isSignatureSelected;
   String sign_type;
+  String from;
 
-  _ImagePickerScreenState(this.isSignatureSelected, this.sign_type);
+  String user_id_prefs = "";
+  String auth_token = "";
+
+  _ImagePickerScreenState(this.isSignatureSelected, this.sign_type,this.from);
+
+  @override
+  void initState() {
+    super.initState();
+
+    getData();
+  }
+
+  void getData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    user_id_prefs = prefs.getString('user_id')!;
+    auth_token = prefs.getString('auth_token')!;
+
+    print('user id from getData ${user_id_prefs}');
+
+    setState(() {
+      user_id_prefs = prefs.getString('user_id')!;
+      print('user id from getPrefsData setState ${user_id_prefs}');
+    });
+  }
 
   Future<void> _pickImage() async {
     final pickedImage =
@@ -60,16 +88,10 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
         onPressed: () async {
 
           if(isUpload){
-            final SharedPreferences prefs = await SharedPreferences.getInstance();
-            String  user_id_prefs = prefs.getString('user_id')!;
-            String auth_token = prefs.getString('auth_token')!;
-            uploadImage(_image!, auth_token, user_id_prefs,sign_type,isSignatureSelected,context);
-
+            uploadImage(_image!, auth_token, user_id_prefs,sign_type,isSignatureSelected,context,from);
           }else{
             _pickImage();
-
           }
-
 
         },
         tooltip: 'Pick Signature',
@@ -80,8 +102,8 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
 
 }
 
-Future<void> uploadImage(File imageFile, String user_id,String auth_token,String sign_type,
-    bool is_default,BuildContext context) async {
+Future<void> uploadImage(File imageFile, String auth_token,String user_id,String sign_type,
+    bool is_default,BuildContext context, String from) async {
   // Replace the URL with your server endpoint
   final String url = AppConstants.API_BASE_URL + "/upload_sign_path_mobile";
 
@@ -114,7 +136,15 @@ Future<void> uploadImage(File imageFile, String user_id,String auth_token,String
     if (response.statusCode == 200) {
       print('Signature from gallery uploaded successfully');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature updated successfully')));
+
       Navigator.pop(context);
+      if(from == "long_signature"){
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => LongSignaturesScreen()));
+      }else if(from == "initial"){
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => InitialSignaturesScreen()));
+      }
 
     } else {
       print('Failed to upload Signature from gallery. Status code: ${response.statusCode}');

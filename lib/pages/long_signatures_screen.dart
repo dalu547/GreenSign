@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:math';
 import 'dart:ui' as ui;
 import 'dart:io';
 
 import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:DigiSign/pages/my_signatures_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -26,22 +29,16 @@ import '../widgets/mobile_image_converter.dart';
 
 
 class LongSignaturesScreen extends StatefulWidget {
-  Profile profile;
-
-  LongSignaturesScreen(this.profile);
 
   @override
   State<StatefulWidget> createState() {
-    return _LongSignaturesScreenState(this.profile);
+    return _LongSignaturesScreenState();
   }
 
 }
 
 class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
-  Profile profile;
-
-  _LongSignaturesScreenState(this.profile);
-
+  late Profile profile;
 
   bool isLoading = false;
   String user_id_prefs = "";
@@ -67,6 +64,8 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
   bool isLS2Selected = false;
   bool isLS3Selected = false;
   bool isLS4Selected = false;
+
+  String title = "Long Signatures";
 
   @override
   void initState() {
@@ -102,13 +101,23 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("build triggered");
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text('Long Signatures'),
-          automaticallyImplyLeading: true,
+          title: Text(title),
+          // automaticallyImplyLeading: true,
+          leading: BackButton(
+            onPressed: (){
+
+              Navigator.pop(context);
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => MySignaturesScreen()));
+
+            },
+          ),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -209,7 +218,13 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                            child: Image.network(profile!.data!.user?.long_signature_1 ?? ""),
+                            child: CachedNetworkImage(
+                              imageUrl: profile!.data!.user!.long_signature_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -299,7 +314,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                         onTap: () {
                           print("Upload");
 
-                          uploadSignatureFromGallery(1,isLS1Selected,"longSignature1");
+                          uploadSignatureFromGallery(1,isLS1Selected,"longSignature1",);
 
                         },
                         child: Container(
@@ -415,7 +430,13 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                            child: Image.network(profile!.data!.user?.long_signature_2 ?? ""),
+                            child: CachedNetworkImage(
+                              imageUrl: profile!.data!.user!.long_signature_2! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -620,7 +641,13 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                              child: Image.network(profile!.data!.user?.long_signature_3 ?? ""),
+                              child: CachedNetworkImage(
+                                imageUrl: profile!.data!.user!.long_signature_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
+                                fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -826,7 +853,13 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                            child: Image.network(profile!.data!.user?.long_signature_4 ?? ""),
+                            child: CachedNetworkImage(
+                              imageUrl: profile!.data!.user!.long_signature_4! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -966,7 +999,23 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 
   //Upload from GALLERY.
   void uploadSignatureFromGallery(int sign_num,bool isSignSelected,String sign_type) {
-    Navigator.push(context as BuildContext, MaterialPageRoute(builder: (_) => ImagePickerScreen(isSignSelected,sign_type)));
+    // Navigator.push(context as BuildContext, MaterialPageRoute(builder: (_) => ImagePickerScreen(isSignSelected,sign_type)));
+
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => ImagePickerScreen(isSignSelected,sign_type)),
+    // ).then((isupdate) {
+    //   if(isupdate){
+    //     print("profile call after gallery update");
+    //     // Handle updated data here
+    //     fetchProfileData(user_id_prefs, auth_token);
+    //   }
+    // });
+
+    Navigator.pop(context);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => ImagePickerScreen(isSignSelected,sign_type,"long_signature")));
+
   }
 
 
@@ -983,7 +1032,23 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 // Get a specific camera from the list of available cameras.
     final firstCamera = cameras.first;
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) => TakePictureScreen(firstCamera,isSignSelected,signature_type)));
+    // Navigator.push(context, MaterialPageRoute(builder: (_) => TakePictureScreen(firstCamera,isSignSelected,signature_type)));
+
+
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => TakePictureScreen(firstCamera,isSignSelected,signature_type)),
+    // ).then((isupdate) {
+    //   if(isupdate){
+    //     print("profile call after camera update");
+    //     // Handle updated data here
+    //     fetchProfileData(user_id_prefs, auth_token);
+    //   }
+    // });
+
+    Navigator.pop(context);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => TakePictureScreen(firstCamera,isSignSelected,signature_type,"long_signature")));
 
   }
 
@@ -1164,7 +1229,6 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
     // Write the Uint8List to a file
     File file = await writeBytesToFile(data, 'example_image.jpg');
 
-
     uploadImage(file, auth_token, user_id_prefs,isSignSelected,sign_type);
 
   }
@@ -1218,8 +1282,6 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 
     print(multipartFile.length);
 
-
-
     // Send the request
     try {
       final response = await request.send();
@@ -1230,6 +1292,14 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
       if (response.statusCode == 200) {
         print('Signature draw successfully');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature updated successfully')));
+
+        // fetchProfileData(user_id_prefs, auth_token);
+
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => LongSignaturesScreen()));
+
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature failed')));
         print('Error: ${response.statusCode} - ${response.reasonPhrase}');
@@ -1261,10 +1331,11 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
           print('profile successful');
           print(jsonResponse);
+
           setState(() {
             profile = Profile.fromJson(jsonResponse);
-            print(profile?.data?.user?.digital_signature);
           });
+
         } else {
           print('Invalid JSON response');
           ScaffoldMessenger.of(context as BuildContext)

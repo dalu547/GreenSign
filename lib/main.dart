@@ -1,3 +1,4 @@
+import 'package:DigiSign/pages/sfpdf_viewer_demo.dart';
 import 'package:DigiSign/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue
         ),
         debugShowCheckedModeBanner: false,
-        home: SplashScreen()
+        home: SplashScreen(),
 
     );
   }

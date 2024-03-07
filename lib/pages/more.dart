@@ -90,7 +90,7 @@ class _MoreState extends State<More> {
                     case 0:
                       //My Profile
                       Navigator.push(
-                          context, MaterialPageRoute(builder: (_) => MySignaturesScreen("")));
+                          context, MaterialPageRoute(builder: (_) => MySignaturesScreen()));
                       break;
                     case 1:
                       //Settings

@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'dart:io';
 
 import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,25 +23,22 @@ import 'package:http/http.dart' as http;
 
 
 import '../widgets/mobile_image_converter.dart';
+import 'my_signatures_screen.dart';
 
 
 
 class InitialSignaturesScreen extends StatefulWidget {
-  Profile profile;
-
-  InitialSignaturesScreen(this.profile);
 
   @override
   State<StatefulWidget> createState() {
-    return _InitialSignaturesScreenState(this.profile);
+    return _InitialSignaturesScreenState();
   }
 
 }
 
 class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
 
-  Profile profile;
-  _InitialSignaturesScreenState(this.profile);
+  late Profile profile;
 
   bool isLoading = false;
   String user_id_prefs = "";
@@ -106,7 +104,15 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           title: Text('Initials'),
-          automaticallyImplyLeading: true,
+            leading: BackButton(
+              onPressed: (){
+
+                Navigator.pop(context);
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (_) => MySignaturesScreen()));
+
+              },
+            ),
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -206,7 +212,13 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                            child: Image.network(profile!.data!.user?.initial_1 ?? ""),
+                            child: CachedNetworkImage(
+                              imageUrl: profile!.data!.user!.initial_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -219,7 +231,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Camera");
-                          uploadSignatureFromCamera(1,isLS1Selected,"initial_1");
+                          uploadSignatureFromCamera(1,isLS1Selected,"initial1");
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 4.h),
@@ -257,7 +269,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Digital pad");
-                          drawSignature(1,isLS1Selected,"initial_1");
+                          drawSignature(1,isLS1Selected,"initial1");
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 4.h),
@@ -296,7 +308,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                         onTap: () {
                           print("Upload");
 
-                          uploadSignatureFromGallery(1,isLS1Selected,"initial_1");
+                          uploadSignatureFromGallery(1,isLS1Selected,"initial1");
 
                         },
                         child: Container(
@@ -412,7 +424,13 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                            child: Image.network(profile!.data!.user?.initial_2 ?? ""),
+                            child: CachedNetworkImage(
+                              imageUrl: profile!.data!.user!.initial_2! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -425,7 +443,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Camera");
-                          uploadSignatureFromCamera(2,isLS2Selected,"initial_2");
+                          uploadSignatureFromCamera(2,isLS2Selected,"initial2");
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 4.h),
@@ -463,7 +481,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Digital pad");
-                          drawSignature(2,isLS2Selected,"initial_2");
+                          drawSignature(2,isLS2Selected,"initial2");
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 4.h),
@@ -501,7 +519,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Upload");
-                          uploadSignatureFromGallery(2,isLS2Selected,"initial_2");
+                          uploadSignatureFromGallery(2,isLS2Selected,"initial2");
 
                         },
                         child: Container(
@@ -617,7 +635,13 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                            child: Image.network(profile!.data!.user?.initial_3 ?? ""),
+                            child: CachedNetworkImage(
+                              imageUrl: profile!.data!.user!.initial_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -630,7 +654,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Camera");
-                          uploadSignatureFromCamera(3,isLS3Selected,"initial_3");
+                          uploadSignatureFromCamera(3,isLS3Selected,"initial3");
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 4.h),
@@ -668,7 +692,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Digital pad");
-                          drawSignature(3,isLS3Selected,"initial_3");
+                          drawSignature(3,isLS3Selected,"initial3");
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 4.h),
@@ -706,7 +730,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Upload");
-                          uploadSignatureFromGallery(3,isLS3Selected,"initial_3");
+                          uploadSignatureFromGallery(3,isLS3Selected,"initial3");
                         },
                         child: Container(
                           margin: EdgeInsets.only(left: 4.h),
@@ -821,7 +845,13 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
-                            child: Image.network(profile!.data!.user?.initial_4 ?? ""),
+                            child: CachedNetworkImage(
+                              imageUrl: profile!.data!.user!.initial_4! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ],
@@ -834,7 +864,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Camera");
-                          uploadSignatureFromCamera(4,isLS4Selected,"initial_4");
+                          uploadSignatureFromCamera(4,isLS4Selected,"initial4");
                         },
                         child: Container(
                           margin: EdgeInsets.only(right: 4.h),
@@ -872,7 +902,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Digital pad");
-                          drawSignature(4,isLS4Selected,"initial_4");
+                          drawSignature(4,isLS4Selected,"initial4");
                         },
                         child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 4.h),
@@ -910,7 +940,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Upload");
-                          uploadSignatureFromGallery(4,isLS4Selected,"initial_4");
+                          uploadSignatureFromGallery(4,isLS4Selected,"initial4");
                         },
                         child: Container(
                           margin: EdgeInsets.only(left: 4.h),
@@ -958,7 +988,24 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
   }
 
   void uploadSignatureFromGallery(int sign_num,bool isDefault,String sign_type) {
-    Navigator.push(context as BuildContext, MaterialPageRoute(builder: (_) => ImagePickerScreen(isDefault,sign_type)));
+    // Navigator.push(context as BuildContext, MaterialPageRoute(builder: (_) => ImagePickerScreen(isDefault,sign_type)));
+
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(builder: (context) => ImagePickerScreen(isDefault,sign_type)),
+    // ).then((isupdate) {
+    //   if(isupdate){
+    //     print("profile call after gallery update");
+    //     // Handle updated data here
+    //     fetchProfileData(user_id_prefs, auth_token);
+    //   }
+    // });
+
+    Navigator.pop(context);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (_) => ImagePickerScreen(isDefault,sign_type,"initial")));
+
+
   }
 
   void drawSignature(int sign_num,bool isDefault,String sign_type) {
@@ -982,7 +1029,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
 // Get a specific camera from the list of available cameras.
     final firstCamera = cameras.first;
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) => TakePictureScreen(firstCamera,false,"")));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => TakePictureScreen(firstCamera,isDefault,sign_type,"initial")));
 
   }
 
@@ -1190,6 +1237,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
     var fileStream = http.ByteStream(imageFile.openRead());
     var length = await imageFile.length();
     var multipartFile = http.MultipartFile('file', fileStream, length, filename: 'image.jpg');
+
     request.files.add(multipartFile);
     request.headers.addAll(headers);
 
@@ -1197,6 +1245,14 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
     request.fields['user_id'] = user_id;
     request.fields['is_default'] = is_default.toString();
     request.fields['sign_type'] = sign_type;
+
+
+    print('URL: $url');
+    print('Headers: $headers');
+    print('Image File: $imageFile');
+    print('user_id: $user_id');
+    print('is_default: $is_default');
+    print('sign_type: $sign_type');
 
     // Send the request
     try {
@@ -1206,6 +1262,11 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
       if (response.statusCode == 200) {
         print('Signature draw successfully');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature updated successfully')));
+
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => InitialSignaturesScreen()));
+
       } else {
         print('Failed to signature draw. Status code: ${response.statusCode}');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature failed')));
