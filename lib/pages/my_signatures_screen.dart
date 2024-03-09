@@ -175,7 +175,8 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                             child: CachedNetworkImage(
-                              imageUrl: profile!.data!.user!.digital_signature! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              imageUrl: profile?.data?.user?.digital_signature != null
+                                  ? profile!.data!.user!.digital_signature! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}' : '',
                               placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
@@ -272,7 +273,9 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                             child: CachedNetworkImage(
-                              imageUrl: profile!.data!.user!.initial! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              imageUrl: profile?.data?.user?.initial != null
+                                  ? profile!.data!.user!.initial! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',
                               placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
@@ -290,6 +293,7 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
                       onPressed: () {
                         // Add your button onPressed logic here
                         print('Button clicked');
+                        Navigator.pop(context);
                         Navigator.push(
                             context, MaterialPageRoute(builder: (_) => InitialSignaturesScreen()));
                       },

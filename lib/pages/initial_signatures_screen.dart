@@ -74,6 +74,8 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
         defaultTargetPlatform == TargetPlatform.macOS ||
         kIsWeb;
 
+    profile = Profile(status: '', data: null); // Initialize profile here
+
     getData();
   }
 
@@ -213,7 +215,9 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                             child: CachedNetworkImage(
-                              imageUrl: profile!.data!.user!.initial_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              imageUrl: profile?.data?.user?.initial_1 != null
+                                  ? profile!.data!.user!.initial_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',
                               placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
@@ -425,7 +429,9 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                             child: CachedNetworkImage(
-                              imageUrl: profile!.data!.user!.initial_2! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              imageUrl: profile?.data?.user?.initial_2 != null
+                                  ? profile!.data!.user!.initial_2! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',
                               placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
@@ -636,7 +642,9 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                             child: CachedNetworkImage(
-                              imageUrl: profile!.data!.user!.initial_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              imageUrl: profile?.data?.user?.initial_3 != null
+                                  ? profile!.data!.user!.initial_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',
                               placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
@@ -846,7 +854,9 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                             child: CachedNetworkImage(
-                              imageUrl: profile!.data!.user!.initial_4! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
+                              imageUrl: profile?.data?.user?.initial_4 != null
+                                  ? profile!.data!.user!.initial_4! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',
                               placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
@@ -1013,8 +1023,6 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
     _showPopup(isDefault,sign_type);
 
     // Navigator.push(context, MaterialPageRoute(builder: (_) => SignaturePage()));
-
-
   }
 
   Future<void> uploadSignatureFromCamera(int sign_num,bool isDefault,String sign_type) async {
@@ -1300,7 +1308,9 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
           print(jsonResponse);
           setState(() {
             profile = Profile.fromJson(jsonResponse);
-            print(profile?.data?.user?.digital_signature);
+
+            setDefaultSignature(profile);
+
           });
         } else {
           print('Invalid JSON response');
@@ -1320,5 +1330,61 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
       });
     }
   }
+
+
+  void setDefaultSignature(Profile profile) {
+
+    if(profile.data?.user?.initial == profile.data?.user?.initial_1){
+
+      _ls1ImagePath = ImageConstant.imgCheckedSignature;
+      _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+
+      isLS1Selected = true;
+      isLS2Selected = false;
+      isLS3Selected = false;
+      isLS4Selected = false;
+
+    }else   if(profile.data?.user?.initial == profile.data?.user?.initial_2){
+
+      _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls2ImagePath = ImageConstant.imgCheckedSignature;
+      _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+
+      isLS1Selected = false;
+      isLS2Selected = true;
+      isLS3Selected = false;
+      isLS4Selected = false;
+
+    }else if(profile.data?.user?.initial == profile.data?.user?.initial_3){
+
+      _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls3ImagePath = ImageConstant.imgCheckedSignature;
+      _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+
+      isLS1Selected = false;
+      isLS2Selected = false;
+      isLS3Selected = true;
+      isLS4Selected = false;
+
+    }else if(profile.data?.user?.initial == profile.data?.user?.initial_4){
+
+      _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls4ImagePath = ImageConstant.imgCheckedSignature;
+
+      isLS1Selected = false;
+      isLS2Selected = false;
+      isLS3Selected = false;
+      isLS4Selected = true;
+
+    }
+
+  }
+
 }
 

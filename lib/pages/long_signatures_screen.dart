@@ -76,6 +76,8 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
         defaultTargetPlatform == TargetPlatform.macOS ||
         kIsWeb;
 
+    profile = Profile(status: '', data: null); // Initialize profile here
+
     getData();
   }
 
@@ -219,8 +221,9 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                             child: CachedNetworkImage(
-                              imageUrl: profile!.data!.user!.long_signature_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
-                              placeholder: (context, url) =>
+                              imageUrl: profile?.data?.user?.long_signature_1 != null
+                                  ? profile!.data!.user!.long_signature_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',                              placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
                               fit: BoxFit.cover,
@@ -431,8 +434,9 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                             child: CachedNetworkImage(
-                              imageUrl: profile!.data!.user!.long_signature_2! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
-                              placeholder: (context, url) =>
+                              imageUrl: profile?.data?.user?.long_signature_2 != null
+                                  ? profile!.data!.user!.long_signature_2! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',                              placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
                               fit: BoxFit.cover,
@@ -642,8 +646,9 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                               child: CachedNetworkImage(
-                                imageUrl: profile!.data!.user!.long_signature_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
-                                placeholder: (context, url) =>
+                                imageUrl: profile?.data?.user?.long_signature_3 != null
+                                    ? profile!.data!.user!.long_signature_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                    : '',                                placeholder: (context, url) =>
                                     CircularProgressIndicator(),
                                 errorWidget: (context, url, error) => Icon(Icons.error),
                                 fit: BoxFit.cover,
@@ -854,8 +859,9 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 16.h),
                             child: CachedNetworkImage(
-                              imageUrl: profile!.data!.user!.long_signature_4! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'  ?? "",
-                              placeholder: (context, url) =>
+                              imageUrl: profile?.data?.user?.long_signature_4 != null
+                                  ? profile!.data!.user!.long_signature_4! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',                              placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
                               fit: BoxFit.cover,
@@ -1334,6 +1340,9 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 
           setState(() {
             profile = Profile.fromJson(jsonResponse);
+
+            setDefaultSignature(profile);
+
           });
 
         } else {
@@ -1353,6 +1362,61 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
         isLoading = false;
       });
     }
+  }
+
+  void setDefaultSignature(Profile profile) {
+
+    if(profile.data?.user?.digital_signature == profile.data?.user?.long_signature_1){
+
+      _ls1ImagePath = ImageConstant.imgCheckedSignature;
+       _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
+       _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
+       _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+
+       isLS1Selected = true;
+       isLS2Selected = false;
+       isLS3Selected = false;
+       isLS4Selected = false;
+
+    }else   if(profile.data?.user?.digital_signature == profile.data?.user?.long_signature_2){
+
+      _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls2ImagePath = ImageConstant.imgCheckedSignature;
+      _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+
+      isLS1Selected = false;
+      isLS2Selected = true;
+      isLS3Selected = false;
+      isLS4Selected = false;
+
+    }else if(profile.data?.user?.digital_signature == profile.data?.user?.long_signature_3){
+
+      _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls3ImagePath = ImageConstant.imgCheckedSignature;
+      _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+
+      isLS1Selected = false;
+      isLS2Selected = false;
+      isLS3Selected = true;
+      isLS4Selected = false;
+
+    }else if(profile.data?.user?.digital_signature == profile.data?.user?.long_signature_4){
+
+      _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls4ImagePath = ImageConstant.imgCheckedSignature;
+
+      isLS1Selected = false;
+      isLS2Selected = false;
+      isLS3Selected = false;
+      isLS4Selected = true;
+
+    }
+
+
   }
 
 }
