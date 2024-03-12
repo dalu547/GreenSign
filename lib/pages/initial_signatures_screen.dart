@@ -148,7 +148,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
 
   Widget _buildFrameOne(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 16.v),
       decoration: AppDecoration.outlineIndigo,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -188,16 +188,16 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   SizedBox(
-                    height: 81.v,
-                    width: 297.h,
+                    height: 80.v,
+                    width: 300.h,
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            height: 72.v,
-                            width: 297.h,
+                            height: 100.v,
+                            width: 300.h,
                             decoration: BoxDecoration(
                               color: appTheme.whiteA700,
                               borderRadius: BorderRadius.circular(
@@ -213,7 +213,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 16.h),
+                            padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
                             child: CachedNetworkImage(
                               imageUrl: profile?.data?.user?.initial_1 != null
                                   ? profile!.data!.user!.initial_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
@@ -361,7 +361,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
   }
   Widget _buildFrameTwo(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 16.v),
       decoration: AppDecoration.outlineIndigo,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -402,16 +402,16 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   SizedBox(
-                    height: 81.v,
-                    width: 297.h,
+                    height: 80.v,
+                    width: 300.h,
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            height: 72.v,
-                            width: 297.h,
+                            height: 100.v,
+                            width: 300.h,
                             decoration: BoxDecoration(
                               color: appTheme.whiteA700,
                               borderRadius: BorderRadius.circular(
@@ -427,7 +427,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 16.h),
+                            padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
                             child: CachedNetworkImage(
                               imageUrl: profile?.data?.user?.initial_2 != null
                                   ? profile!.data!.user!.initial_2! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
@@ -574,7 +574,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
   }
   Widget _buildFrameThree(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 16.v),
       decoration: AppDecoration.outlineIndigo,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -615,16 +615,16 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   SizedBox(
-                    height: 81.v,
-                    width: 297.h,
+                    height: 80.v,
+                    width: 300.h,
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            height: 72.v,
-                            width: 297.h,
+                            height: 100.v,
+                            width: 300.h,
                             decoration: BoxDecoration(
                               color: appTheme.whiteA700,
                               borderRadius: BorderRadius.circular(
@@ -640,7 +640,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 16.h),
+                            padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
                             child: CachedNetworkImage(
                               imageUrl: profile?.data?.user?.initial_3 != null
                                   ? profile!.data!.user!.initial_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
@@ -786,7 +786,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
   }
   Widget _buildFrameFour(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 16.v),
       decoration: AppDecoration.outlineIndigo,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -827,16 +827,16 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   SizedBox(
-                    height: 81.v,
-                    width: 297.h,
+                    height: 80.v,
+                    width: 300.h,
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            height: 72.v,
-                            width: 297.h,
+                            height: 100.v,
+                            width: 300.h,
                             decoration: BoxDecoration(
                               color: appTheme.whiteA700,
                               borderRadius: BorderRadius.circular(
@@ -852,7 +852,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 16.h),
+                            padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
                             child: CachedNetworkImage(
                               imageUrl: profile?.data?.user?.initial_4 != null
                                   ? profile!.data!.user!.initial_4! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'

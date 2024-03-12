@@ -58,7 +58,7 @@ class _LoginState extends State<LoginScreen> {
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
-                        hintText: 'Email'),
+                        hintText: 'Email/ Username'),
                   ),
                 ),
                 Padding(

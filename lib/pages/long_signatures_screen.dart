@@ -153,7 +153,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 
   Widget _buildFrameOne(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 16.v),
       decoration: AppDecoration.outlineIndigo,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -161,7 +161,6 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
         children: [
           GestureDetector(
             onTap: (){
-              print("Long Signature one clicked");
               setState(() {
                  isLS1Selected = true;
                  isLS2Selected = false;
@@ -194,16 +193,16 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   SizedBox(
-                    height: 81.v,
-                    width: 297.h,
+                    height: 80.v,
+                    width: 300.h,
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            height: 72.v,
-                            width: 297.h,
+                            height: 100.v,
+                            width: 300.h,
                             decoration: BoxDecoration(
                               color: appTheme.whiteA700,
                               borderRadius: BorderRadius.circular(
@@ -218,15 +217,17 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 16.h),
-                            child: CachedNetworkImage(
-                              imageUrl: profile?.data?.user?.long_signature_1 != null
-                                  ? profile!.data!.user!.long_signature_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
-                                  : '',                              placeholder: (context, url) =>
-                                  CircularProgressIndicator(),
-                              errorWidget: (context, url, error) => Icon(Icons.error),
-                              fit: BoxFit.cover,
+                          child: Positioned.fill(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
+                              child: CachedNetworkImage(
+                                imageUrl: profile?.data?.user?.long_signature_1 != null
+                                    ? profile!.data!.user!.long_signature_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                    : '',                              placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -366,7 +367,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
   }
   Widget _buildFrameTwo(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 16.v),
       decoration: AppDecoration.outlineIndigo,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -407,16 +408,16 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   SizedBox(
-                    height: 81.v,
-                    width: 297.h,
+                    height: 80.v,
+                    width: 300.h,
                     child: Stack(
-                      alignment: Alignment.centerLeft,
+                      alignment: Alignment.center,
                       children: [
                         Align(
-                          alignment: Alignment.bottomCenter,
+                          alignment: Alignment.center,
                           child: Container(
-                            height: 72.v,
-                            width: 297.h,
+                            height: 100.v,
+                            width: 300.h,
                             decoration: BoxDecoration(
                               color: appTheme.whiteA700,
                               borderRadius: BorderRadius.circular(
@@ -432,11 +433,12 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 16.h),
+                            padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
                             child: CachedNetworkImage(
                               imageUrl: profile?.data?.user?.long_signature_2 != null
                                   ? profile!.data!.user!.long_signature_2! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
-                                  : '',                              placeholder: (context, url) =>
+                                  : '',
+                              placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
                               fit: BoxFit.cover,
@@ -578,7 +580,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
   }
   Widget _buildFrameThree(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 16.v),
       decoration: AppDecoration.outlineIndigo,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -619,16 +621,16 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   SizedBox(
-                    height: 81.v,
-                    width: 297.h,
+                    height: 80.v,
+                    width: 300.h,
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            height: 72.v,
-                            width: 297.h,
+                            height: 100.v,
+                            width: 300.h,
                             decoration: BoxDecoration(
                               color: appTheme.whiteA700,
                               borderRadius: BorderRadius.circular(
@@ -644,7 +646,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 16.h),
+                            padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
                               child: CachedNetworkImage(
                                 imageUrl: profile?.data?.user?.long_signature_3 != null
                                     ? profile!.data!.user!.long_signature_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
@@ -791,7 +793,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
   }
   Widget _buildFrameFour(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 16.v),
       decoration: AppDecoration.outlineIndigo,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -832,16 +834,16 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                     style: theme.textTheme.bodyLarge,
                   ),
                   SizedBox(
-                    height: 81.v,
-                    width: 297.h,
+                    height: 80.v,
+                    width: 300.h,
                     child: Stack(
                       alignment: Alignment.centerLeft,
                       children: [
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
-                            height: 72.v,
-                            width: 297.h,
+                            height: 100.v,
+                            width: 300.h,
                             decoration: BoxDecoration(
                               color: appTheme.whiteA700,
                               borderRadius: BorderRadius.circular(
@@ -857,7 +859,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: EdgeInsets.only(left: 16.h),
+                            padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
                             child: CachedNetworkImage(
                               imageUrl: profile?.data?.user?.long_signature_4 != null
                                   ? profile!.data!.user!.long_signature_4! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'

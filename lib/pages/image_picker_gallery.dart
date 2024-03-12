@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 
@@ -64,13 +65,16 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
     final pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
 
+        String? croppedImagePath = await cropPicture(pickedImage!.path);
+
     setState(() {
       if (pickedImage != null) {
-        _image = File(pickedImage.path);
+        _image = File(croppedImagePath!);
         isUpload = true;
         iconData = Icons.upload_file;
       }
     });
+
   }
 
   @override
@@ -98,6 +102,38 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
         child: Icon(iconData),
       ),
     );
+  }
+
+
+  Future<String?> cropPicture(String imagePath) async {
+    try {
+      // Create an instance of ImageCropper
+      ImageCropper imageCropper = ImageCropper();
+
+      // Crop the picture
+      CroppedFile? croppedFile = await imageCropper.cropImage(
+          sourcePath: imagePath,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+            CropAspectRatioPreset.ratio16x9,
+          ],
+
+          uiSettings: [
+            AndroidUiSettings(
+                toolbarTitle: 'Crop',
+                cropGridColor: Colors.black,
+                initAspectRatio: CropAspectRatioPreset.ratio16x9,
+                lockAspectRatio: false),
+            IOSUiSettings(title: 'Crop')
+          ]
+      );
+
+      // Check if the croppedFile is not null, then return its path
+      return croppedFile?.path;
+
+    } catch (e) {
+      print('Error cropping picture: $e');
+    }
   }
 
 }

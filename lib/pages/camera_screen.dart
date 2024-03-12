@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'dart:io';
-
-import 'package:DigiSign/pages/profilescreen_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 import '../constants/app_constants.dart';
 
@@ -16,36 +14,9 @@ import 'initial_signatures_screen.dart';
 import 'long_signatures_screen.dart';
 
 
-// Future<void> main() async {
-//   // Ensure that plugin services are initialized so that `availableCameras()`
-//   // can be called before `runApp()`
-//   WidgetsFlutterBinding.ensureInitialized();
-//
-//   // Obtain a list of the available cameras on the device.
-//   final cameras = await availableCameras();
-//
-//   // Get a specific camera from the list of available cameras.
-//   final firstCamera = cameras.first;
-//
-//   runApp(
-//     MaterialApp(
-//       theme: ThemeData.dark(),
-//       home: TakePictureScreen(
-//         // Pass the appropriate camera to the TakePictureScreen widget.
-//         camera: firstCamera,
-//       ),
-//     ),
-//   );
-// }
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
-
-
-  // const TakePictureScreen({
-  //   super.key,
-  //   required this.camera,
-  // });
 
   final CameraDescription camera;
   bool isSignatureSelected;
@@ -127,6 +98,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
             if (!mounted) return;
 
+            String? croppedImagePath = await cropPicture(image.path);
+
+
             // If the picture was taken, display it on a new screen.
             Navigator.pop(context);
             await Navigator.of(context).push(
@@ -135,7 +109,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                     DisplayPictureScreen(
                       // Pass the automatically generated path to
                       // the DisplayPictureScreen widget.
-                      imagePath: image.path, isSignatureSelected: isSignatureSelected, sign_type: sign_type, from: from,
+                      croppedImagePath!, isSignatureSelected,sign_type,from,
                     ),
               ),
             );
@@ -148,20 +122,52 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       ),
     );
   }
-}
 
+
+  Future<String?> cropPicture(String imagePath) async {
+    try {
+      // Create an instance of ImageCropper
+      ImageCropper imageCropper = ImageCropper();
+
+      // Crop the picture
+      CroppedFile? croppedFile = await imageCropper.cropImage(
+        sourcePath: imagePath,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio16x9,
+        ],
+
+          uiSettings: [
+            AndroidUiSettings(
+                toolbarTitle: 'Crop',
+                cropGridColor: Colors.black,
+                initAspectRatio: CropAspectRatioPreset.ratio16x9,
+                lockAspectRatio: false),
+            IOSUiSettings(title: 'Crop')
+          ]
+      );
+
+      // Check if the croppedFile is not null, then return its path
+        return croppedFile?.path;
+
+    } catch (e) {
+      print('Error cropping picture: $e');
+    }
+  }
+
+
+}
 
 
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
+   String imagePath;
 
   bool isSignatureSelected;
   String sign_type;
   String from;
 
-  DisplayPictureScreen({super.key, required this.imagePath,required this.isSignatureSelected,required this.sign_type,required this.from});
-
+  DisplayPictureScreen(this.imagePath, this.isSignatureSelected, this.sign_type, this.from);
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +175,9 @@ class DisplayPictureScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Display the Signature')),
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
-      body: Image.file(File(imagePath)),
+      body: Center(
+          child: Image.file(File(imagePath))
+      ),
       floatingActionButton: FloatingActionButton(
         // Provide an onPressed callback.
         onPressed: () async {

@@ -155,7 +155,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                                 ])),
                             SizedBox(height: 4.v),
                             if (envelope?.totalSignedDocuments != null &&
-                                envelope?.totalNumberDocuments != null)
+                                envelope?.totalNumberRecipients != null)
                               _buildProgressAndSign(context, envelope),
                             SizedBox(height: 34.v),
                             Align(
@@ -276,7 +276,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(2.h),
               child: LinearProgressIndicator(
                 value: calculatePercentage(envelope!.totalSignedDocuments ?? 0,
-                    envelope!.totalNumberDocuments ?? 0),
+                    envelope!.totalNumberRecipients ?? 0),
                 backgroundColor: appTheme.blueGray10001,
                 valueColor: AlwaysStoppedAnimation<Color>(appTheme.greenA700),
               ),
@@ -286,7 +286,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 8.h, top: 18.v, bottom: 15.v),
             child: Text(
-                '${envelope?.totalSignedDocuments}/${envelope?.totalNumberDocuments}',
+                '${envelope?.totalSignedDocuments}/${envelope?.totalNumberRecipients}',
                 style: theme.textTheme.bodyMedium),
           ),
         SizedBox(width: 10.v),

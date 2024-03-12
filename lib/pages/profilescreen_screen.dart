@@ -122,7 +122,9 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
                       radius: 80,
                       backgroundColor: Colors.grey[200],
                       child: CachedNetworkImage(
-                        imageUrl: profile!.data!.user?.profile_image ?? "",
+                        imageUrl: profile?.data?.user?.profile_image != null
+                            ? profile!.data!.user!.profile_image! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                            : '',
                         placeholder: (context, url) =>
                             CircularProgressIndicator(),
                         errorWidget: (context, url, error) => Icon(Icons.error),
