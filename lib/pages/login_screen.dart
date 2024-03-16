@@ -32,8 +32,8 @@ class _LoginState extends State<LoginScreen> {
     // _usernameController.text = 'dt_rohini.c';
     // _passwordController.text = 'Sunny@123';
 
-    _usernameController.text = 'anilkumar.v@digitelenetworks.com';
-    _passwordController.text = 'Anil@123';
+    // _usernameController.text = 'anilkumar.v@digitelenetworks.com';
+    // _passwordController.text = 'Anil@123';
   }
 
   @override
@@ -61,7 +61,7 @@ class _LoginState extends State<LoginScreen> {
                     controller: _usernameController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Email',
+                        labelText: 'Email/ Username',
                         hintText: 'Email/ Username'),
                   ),
                 ),

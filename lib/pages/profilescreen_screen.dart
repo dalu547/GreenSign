@@ -24,6 +24,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import 'package:http/http.dart' as http;
+import 'dart:developer';
+
 
 import '../widgets/mobile_image_converter.dart';
 
@@ -101,6 +103,7 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
             title: Text("Profile"),
+            automaticallyImplyLeading: false,
           ),
           body: SingleChildScrollView(
               child: Column(
@@ -143,18 +146,19 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
                     SizedBox(height: 16.v),
                     _buildCardWithBorder(
                       context,
-                      firstName: profile?.data?.user?.first_name ?? "",
-                      lastName: profile?.data?.user?.last_name ?? "",
-                      emailAddress: profile?.data?.user?.email_address ?? "",
+                      firstName: profile?.data?.user?.first_name ?? "First name",
+                      lastName: profile?.data?.user?.last_name ?? "Last name",
+                      emailAddress: profile?.data?.user?.email_address ?? "Email address",
                     ),
                     SizedBox(height: 24.v),
                     _buildCard2WithBorder(
                       context,
-                      mobileNo: profile?.data?.user?.mobile ?? "",
-                      roleName: profile?.data?.user?.role_name ?? "",
-                      company: profile?.data!.user?.company ?? "",
-                      address: profile?.data!.user?.address ?? "",
-                      groupName : profile?.data!.user?.group_name ?? "",
+                      countryCode : profile?.data?.user?.country_code ?? "Country code",
+                      mobileNo: profile?.data?.user?.mobile ?? "Mobile number",
+                      roleName: profile?.data?.user?.role_name ?? "Role name",
+                      company: profile?.data!.user?.company ?? "Company",
+                      address: profile?.data!.user?.address ?? "Address",
+                      groupName : profile?.data!.user?.group_name ?? "Group name",
                     ),
                     SizedBox(height: 5.v),
                     CheckboxListTile(
@@ -274,7 +278,7 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
         required String roleName,
         required String company,
         required String address,
-        required String groupName,
+        required String groupName, required String countryCode,
       }) {
     return Container(
       width: double.maxFinite,
@@ -284,6 +288,23 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          Padding(
+            padding: EdgeInsets.only(left: 20.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  countryCode,
+                  style: CustomTextStyles.bodyLarge_1.copyWith(
+                    color: appTheme.black900,
+                  ),
+                ),
+                SizedBox(height: 11.v),
+                Divider(),
+              ],
+            ),
+          ),
+          SizedBox(height: 12.v),
           Padding(
             padding: EdgeInsets.only(left: 20.h),
             child: Column(
@@ -340,12 +361,20 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  address,
-                  style: CustomTextStyles.bodyLarge_1.copyWith(
-                    color: appTheme.black900,
-                  ),
-                ),
+               if(address.isNotEmpty)
+                 Text(
+                   address,
+                   style: CustomTextStyles.bodyLarge_1.copyWith(
+                     color: appTheme.black900,
+                   ),
+                 )
+               else
+                 Text(
+                   'Address',
+                   style: CustomTextStyles.bodyLarge_1.copyWith(
+                     color: appTheme.black900.withOpacity(0.5),
+                   ),
+                 ),
                 SizedBox(height: 9.v),
                 Divider(),
               ],
@@ -356,12 +385,19 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if(groupName.isNotEmpty)
                 Text(
                   groupName,
                   style: CustomTextStyles.bodyLarge_1.copyWith(
-                    color: appTheme.black900,
+                    color: appTheme.black900
                   ),
-                ),
+                )else
+                  Text(
+                    'Group Name',
+                    style: CustomTextStyles.bodyLarge_1.copyWith(
+                      color: appTheme.black900.withOpacity(0.5),
+                    ),
+                  ),
                 SizedBox(height: 9.v),
                 Divider(),
               ],
@@ -392,7 +428,8 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
           print('profile successful');
-          print(jsonResponse);
+          log(response.body);
+
           setState(() {
             profile = Profile.fromJson(jsonResponse);
           });

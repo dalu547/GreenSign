@@ -111,6 +111,8 @@ class User {
     required this.initial_2,
     required this.initial_3,
     required this.initial_4,
+    required this.group_name,
+
   });
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -145,7 +147,8 @@ class User {
         initial_2: json["initial_2"],
         initial_3: json["initial_3"],
         initial_4: json["initial_4"],
-      );
+        group_name: json["group_name"],
+  );
 
   Map<String, dynamic> toJson() => {
         "id": id,
@@ -178,6 +181,6 @@ class User {
         "initial_1": initial_1,
         "initial_2": initial_2,
         "initial_3": initial_3,
-        "initial_4": initial_4,
+        "group_name": group_name,
       };
 }

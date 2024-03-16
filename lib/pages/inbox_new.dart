@@ -167,7 +167,7 @@ class _InboxState extends State<InboxNew> {
                     callback: updateData);
               }else{
                 ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text('Please wait data loading...')));
+                    .showSnackBar(SnackBar(content: Text('Loading...')));
               }
             },
             icon: Icon(Icons.filter_list_alt),
