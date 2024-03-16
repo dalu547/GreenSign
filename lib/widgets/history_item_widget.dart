@@ -42,7 +42,8 @@ class HistorylistItemWidget extends StatelessWidget {
         SizedBox(height: 4.v),
         Align(
             alignment: Alignment.centerLeft,
-            child: Text('Comments: ', style: theme.textTheme.bodyMedium)),
+            child: Text('Comments: ${activites.comment}',
+                style: theme.textTheme.bodyMedium)),
         SizedBox(height: 4.v),
         Align(alignment: Alignment.center, child: Divider()),
       ],

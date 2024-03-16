@@ -65,6 +65,9 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
   bool isLS3Selected = false;
   bool isLS4Selected = false;
 
+  String  selected_sign_type = "";
+  String selected_sign_path = "";
+
   @override
   void initState() {
     super.initState();
@@ -115,6 +118,32 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
 
               },
             ),
+          actions: [
+            Container(
+              child: MaterialButton(
+                onPressed: () {
+
+                  if(!selected_sign_type.isEmpty){
+                    if(!selected_sign_path.isEmpty){
+                      updateDefaultSignature(auth_token, user_id_prefs, true, selected_sign_type,context);
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Signature should not be empty.')));
+                    }
+                  }else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Atleast one signature should be selected.')));
+                  }
+                  },
+                child: Text(
+                  'Save',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -165,6 +194,10 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                 _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+
+                selected_sign_type = "initial1";
+                selected_sign_path = profile.data?.user?.initial_1 ?? "";
+
               });
             },
             child: CustomImageView(
@@ -379,6 +412,10 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                 _ls2ImagePath = ImageConstant.imgCheckedSignature;
                 _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+                selected_sign_type = "initial2";
+                selected_sign_path = profile.data?.user?.initial_2 ?? "";
+
+
               });
             },
             child: CustomImageView(
@@ -592,6 +629,10 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                 _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls3ImagePath = ImageConstant.imgCheckedSignature;
                 _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+                selected_sign_type = "initial3";
+                selected_sign_path = profile.data?.user?.initial_3 ?? "";
+
+
               });
             },
             child: CustomImageView(
@@ -804,6 +845,10 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                 _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls4ImagePath = ImageConstant.imgCheckedSignature;
+                selected_sign_type = "initial4";
+                selected_sign_path = profile.data?.user?.initial_4 ?? "";
+
+
               });
             },
             child: CustomImageView(
@@ -1308,7 +1353,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
           print(jsonResponse);
           setState(() {
             profile = Profile.fromJson(jsonResponse);
-
+            print(profile.data?.user?.initial);
             setDefaultSignature(profile);
 
           });
@@ -1346,7 +1391,11 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
       isLS3Selected = false;
       isLS4Selected = false;
 
-    }else   if(profile.data?.user?.initial == profile.data?.user?.initial_2){
+      selected_sign_type = "initial1";
+      selected_sign_path = profile.data?.user?.initial_1 ?? "";
+
+
+    }else if(profile.data?.user?.initial == profile.data?.user?.initial_2){
 
       _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
       _ls2ImagePath = ImageConstant.imgCheckedSignature;
@@ -1357,6 +1406,11 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
       isLS2Selected = true;
       isLS3Selected = false;
       isLS4Selected = false;
+
+      selected_sign_type = "initial2";
+      selected_sign_path = profile.data?.user?.initial_2 ?? "";
+
+
 
     }else if(profile.data?.user?.initial == profile.data?.user?.initial_3){
 
@@ -1370,6 +1424,11 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
       isLS3Selected = true;
       isLS4Selected = false;
 
+      selected_sign_type = "initial3";
+      selected_sign_path = profile.data?.user?.initial_3 ?? "";
+
+
+
     }else if(profile.data?.user?.initial == profile.data?.user?.initial_4){
 
       _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
@@ -1382,8 +1441,62 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
       isLS3Selected = false;
       isLS4Selected = true;
 
+      selected_sign_type = "initial4";
+      selected_sign_path = profile.data?.user?.initial_4 ?? "";
+
+
     }
 
+  }
+
+  //Signature pad upload.
+  Future<void> updateDefaultSignature(String auth_token, String user_id,
+      bool is_default, String sign_type, BuildContext context) async {
+    // Replace the URL with your server endpoint
+    final String url = AppConstants.API_BASE_URL + "/upload_sign_path_mobile";
+
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $auth_token'
+    };
+
+    request.headers.addAll(headers);
+
+    // You can add additional fields to the request if needed
+    request.fields['user_id'] = user_id;
+    request.fields['is_default'] = is_default.toString();
+    request.fields['sign_type'] = sign_type;
+
+    print(sign_type);
+
+    // Send the request
+    try {
+      final response = await request.send();
+
+      print('Response Body: ${await response.stream.bytesToString()}');
+
+      // Check if the request was successful
+      if (response.statusCode == 200) {
+        print('Signature default successfully');
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Default Signature updated successfully')));
+
+        // fetchProfileData(user_id_prefs, auth_token);
+
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => MySignaturesScreen()));
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Signature failed')));
+        print('Error: ${response.statusCode} - ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      print('Error updating default signature: $error');
+    }
   }
 
 }

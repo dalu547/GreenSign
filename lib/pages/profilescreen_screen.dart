@@ -143,22 +143,25 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
                     SizedBox(height: 16.v),
                     _buildCardWithBorder(
                       context,
-                      mobileNo: profile?.data?.user?.first_name ?? "",
-                      value: profile?.data?.user?.last_name ?? "",
-                      company: profile?.data?.user?.email_address ?? "",
-                      deskNumber: "**********",
-                      address: "**********",
+                      firstName: profile?.data?.user?.first_name ?? "",
+                      lastName: profile?.data?.user?.last_name ?? "",
+                      emailAddress: profile?.data?.user?.email_address ?? "",
                     ),
                     SizedBox(height: 24.v),
-                    _buildCardWithBorder(
+                    _buildCard2WithBorder(
                       context,
                       mobileNo: profile?.data?.user?.mobile ?? "",
-                      value: profile?.data?.user?.role_name ?? "",
+                      roleName: profile?.data?.user?.role_name ?? "",
                       company: profile?.data!.user?.company ?? "",
-                      deskNumber: profile?.data!.user?.desk_number ?? "",
                       address: profile?.data!.user?.address ?? "",
+                      groupName : profile?.data!.user?.group_name ?? "",
                     ),
                     SizedBox(height: 5.v),
+                    CheckboxListTile(
+                      title: Text('Department Manager'),
+                      value: profile?.data!.user?.is_group_admin ?? false,
+                      onChanged: (bool? value) {  },
+                    ),
                   ],
                 ),
               ),
@@ -198,12 +201,81 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
   /// Common widget
   Widget _buildCardWithBorder(
     BuildContext context, {
-    required String mobileNo,
-    required String value,
-    required String company,
-    required String deskNumber,
-    required String address,
+    required String firstName,
+    required String lastName,
+    required String emailAddress,
   }) {
+    return Container(
+      width: double.maxFinite,
+      padding: EdgeInsets.symmetric(vertical: 11.v),
+      decoration: AppDecoration.outlineGray400,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(left: 20.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  firstName,
+                  style: CustomTextStyles.bodyLarge_1.copyWith(
+                    color: appTheme.black900,
+                  ),
+                ),
+                SizedBox(height: 11.v),
+                Divider(),
+              ],
+            ),
+          ),
+          SizedBox(height: 12.v),
+          Padding(
+            padding: EdgeInsets.only(left: 20.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  lastName,
+                  style: CustomTextStyles.bodyLarge_1.copyWith(
+                    color: appTheme.black900,
+                  ),
+                ),
+                SizedBox(height: 9.v),
+                Divider(),
+              ],
+            ),
+          ),
+          SizedBox(height: 12.v),
+          Padding(
+            padding: EdgeInsets.only(left: 20.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  emailAddress,
+                  style: CustomTextStyles.bodyLarge_1.copyWith(
+                    color: appTheme.black900,
+                  ),
+                ),
+                SizedBox(height: 9.v),
+                Divider(),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCard2WithBorder(
+      BuildContext context, {
+        required String mobileNo,
+        required String roleName,
+        required String company,
+        required String address,
+        required String groupName,
+      }) {
     return Container(
       width: double.maxFinite,
       padding: EdgeInsets.symmetric(vertical: 11.v),
@@ -235,7 +307,7 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  value,
+                  roleName,
                   style: CustomTextStyles.bodyLarge_1.copyWith(
                     color: appTheme.black900,
                   ),
@@ -253,8 +325,8 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
               children: [
                 Text(
                   company,
-                  style: CustomTextStyles.bodyLargeGray80099_1.copyWith(
-                    color: appTheme.gray80099.withOpacity(0.3),
+                  style: CustomTextStyles.bodyLarge_1.copyWith(
+                    color: appTheme.black900,
                   ),
                 ),
                 SizedBox(height: 9.v),
@@ -269,27 +341,30 @@ class _ProfilescreenScreenState extends State<ProfilescreenScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  deskNumber,
-                  style: CustomTextStyles.bodyLargeGray80099_1.copyWith(
-                    color: appTheme.gray80099.withOpacity(0.3),
+                  address,
+                  style: CustomTextStyles.bodyLarge_1.copyWith(
+                    color: appTheme.black900,
                   ),
                 ),
-                SizedBox(height: 11.v),
+                SizedBox(height: 9.v),
                 Divider(),
               ],
             ),
           ),
-          SizedBox(height: 11.v),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: 20.h),
-              child: Text(
-                address,
-                style: CustomTextStyles.bodyLargeGray80099_1.copyWith(
-                  color: appTheme.gray80099.withOpacity(0.3),
+          Padding(
+            padding: EdgeInsets.only(left: 20.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  groupName,
+                  style: CustomTextStyles.bodyLarge_1.copyWith(
+                    color: appTheme.black900,
+                  ),
                 ),
-              ),
+                SizedBox(height: 9.v),
+                Divider(),
+              ],
             ),
           ),
         ],

@@ -28,6 +28,10 @@ class _LoginState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+
+    // _usernameController.text = 'dt_rohini.c';
+    // _passwordController.text = 'Sunny@123';
+
     _usernameController.text = 'anilkumar.v@digitelenetworks.com';
     _passwordController.text = 'Anil@123';
   }
@@ -46,7 +50,7 @@ class _LoginState extends State<LoginScreen> {
                     child: SizedBox(
                       width: 200,
                       height: 150,
-                      child: Image.asset('assets/images/digisign_black_title_logo.png'),
+                      child: Image.asset('assets/images/digisign_title_logo_small.png'),
                     ),
                   ),
                 ),

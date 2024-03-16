@@ -337,12 +337,14 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
       if (response.statusCode == 200) {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
-          print('profile successful');
+          print('profile in my signatures successful');
           print(jsonResponse);
 
           setState(() {
             profile = Profile.fromJson(jsonResponse);
-            print(profile?.data?.user?.long_signature_1);
+            print(profile?.data?.user?.digital_signature);
+            print(profile?.data?.user?.initial);
+
           });
 
         } else {

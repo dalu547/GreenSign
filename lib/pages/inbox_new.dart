@@ -53,6 +53,9 @@ class _InboxState extends State<InboxNew> {
   String envelope_icon = ImageConstant.imgInbox;
   String from = "navigation";
 
+  bool _responseReceived = false;
+
+
   _InboxState(int type);
 
   //This method will trigger if it is from dialog selection.
@@ -158,11 +161,14 @@ class _InboxState extends State<InboxNew> {
         actions: [
           IconButton(
             onPressed: () {
-              print('filter tap');
-              // Show the custom dialog
-              _showCustomDialog(context,
-                  callback: updateData); // ScaffoldMessenger.of(context)
-              //     .showSnackBar(SnackBar(content: Text('Dialog text')));
+              if(_responseReceived){
+                // Show the custom dialog
+                _showCustomDialog(context,
+                    callback: updateData);
+              }else{
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text('Please wait data loading...')));
+              }
             },
             icon: Icon(Icons.filter_list_alt),
           ),
@@ -220,7 +226,7 @@ class _InboxState extends State<InboxNew> {
           itemCount: _filteredList!.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: EmaillistItemWidget(_filteredList![index], envelope_type),
+              title: EmaillistItemWidget(_filteredList![index], envelope_type,envelope_icon),
               onTap: () {
                 Navigator.push(
                     context,
@@ -322,6 +328,7 @@ class _InboxState extends State<InboxNew> {
           print(jsonResponse);
           setState(() {
             menvelopeCount = MEnvelopeCount.fromJson(jsonResponse);
+            _responseReceived = true;
             print(menvelopeCount?.data?.inbox);
           });
         } else {

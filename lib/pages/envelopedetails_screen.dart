@@ -103,7 +103,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                                 alignment: Alignment.centerLeft,
                                 child: Row(children: [
                                   CustomImageView(
-                                      imagePath: ImageConstant.imgUser,
+                                      imagePath: ImageConstant.imgMoreProfile,
                                       height: 16.v,
                                       width: 17.h),
                                   Padding(
@@ -199,8 +199,16 @@ class EnvelopedetailsScreen extends StatelessWidget {
                                       style: CustomTextStyles
                                           .titleMediumOnPrimary)),
                             SizedBox(height: 8.v),
-                            if (envelope?.envelopeStatusType != 'Completed')
-                              _buildRecipients(context),
+                            // if (envelope?.envelopeStatusType != 'Completed')
+                            //   _buildRecipients(context),
+                            CheckboxListTile(
+                              title: Text('Set Signing Order'),
+                              value: envelope?.signingOrder ?? false,
+                              onChanged: (newValue) {
+
+                              },
+                              controlAffinity: ListTileControlAffinity.leading, // Change if the checkbox should appear before or after the title
+                            ),
                             SizedBox(height: 8.v),
                             _buildReciepientsList(context),
                             SizedBox(height: 9.v),

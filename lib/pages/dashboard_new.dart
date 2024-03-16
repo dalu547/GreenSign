@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../model/envelope_count.dart';
+import '../core/utils/image_constant.dart';
 import '../widgets/emaillist_item_widget.dart';
 import '../widgets/userprofile_item_widget.dart';
 import 'envelopedetails_screen.dart';
@@ -141,7 +142,8 @@ class _DashBoardState extends State<DashBoardNew> {
           itemCount: envelopes!.length,
           itemBuilder: (context, index) {
             return ListTile(
-              title: EmaillistItemWidget(envelopes![index],"Action Required"),
+              title: EmaillistItemWidget(envelopes![index],"Action Required",ImageConstant.imgExclamationCircle,
+              ),
               onTap: () {
                 Navigator.push(
                     context,

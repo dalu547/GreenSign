@@ -12,8 +12,10 @@ import '../../widgets/custom_image_view.dart';
 class EmaillistItemWidget extends StatelessWidget {
   final Envelope envelope;
   final String envelope_type;
+  final String envelope_icon ;
 
-  const EmaillistItemWidget(this.envelope, this.envelope_type);
+
+  const EmaillistItemWidget(this.envelope, this.envelope_type,this.envelope_icon);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class EmaillistItemWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CustomImageView(
-              imagePath: ImageConstant.imgClock,
+              imagePath: envelope_icon,
               height: 24.adaptSize,
               width: 24.adaptSize,
               margin: EdgeInsets.only(bottom: 50.v),
@@ -56,7 +58,7 @@ class EmaillistItemWidget extends StatelessWidget {
                     if (envelope_type == 'Sent')
                     Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("To: ${envelope.from}",
+                        child: Text("To: ${envelope.requiredApprovals?.first.recipientName}",
                             style: CustomTextStyles.bodyMedium_1))
                     else
                       Align(

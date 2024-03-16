@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:DigiSign/core/utils/size_utils.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -13,30 +14,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'initial_signatures_screen.dart';
 import 'long_signatures_screen.dart';
 
-
-
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
-
   final CameraDescription camera;
   bool isSignatureSelected;
   String sign_type;
   String from;
 
-  TakePictureScreen(this.camera,this.isSignatureSelected,this.sign_type,this.from);
-
+  TakePictureScreen(
+      this.camera, this.isSignatureSelected, this.sign_type, this.from);
 
   @override
-  TakePictureScreenState createState() => TakePictureScreenState(isSignatureSelected,sign_type,from);
+  TakePictureScreenState createState() =>
+      TakePictureScreenState(isSignatureSelected, sign_type, from);
 }
 
 class TakePictureScreenState extends State<TakePictureScreen> {
-
   bool isSignatureSelected;
   String sign_type;
   String from;
 
-  TakePictureScreenState(this.isSignatureSelected, this.sign_type,this.from);
+  TakePictureScreenState(this.isSignatureSelected, this.sign_type, this.from);
 
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
@@ -100,19 +98,38 @@ class TakePictureScreenState extends State<TakePictureScreen> {
 
             String? croppedImagePath = await cropPicture(image.path);
 
-
             // If the picture was taken, display it on a new screen.
+
             Navigator.pop(context);
+
+            // Create a File object using the image path
+            // File imageFile = File(croppedImagePath!);
+            // // Check if the file exists
+            // if (imageFile.existsSync()) {
+            //   final SharedPreferences prefs =
+            //       await SharedPreferences.getInstance();
+            //
+            //   String user_id_prefs = prefs.getString('user_id')!;
+            //   String auth_token = prefs.getString('auth_token')!;
+            //
+            //   uploadImage(imageFile, auth_token, user_id_prefs,
+            //       isSignatureSelected, sign_type, context, from);
+            //   // You can use the imageFile as needed
+            // } else {
+            //   print('File does not exist');
+            // }
+
             await Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) =>
-                    DisplayPictureScreen(
-                      // Pass the automatically generated path to
-                      // the DisplayPictureScreen widget.
-                      croppedImagePath!, isSignatureSelected,sign_type,from,
-                    ),
+                builder: (context) => DisplayPictureScreen(
+                  // Pass the automatically generated path to
+                  // the DisplayPictureScreen widget.
+                  croppedImagePath!, isSignatureSelected, sign_type, from,
+                ),
               ),
             );
+
+            //
           } catch (e) {
             // If an error occurs, log the error to the console.
             print(e);
@@ -123,97 +140,142 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     );
   }
 
-
   Future<String?> cropPicture(String imagePath) async {
     try {
       // Create an instance of ImageCropper
       ImageCropper imageCropper = ImageCropper();
 
       // Crop the picture
-      CroppedFile? croppedFile = await imageCropper.cropImage(
-        sourcePath: imagePath,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-          CropAspectRatioPreset.ratio16x9,
-        ],
-
-          uiSettings: [
-            AndroidUiSettings(
-                toolbarTitle: 'Crop',
-                cropGridColor: Colors.black,
-                initAspectRatio: CropAspectRatioPreset.ratio16x9,
-                lockAspectRatio: false),
-            IOSUiSettings(title: 'Crop')
-          ]
-      );
+      CroppedFile? croppedFile = await imageCropper
+          .cropImage(sourcePath: imagePath, aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio16x9,
+      ], uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Crop',
+            cropGridColor: Colors.black,
+            initAspectRatio: CropAspectRatioPreset.ratio16x9,
+            lockAspectRatio: false),
+        IOSUiSettings(title: 'Crop')
+      ]);
 
       // Check if the croppedFile is not null, then return its path
-        return croppedFile?.path;
-
+      return croppedFile?.path;
     } catch (e) {
       print('Error cropping picture: $e');
     }
   }
-
-
 }
-
 
 // A widget that displays the picture taken by the user.
 class DisplayPictureScreen extends StatelessWidget {
-   String imagePath;
+  String imagePath;
 
   bool isSignatureSelected;
   String sign_type;
   String from;
 
-  DisplayPictureScreen(this.imagePath, this.isSignatureSelected, this.sign_type, this.from);
+  DisplayPictureScreen(
+      this.imagePath, this.isSignatureSelected, this.sign_type, this.from);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Display the Signature')),
+      appBar: AppBar(title: const Text('Upload the Signature')),
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
       body: Center(
-          child: Image.file(File(imagePath))
+        child: Column(
+          children: [
+            Container(
+              child: File(imagePath) == null
+                  ? Text(
+                  'No signature image captured.\n Please capture from camera')
+                  : Image.file(File(imagePath)),
+            ),
+            SizedBox(height: 100.v),
+              Container(
+                height: 50,
+                width: 250,
+                decoration: BoxDecoration(
+                    color: Color(0xFF3B82F6),
+                    borderRadius: BorderRadius.circular(30)),
+                child: MaterialButton(
+                  onPressed: () async {
+                    try {
+                      final SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      String user_id_prefs = prefs.getString('user_id')!;
+                      String auth_token = prefs.getString('auth_token')!;
+
+                      print("upload");
+                      // Create a File object using the image path
+                      File imageFile = File(imagePath);
+                      // Check if the file exists
+                      if (imageFile.existsSync()) {
+                        print('File exists');
+                        uploadImage(imageFile, auth_token, user_id_prefs,
+                            isSignatureSelected, sign_type, context, from);
+                        // You can use the imageFile as needed
+                      } else {
+                        print('File does not exist');
+                      }
+                    } catch (e) {
+                      // If an error occurs, log the error to the console.
+                      print(e);
+                    }
+                  },
+                  child: Text(
+                    'Upload',
+                    style: TextStyle(color: Colors.white, fontSize: 14),
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        // Provide an onPressed callback.
-        onPressed: () async {
-          // Take the Picture in a try / catch block. If anything goes wrong,
-          // catch the error.
-          try {
-
-            final SharedPreferences prefs = await SharedPreferences.getInstance();
-           String  user_id_prefs = prefs.getString('user_id')!;
-           String auth_token = prefs.getString('auth_token')!;
-
-                 print("upload");
-            // Create a File object using the image path
-                File imageFile = File(imagePath);
-                // Check if the file exists
-                if (imageFile.existsSync()) {
-                  print('File exists');
-                  uploadImage(imageFile, auth_token, user_id_prefs,isSignatureSelected,sign_type,context,from);
-                  // You can use the imageFile as needed
-                } else {
-                  print('File does not exist');
-                }
-          } catch (e) {
-            // If an error occurs, log the error to the console.
-            print(e);
-          }
-        },
-        child: const Icon(Icons.upload_file),
-      ),
-
+      // floatingActionButton: FloatingActionButton(
+      //   // Provide an onPressed callback.
+      //   onPressed: () async {
+      //     // Take the Picture in a try / catch block. If anything goes wrong,
+      //     // catch the error.
+      //     try {
+      //       final SharedPreferences prefs =
+      //           await SharedPreferences.getInstance();
+      //       String user_id_prefs = prefs.getString('user_id')!;
+      //       String auth_token = prefs.getString('auth_token')!;
+      //
+      //       print("upload");
+      //       // Create a File object using the image path
+      //       File imageFile = File(imagePath);
+      //       // Check if the file exists
+      //       if (imageFile.existsSync()) {
+      //         print('File exists');
+      //         uploadImage(imageFile, auth_token, user_id_prefs,
+      //             isSignatureSelected, sign_type, context, from);
+      //         // You can use the imageFile as needed
+      //       } else {
+      //         print('File does not exist');
+      //       }
+      //     } catch (e) {
+      //       // If an error occurs, log the error to the console.
+      //       print(e);
+      //     }
+      //   },
+      //   child: const Icon(Icons.upload_file),
+      // ),
     );
   }
 }
 
-Future<void> uploadImage(File imageFile, String auth_token,
-    String user_id,bool is_default,String sign_type,BuildContext context,String from) async {
+Future<void> uploadImage(
+    File imageFile,
+    String auth_token,
+    String user_id,
+    bool is_default,
+    String sign_type,
+    BuildContext context,
+    String from) async {
   // Replace the URL with your server endpoint
   final String url = AppConstants.API_BASE_URL + "/upload_sign_path_mobile";
 
@@ -228,8 +290,8 @@ Future<void> uploadImage(File imageFile, String auth_token,
   // Add the image file to the request
   var fileStream = http.ByteStream(imageFile.openRead());
   var length = await imageFile.length();
-  var multipartFile = http.MultipartFile(
-      'file', fileStream, length, filename: 'image.jpg');
+  var multipartFile =
+      http.MultipartFile('file', fileStream, length, filename: 'image.jpg');
   request.files.add(multipartFile);
   request.headers.addAll(headers);
 
@@ -245,22 +307,21 @@ Future<void> uploadImage(File imageFile, String auth_token,
     // Check if the request was successful
     if (response.statusCode == 200) {
       print('Signature from capture successfully');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature updated successfully')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Signature updated successfully')));
       Navigator.pop(context);
 
-      if(from == "long_signature"){
+      if (from == "long_signature") {
         Navigator.push(
             context, MaterialPageRoute(builder: (_) => LongSignaturesScreen()));
-      }else if(from == "initial"){
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => InitialSignaturesScreen()));
+      } else if (from == "initial") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => InitialSignaturesScreen()));
       }
-
-
     } else {
       print('Failed to upload image. Status code: ${response.statusCode}');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature update fail')));
-
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Signature update fail')));
     }
   } catch (error) {
     print('Error uploading image: $error');

@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:math';
 import 'dart:ui' as ui;
 import 'dart:io';
 
 import 'package:DigiSign/core/utils/size_utils.dart';
-import 'package:DigiSign/pages/my_signatures_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
@@ -25,6 +23,7 @@ import 'package:http/http.dart' as http;
 
 
 import '../widgets/mobile_image_converter.dart';
+import 'my_signatures_screen.dart';
 
 
 
@@ -38,6 +37,7 @@ class LongSignaturesScreen extends StatefulWidget {
 }
 
 class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
+
   late Profile profile;
 
   bool isLoading = false;
@@ -65,7 +65,8 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
   bool isLS3Selected = false;
   bool isLS4Selected = false;
 
-  String title = "Long Signatures";
+  String  selected_sign_type = "";
+  String  selected_sign_path = "";
 
   @override
   void initState() {
@@ -94,7 +95,6 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
     print('user id from getData ${user_id_prefs}');
     fetchProfileData(user_id_prefs, auth_token);
 
-
     setState(() {
       user_id_prefs = prefs.getString('user_id')!;
       print('user id from getPrefsData setState ${user_id_prefs}');
@@ -103,14 +103,12 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("build triggered");
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.white,
-          title: Text(title),
-          // automaticallyImplyLeading: true,
+          title: Text('Long Signatures'),
           leading: BackButton(
             onPressed: (){
 
@@ -120,6 +118,33 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 
             },
           ),
+          actions: [
+            Container(
+              child: MaterialButton(
+                onPressed: () {
+
+                  if(!selected_sign_type.isEmpty){
+                    if(!selected_sign_path.isEmpty){
+                      updateDefaultSignature(auth_token, user_id_prefs, true, selected_sign_type,context);
+                    }else{
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Signature should not be empty.')));
+                    }
+                  }else{
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Atleast one signature should be selected.')));
+                  }
+
+                },
+                child: Text(
+                  'Save',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           child: Container(
@@ -136,7 +161,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildFrameOne(context),
-                 SizedBox(height: 16.v),
+                SizedBox(height: 16.v),
                 _buildFrameTwo(context),
                 SizedBox(height: 16.v),
                 _buildFrameThree(context),
@@ -162,14 +187,18 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
           GestureDetector(
             onTap: (){
               setState(() {
-                 isLS1Selected = true;
-                 isLS2Selected = false;
-                 isLS3Selected = false;
-                 isLS4Selected = false;
-                 _ls1ImagePath = ImageConstant.imgCheckedSignature;
-                 _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
-                 _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
-                 _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+                isLS1Selected = true;
+                isLS2Selected = false;
+                isLS3Selected = false;
+                isLS4Selected = false;
+                _ls1ImagePath = ImageConstant.imgCheckedSignature;
+                _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
+                _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
+                _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+
+                selected_sign_type = "longSignature1";
+                selected_sign_path = profile.data?.user?.long_signature_1 ?? "";
+
               });
             },
             child: CustomImageView(
@@ -217,17 +246,16 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Positioned.fill(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
-                              child: CachedNetworkImage(
-                                imageUrl: profile?.data?.user?.long_signature_1 != null
-                                    ? profile!.data!.user!.long_signature_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
-                                    : '',                              placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
-                                errorWidget: (context, url, error) => Icon(Icons.error),
-                                fit: BoxFit.cover,
-                              ),
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
+                            child: CachedNetworkImage(
+                              imageUrl: profile?.data?.user?.long_signature_1 != null
+                                  ? profile!.data!.user!.long_signature_1! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -318,7 +346,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                         onTap: () {
                           print("Upload");
 
-                          uploadSignatureFromGallery(1,isLS1Selected,"longSignature1",);
+                          uploadSignatureFromGallery(1,isLS1Selected,"longSignature1");
 
                         },
                         child: Container(
@@ -385,6 +413,11 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                 _ls2ImagePath = ImageConstant.imgCheckedSignature;
                 _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+                selected_sign_type = "longSignature2";
+
+                selected_sign_path = profile.data?.user?.long_signature_2 ?? "";
+
+
               });
             },
             child: CustomImageView(
@@ -411,10 +444,10 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                     height: 80.v,
                     width: 300.h,
                     child: Stack(
-                      alignment: Alignment.center,
+                      alignment: Alignment.centerLeft,
                       children: [
                         Align(
-                          alignment: Alignment.center,
+                          alignment: Alignment.bottomCenter,
                           child: Container(
                             height: 100.v,
                             width: 300.h,
@@ -598,6 +631,11 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                 _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls3ImagePath = ImageConstant.imgCheckedSignature;
                 _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+                selected_sign_type = "longSignature3";
+
+                selected_sign_path = profile.data?.user?.long_signature_3 ?? "";
+
+
               });
             },
             child: CustomImageView(
@@ -647,13 +685,14 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(4.h, 4.v, 4.h, 4.v),
-                              child: CachedNetworkImage(
-                                imageUrl: profile?.data?.user?.long_signature_3 != null
-                                    ? profile!.data!.user!.long_signature_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
-                                    : '',                                placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
-                                errorWidget: (context, url, error) => Icon(Icons.error),
-                                fit: BoxFit.cover,
+                            child: CachedNetworkImage(
+                              imageUrl: profile?.data?.user?.long_signature_3 != null
+                                  ? profile!.data!.user!.long_signature_3! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
+                                  : '',
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) => Icon(Icons.error),
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -743,9 +782,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Upload");
-
                           uploadSignatureFromGallery(3,isLS3Selected,"longSignature3");
-
                         },
                         child: Container(
                           margin: EdgeInsets.only(left: 4.h),
@@ -811,6 +848,11 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                 _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
                 _ls4ImagePath = ImageConstant.imgCheckedSignature;
+                selected_sign_type = "longSignature4";
+
+                selected_sign_path = profile.data?.user?.long_signature_4 ?? "";
+
+
               });
             },
             child: CustomImageView(
@@ -863,7 +905,8 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                             child: CachedNetworkImage(
                               imageUrl: profile?.data?.user?.long_signature_4 != null
                                   ? profile!.data!.user!.long_signature_4! + '?timestamp=${DateTime.now().millisecondsSinceEpoch}'
-                                  : '',                              placeholder: (context, url) =>
+                                  : '',
+                              placeholder: (context, url) =>
                                   CircularProgressIndicator(),
                               errorWidget: (context, url, error) => Icon(Icons.error),
                               fit: BoxFit.cover,
@@ -956,9 +999,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                       InkWell(
                         onTap: () {
                           print("Upload");
-
                           uploadSignatureFromGallery(4,isLS4Selected,"longSignature4");
-
                         },
                         child: Container(
                           margin: EdgeInsets.only(left: 4.h),
@@ -1005,13 +1046,12 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
     );
   }
 
-  //Upload from GALLERY.
-  void uploadSignatureFromGallery(int sign_num,bool isSignSelected,String sign_type) {
-    // Navigator.push(context as BuildContext, MaterialPageRoute(builder: (_) => ImagePickerScreen(isSignSelected,sign_type)));
+  void uploadSignatureFromGallery(int sign_num,bool isDefault,String sign_type) {
+    // Navigator.push(context as BuildContext, MaterialPageRoute(builder: (_) => ImagePickerScreen(isDefault,sign_type)));
 
     // Navigator.push(
     //   context,
-    //   MaterialPageRoute(builder: (context) => ImagePickerScreen(isSignSelected,sign_type)),
+    //   MaterialPageRoute(builder: (context) => ImagePickerScreen(isDefault,sign_type)),
     // ).then((isupdate) {
     //   if(isupdate){
     //     print("profile call after gallery update");
@@ -1022,13 +1062,18 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 
     Navigator.pop(context);
     Navigator.push(
-        context, MaterialPageRoute(builder: (_) => ImagePickerScreen(isSignSelected,sign_type,"long_signature")));
+        context, MaterialPageRoute(builder: (_) => ImagePickerScreen(isDefault,sign_type,"long_signature")));
 
   }
 
+  void drawSignature(int sign_num,bool isDefault,String sign_type) {
 
-  //Capture from CAMERA.
-  Future<void> uploadSignatureFromCamera(int sign_num, bool isSignSelected,String signature_type) async {
+    _showPopup(isDefault,sign_type);
+
+    // Navigator.push(context, MaterialPageRoute(builder: (_) => SignaturePage()));
+  }
+
+  Future<void> uploadSignatureFromCamera(int sign_num,bool isDefault,String sign_type) async {
 
     // Ensure that plugin services are initialized so that `availableCameras()`
 // can be called before `runApp()`
@@ -1040,34 +1085,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
 // Get a specific camera from the list of available cameras.
     final firstCamera = cameras.first;
 
-    // Navigator.push(context, MaterialPageRoute(builder: (_) => TakePictureScreen(firstCamera,isSignSelected,signature_type)));
-
-
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => TakePictureScreen(firstCamera,isSignSelected,signature_type)),
-    // ).then((isupdate) {
-    //   if(isupdate){
-    //     print("profile call after camera update");
-    //     // Handle updated data here
-    //     fetchProfileData(user_id_prefs, auth_token);
-    //   }
-    // });
-
-    Navigator.pop(context);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => TakePictureScreen(firstCamera,isSignSelected,signature_type,"long_signature")));
-
-  }
-
-
-  //Draw from PAD.
-  void drawSignature(int sign_num,bool isSignSelected,String sign_type) {
-
-    _showPopup(isSignSelected,sign_type);
-
-    // Navigator.push(context, MaterialPageRoute(builder: (_) => SignaturePage()));
-
+    Navigator.push(context, MaterialPageRoute(builder: (_) => TakePictureScreen(firstCamera,isDefault,sign_type,"long_signature")));
 
   }
 
@@ -1075,7 +1093,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
   Color? _getBorderColor() => Colors.grey[350];
 
   //Signature Pad.
-  void _showPopup(bool isSignSelected,String sign_type) {
+  void _showPopup(bool isDefault,String sign_type) {
     _isSigned = false;
 
     // if (_isWebOrDesktop) {
@@ -1184,7 +1202,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
                 const SizedBox(width: 8.0),
                 TextButton(
                   onPressed: () {
-                    _handleSaveButtonPressed(isSignSelected,sign_type);
+                    _handleSaveButtonPressed(isDefault,sign_type);
                     Navigator.of(context).pop();
                   },
                   style: ButtonStyle(
@@ -1209,7 +1227,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
     _isSigned = false;
   }
 
-  Future<void> _handleSaveButtonPressed(bool isSignSelected,String sign_type) async {
+  Future<void> _handleSaveButtonPressed(bool isDefault,String sign_type) async {
     late Uint8List data;
 
     if (kIsWeb) {
@@ -1237,7 +1255,10 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
     // Write the Uint8List to a file
     File file = await writeBytesToFile(data, 'example_image.jpg');
 
-    uploadImage(file, auth_token, user_id_prefs,isSignSelected,sign_type);
+    // Use the created file as needed
+    print('File path: ${file.path}');
+
+    uploadImage(file, auth_token, user_id_prefs,isDefault,sign_type);
 
   }
 
@@ -1281,6 +1302,7 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
     request.fields['is_default'] = is_default.toString();
     request.fields['sign_type'] = sign_type;
 
+
     print('URL: $url');
     print('Headers: $headers');
     print('Image File: $imageFile');
@@ -1288,29 +1310,22 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
     print('is_default: $is_default');
     print('sign_type: $sign_type');
 
-    print(multipartFile.length);
-
     // Send the request
     try {
       final response = await request.send();
-
-      print('Response Body: ${await response.stream.bytesToString()}');
 
       // Check if the request was successful
       if (response.statusCode == 200) {
         print('Signature draw successfully');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature updated successfully')));
 
-        // fetchProfileData(user_id_prefs, auth_token);
-
         Navigator.pop(context);
         Navigator.push(
             context, MaterialPageRoute(builder: (_) => LongSignaturesScreen()));
 
-
       } else {
+        print('Failed to signature draw. Status code: ${response.statusCode}');
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature failed')));
-        print('Error: ${response.statusCode} - ${response.reasonPhrase}');
       }
     } catch (error) {
       print('Error uploading image: $error');
@@ -1339,14 +1354,12 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
           print('profile successful');
           print(jsonResponse);
-
           setState(() {
             profile = Profile.fromJson(jsonResponse);
-
+            print(profile.data?.user?.digital_signature);
             setDefaultSignature(profile);
 
           });
-
         } else {
           print('Invalid JSON response');
           ScaffoldMessenger.of(context as BuildContext)
@@ -1366,21 +1379,26 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
     }
   }
 
+
   void setDefaultSignature(Profile profile) {
 
     if(profile.data?.user?.digital_signature == profile.data?.user?.long_signature_1){
 
       _ls1ImagePath = ImageConstant.imgCheckedSignature;
-       _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
-       _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
-       _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls2ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls3ImagePath = ImageConstant.imgUncheckedSignatutre;
+      _ls4ImagePath = ImageConstant.imgUncheckedSignatutre;
 
-       isLS1Selected = true;
-       isLS2Selected = false;
-       isLS3Selected = false;
-       isLS4Selected = false;
+      isLS1Selected = true;
+      isLS2Selected = false;
+      isLS3Selected = false;
+      isLS4Selected = false;
 
-    }else   if(profile.data?.user?.digital_signature == profile.data?.user?.long_signature_2){
+      selected_sign_type = "longSignature1";
+      selected_sign_path = profile.data?.user?.long_signature_1 ?? "";
+
+
+    }else if(profile.data?.user?.digital_signature == profile.data?.user?.long_signature_2){
 
       _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
       _ls2ImagePath = ImageConstant.imgCheckedSignature;
@@ -1391,6 +1409,11 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
       isLS2Selected = true;
       isLS3Selected = false;
       isLS4Selected = false;
+
+      selected_sign_type = "longSignature2";
+      selected_sign_path = profile.data?.user?.long_signature_2 ?? "";
+
+
 
     }else if(profile.data?.user?.digital_signature == profile.data?.user?.long_signature_3){
 
@@ -1404,6 +1427,11 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
       isLS3Selected = true;
       isLS4Selected = false;
 
+      selected_sign_type = "longSignature3";
+      selected_sign_path = profile.data?.user?.long_signature_3 ?? "";
+
+
+
     }else if(profile.data?.user?.digital_signature == profile.data?.user?.long_signature_4){
 
       _ls1ImagePath = ImageConstant.imgUncheckedSignatutre;
@@ -1416,9 +1444,65 @@ class _LongSignaturesScreenState extends State<LongSignaturesScreen> {
       isLS3Selected = false;
       isLS4Selected = true;
 
+      selected_sign_type = "longSignature4";
+
+      selected_sign_path = profile.data?.user?.long_signature_4 ?? "";
+
+
     }
 
+  }
 
+  //Signature pad upload.
+  Future<void> updateDefaultSignature(String auth_token, String user_id,
+      bool is_default, String sign_type,BuildContext context) async {
+    // Replace the URL with your server endpoint
+    final String url = AppConstants.API_BASE_URL + "/upload_sign_path_mobile";
+
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $auth_token'
+    };
+
+    request.headers.addAll(headers);
+
+    // You can add additional fields to the request if needed
+    request.fields['user_id'] = user_id;
+    request.fields['is_default'] = is_default.toString();
+    request.fields['sign_type'] = sign_type;
+
+    print(user_id);
+    print(sign_type);
+    print(is_default);
+
+    // Send the request
+    try {
+      final response = await request.send();
+
+      print('Response Body: ${await response.stream.bytesToString()}');
+
+      // Check if the request was successful
+      if (response.statusCode == 200) {
+        print('Signature default successfully');
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Default Signature updated successfully')));
+
+        // fetchProfileData(user_id_prefs, auth_token);
+
+        Navigator.pop(context);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => MySignaturesScreen()));
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Signature failed')));
+        print('Error: ${response.statusCode} - ${response.reasonPhrase}');
+      }
+    } catch (error) {
+      print('Error updating default signature: $error');
+    }
   }
 
 }

@@ -150,6 +150,7 @@ class Activites {
   String? action;
   String? timestamp;
   String? status;
+  String? comment;
 
   Activites(
       {this.transactionId,
@@ -158,7 +159,9 @@ class Activites {
         this.statusId,
         this.action,
         this.timestamp,
-        this.status});
+        this.status,
+        this.comment,
+      });
 
   Activites.fromJson(Map<String, dynamic> json) {
     transactionId = json['transaction_id'];
@@ -168,6 +171,8 @@ class Activites {
     action = json['action'];
     timestamp = json['timestamp'];
     status = json['status'];
+    comment = json['comment'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -179,6 +184,7 @@ class Activites {
     data['action'] = this.action;
     data['timestamp'] = this.timestamp;
     data['status'] = this.status;
+    data['comment'] = this.comment;
     return data;
   }
 }

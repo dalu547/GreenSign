@@ -78,16 +78,16 @@ class _ManageenvelopeScreenState extends State<ManageenvelopeScreen> {
                 _buildManageEnvelopeList(context),
                 //List view
                 SizedBox(height: 24.v),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 16.h),
-                    child: Text(
-                      "*Completed in last one month",
-                      style: CustomTextStyles.titleSmallBluegray500,
-                    ),
-                  ),
-                ),
+                // Align(
+                //   alignment: Alignment.centerRight,
+                //   child: Padding(
+                //     padding: EdgeInsets.only(right: 16.h),
+                //     child: Text(
+                //       "*Completed in last one month",
+                //       style: CustomTextStyles.titleSmallBluegray500,
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:DigiSign/core/utils/size_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'dart:io';
@@ -15,22 +16,22 @@ import 'initial_signatures_screen.dart';
 import 'long_signatures_screen.dart';
 
 class ImagePickerScreen extends StatefulWidget {
-
   bool isSignatureSelected;
   String sign_type;
   String from;
 
-  ImagePickerScreen(this.isSignatureSelected,this.sign_type,this.from);
-
+  ImagePickerScreen(this.isSignatureSelected, this.sign_type, this.from);
 
   @override
-  _ImagePickerScreenState createState() => _ImagePickerScreenState(isSignatureSelected,sign_type,from);
+  _ImagePickerScreenState createState() =>
+      _ImagePickerScreenState(isSignatureSelected, sign_type, from);
 }
 
 class _ImagePickerScreenState extends State<ImagePickerScreen> {
   File? _image;
   bool isUpload = false;
   IconData? iconData = Icons.image;
+  String titleText = "Pick Signature";
 
   bool isSignatureSelected;
   String sign_type;
@@ -39,13 +40,14 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
   String user_id_prefs = "";
   String auth_token = "";
 
-  _ImagePickerScreenState(this.isSignatureSelected, this.sign_type,this.from);
+  _ImagePickerScreenState(this.isSignatureSelected, this.sign_type, this.from);
 
   @override
   void initState() {
     super.initState();
 
     getData();
+    _pickImage();
   }
 
   void getData() async {
@@ -65,45 +67,88 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
     final pickedImage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
 
-        String? croppedImagePath = await cropPicture(pickedImage!.path);
+    String? croppedImagePath = await cropPicture(pickedImage!.path);
+
+    File imageFile = File(croppedImagePath!);
+
+    // uploadImage(imageFile, auth_token, user_id_prefs,sign_type,isSignatureSelected,from);
 
     setState(() {
       if (pickedImage != null) {
         _image = File(croppedImagePath!);
         isUpload = true;
         iconData = Icons.upload_file;
+        titleText = "Upload Signature";
+
       }
     });
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pick Signature'),
+        title: Text(titleText),
       ),
       body: Center(
-        child: _image == null
-            ? Text('No signature image selected.\n Please select from gallery')
-            : Image.file(_image!),
+        child: Column(
+          children: [
+            Container(
+              child: _image == null
+                  ? Text(
+                      'No signature image selected.\n Please select from gallery')
+                  : Image.file(_image!),
+            ),
+            SizedBox(height: 100.v),
+            if(isUpload)
+            Container(
+              height: 50,
+              width: 250,
+              decoration: BoxDecoration(
+                  color: Color(0xFF3B82F6),
+                  borderRadius: BorderRadius.circular(30)),
+              child: MaterialButton(
+                onPressed: () {
+                  if (isUpload) {
+                    uploadImage(_image!, auth_token, user_id_prefs, sign_type,
+                        isSignatureSelected,from,context);
+                  } else {
+                    _pickImage();
+                  }
+                },
+                child: Text(
+                  'Upload',
+                  style: TextStyle(color: Colors.white, fontSize: 14),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-
-          if(isUpload){
-            uploadImage(_image!, auth_token, user_id_prefs,sign_type,isSignatureSelected,context,from);
-          }else{
-            _pickImage();
-          }
-
-        },
-        tooltip: 'Pick Signature',
-        child: Icon(iconData),
-      ),
+      // floatingActionButton: Stack(
+      //   children: [
+      //     FloatingActionButton(
+      //       onPressed: () async {
+      //         if (isUpload) {
+      //           uploadImage(_image!, auth_token, user_id_prefs, sign_type,
+      //               isSignatureSelected, from);
+      //         } else {
+      //           _pickImage();
+      //         }
+      //       },
+      //       child: Icon(iconData),
+      //     ),
+      //     Positioned(
+      //       right: 15,
+      //       child: Text(
+      //         'Upload Signature',
+      //         style: TextStyle(fontSize: 16),
+      //       ),
+      //     ),
+      //   ],
+      // ),
     );
   }
-
 
   Future<String?> cropPicture(String imagePath) async {
     try {
@@ -111,35 +156,29 @@ class _ImagePickerScreenState extends State<ImagePickerScreen> {
       ImageCropper imageCropper = ImageCropper();
 
       // Crop the picture
-      CroppedFile? croppedFile = await imageCropper.cropImage(
-          sourcePath: imagePath,
-          aspectRatioPresets: [
-            CropAspectRatioPreset.square,
-            CropAspectRatioPreset.ratio16x9,
-          ],
-
-          uiSettings: [
-            AndroidUiSettings(
-                toolbarTitle: 'Crop',
-                cropGridColor: Colors.black,
-                initAspectRatio: CropAspectRatioPreset.ratio16x9,
-                lockAspectRatio: false),
-            IOSUiSettings(title: 'Crop')
-          ]
-      );
+      CroppedFile? croppedFile = await imageCropper
+          .cropImage(sourcePath: imagePath, aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio16x9,
+      ], uiSettings: [
+        AndroidUiSettings(
+            toolbarTitle: 'Crop',
+            cropGridColor: Colors.black,
+            initAspectRatio: CropAspectRatioPreset.ratio16x9,
+            lockAspectRatio: false),
+        IOSUiSettings(title: 'Crop')
+      ]);
 
       // Check if the croppedFile is not null, then return its path
       return croppedFile?.path;
-
     } catch (e) {
       print('Error cropping picture: $e');
     }
   }
-
 }
 
-Future<void> uploadImage(File imageFile, String auth_token,String user_id,String sign_type,
-    bool is_default,BuildContext context, String from) async {
+Future<void> uploadImage(File imageFile, String auth_token, String user_id,
+    String sign_type, bool is_default, String from, BuildContext context) async {
   // Replace the URL with your server endpoint
   final String url = AppConstants.API_BASE_URL + "/upload_sign_path_mobile";
 
@@ -154,8 +193,8 @@ Future<void> uploadImage(File imageFile, String auth_token,String user_id,String
   // Add the image file to the request
   var fileStream = http.ByteStream(imageFile.openRead());
   var length = await imageFile.length();
-  var multipartFile = http.MultipartFile(
-      'file', fileStream, length, filename: 'image.jpg');
+  var multipartFile =
+      http.MultipartFile('file', fileStream, length, filename: 'image.jpg');
   request.files.add(multipartFile);
   request.headers.addAll(headers);
 
@@ -171,21 +210,22 @@ Future<void> uploadImage(File imageFile, String auth_token,String user_id,String
     // Check if the request was successful
     if (response.statusCode == 200) {
       print('Signature from gallery uploaded successfully');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature updated successfully')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Signature updated successfully')));
 
       Navigator.pop(context);
-      if(from == "long_signature"){
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => LongSignaturesScreen()));
-      }else if(from == "initial"){
-        Navigator.push(
-            context, MaterialPageRoute(builder: (_) => InitialSignaturesScreen()));
+      if (from == "long_signature") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => LongSignaturesScreen()));
+      } else if (from == "initial") {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => InitialSignaturesScreen()));
       }
-
     } else {
-      print('Failed to upload Signature from gallery. Status code: ${response.statusCode}');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature update failed')));
-
+      print(
+          'Failed to upload Signature from gallery. Status code: ${response.statusCode}');
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Signature update failed')));
     }
   } catch (error) {
     print('Error uploading image: $error');
