@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:GreenSigner/core/utils/size_utils.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';

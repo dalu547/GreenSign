@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:ui' as ui;
 import 'dart:io';
 
-import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:GreenSigner/core/utils/size_utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
@@ -128,11 +128,11 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
                       updateDefaultSignature(auth_token, user_id_prefs, true, selected_sign_type,context);
                     }else{
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Signature should not be empty.')));
+                          SnackBar(content: Text('Initial should not be empty.')));
                     }
                   }else{
                     ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Atleast one signature should be selected.')));
+                        SnackBar(content: Text('Atleast one initial should be selected.')));
                   }
                   },
                 child: Text(
@@ -145,31 +145,41 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            width: 361.h,
-            margin: EdgeInsets.only(
-              left: 16.h,
-              top: 16.v,
-              right: 16.h,
-            ),
-            decoration: AppDecoration.fillWhiteA.copyWith(
-              borderRadius: BorderRadiusStyle.roundedBorder10,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildFrameOne(context),
-                SizedBox(height: 16.v),
-                _buildFrameTwo(context),
-                SizedBox(height: 16.v),
-                _buildFrameThree(context),
-                SizedBox(height: 16.v),
-                _buildFrameFour(context),
-                SizedBox(height: 16.v),
-              ],
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+            child: Container(
+              width: 361.h,
+              margin: EdgeInsets.only(
+                left: 16.h,
+                top: 16.v,
+                right: 16.h,
+              ),
+              decoration: AppDecoration.fillWhiteA.copyWith(
+                borderRadius: BorderRadiusStyle.roundedBorder10,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildFrameOne(context),
+                  SizedBox(height: 16.v),
+                  _buildFrameTwo(context),
+                  SizedBox(height: 16.v),
+                  _buildFrameThree(context),
+                  SizedBox(height: 16.v),
+                  _buildFrameFour(context),
+                  SizedBox(height: 16.v),
+                ],
+              ),
             ),
           ),
+            if (isLoading)
+              Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          ],
         ),
       ),
     );
@@ -1314,7 +1324,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
       // Check if the request was successful
       if (response.statusCode == 200) {
         print('Signature draw successfully');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature updated successfully')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Initial updated successfully')));
 
         Navigator.pop(context);
         Navigator.push(
@@ -1322,7 +1332,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
 
       } else {
         print('Failed to signature draw. Status code: ${response.statusCode}');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Signature failed')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Initial update failed')));
       }
     } catch (error) {
       print('Error uploading image: $error');
@@ -1482,7 +1492,7 @@ class _InitialSignaturesScreenState extends State<InitialSignaturesScreen> {
       if (response.statusCode == 200) {
         print('Signature default successfully');
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Default Signature updated successfully')));
+            SnackBar(content: Text('Default Initial updated successfully')));
 
         // fetchProfileData(user_id_prefs, auth_token);
 

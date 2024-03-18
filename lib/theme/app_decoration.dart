@@ -1,5 +1,5 @@
-import 'package:DigiSign/core/utils/size_utils.dart';
-import 'package:DigiSign/theme/theme_helper.dart';
+import 'package:GreenSigner/core/utils/size_utils.dart';
+import 'package:GreenSigner/theme/theme_helper.dart';
 import 'package:flutter/material.dart';
 
 class AppDecoration {

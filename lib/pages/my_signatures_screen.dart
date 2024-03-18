@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:ui' as ui;
 import 'dart:io';
 
-import 'package:DigiSign/core/utils/size_utils.dart';
-import 'package:DigiSign/pages/initial_signatures_screen.dart';
-import 'package:DigiSign/pages/long_signatures_screen.dart';
+import 'package:GreenSigner/core/utils/size_utils.dart';
+import 'package:GreenSigner/pages/initial_signatures_screen.dart';
+import 'package:GreenSigner/pages/long_signatures_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
@@ -94,27 +94,37 @@ class _MySignaturesScreenState extends State<MySignaturesScreen> {
           title: Text('My Signatures'),
           automaticallyImplyLeading: true,
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            width: 361.h,
-            margin: EdgeInsets.only(
-              left: 16.h,
-              top: 16.v,
-              right: 16.h,
-            ),
-            decoration: AppDecoration.fillWhiteA.copyWith(
-              borderRadius: BorderRadiusStyle.roundedBorder10,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildFrameOne(context),
-                SizedBox(height: 16.v),
-                _buildFrameTwo(context),
-                SizedBox(height: 16.v),
-              ],
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+            child: Container(
+              width: 361.h,
+              margin: EdgeInsets.only(
+                left: 16.h,
+                top: 16.v,
+                right: 16.h,
+              ),
+              decoration: AppDecoration.fillWhiteA.copyWith(
+                borderRadius: BorderRadiusStyle.roundedBorder10,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildFrameOne(context),
+                  SizedBox(height: 16.v),
+                  _buildFrameTwo(context),
+                  SizedBox(height: 16.v),
+                ],
+              ),
             ),
           ),
+            if (isLoading)
+              Container(
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          ],
         ),
       ),
     );

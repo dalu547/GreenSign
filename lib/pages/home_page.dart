@@ -1,6 +1,6 @@
-import 'package:DigiSign/pages/dashboard_new.dart';
-import 'package:DigiSign/pages/profilescreen_screen.dart';
-import 'package:DigiSign/pages/reports_web_view.dart';
+import 'package:GreenSigner/pages/dashboard_new.dart';
+import 'package:GreenSigner/pages/profilescreen_screen.dart';
+import 'package:GreenSigner/pages/reports_web_view.dart';
 import 'package:flutter/material.dart';
 
 import 'inbox_new.dart';

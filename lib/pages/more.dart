@@ -1,8 +1,8 @@
-import 'package:DigiSign/core/utils/size_utils.dart';
-import 'package:DigiSign/pages/long_signatures_screen.dart';
-import 'package:DigiSign/pages/my_signatures_screen.dart';
-import 'package:DigiSign/pages/profilescreen_screen.dart';
-import 'package:DigiSign/pages/settings_screen.dart';
+import 'package:GreenSigner/core/utils/size_utils.dart';
+import 'package:GreenSigner/pages/long_signatures_screen.dart';
+import 'package:GreenSigner/pages/my_signatures_screen.dart';
+import 'package:GreenSigner/pages/profilescreen_screen.dart';
+import 'package:GreenSigner/pages/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/app_decoration.dart';

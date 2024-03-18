@@ -1,7 +1,7 @@
-import 'package:DigiSign/model/document.dart';
-import 'package:DigiSign/model/required_approvals.dart';
-import 'package:DigiSign/pages/sfpdf_viewer.dart';
-import 'package:DigiSign/pages/web_view_screen.dart';
+import 'package:GreenSigner/model/document.dart';
+import 'package:GreenSigner/model/required_approvals.dart';
+import 'package:GreenSigner/pages/sfpdf_viewer.dart';
+import 'package:GreenSigner/pages/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -89,8 +89,8 @@ class EnvelopedetailsScreen extends StatelessWidget {
                             Align(
                                 alignment: Alignment.centerLeft,
                                 child: Row(children: [
-                                  Text(envelope!.createdOn ?? "",
-                                      style: theme.textTheme.bodyMedium),
+                                  // Text(envelope!.createdOn ?? "",
+                                  //     style: theme.textTheme.bodyMedium),
                                   if (envelope!.expiringSoon ?? false)
                                     Padding(
                                         padding: EdgeInsets.only(left: 12.h),
@@ -192,15 +192,13 @@ class EnvelopedetailsScreen extends StatelessWidget {
                             SizedBox(height: 11.v),
                             _buildDocsList(context, envelope!.documents),
                             SizedBox(height: 20.v),
-                            if (envelope?.envelopeStatusType != 'Completed')
                               Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text("Recipients",
                                       style: CustomTextStyles
                                           .titleMediumOnPrimary)),
                             SizedBox(height: 8.v),
-                            // if (envelope?.envelopeStatusType != 'Completed')
-                            //   _buildRecipients(context),
+                              // _buildRecipients(context),
                             CheckboxListTile(
                               title: Text('Set Signing Order'),
                               value: envelope?.signingOrder ?? false,
@@ -364,10 +362,10 @@ class EnvelopedetailsScreen extends StatelessWidget {
             separatorBuilder: (context, index) {
               return SizedBox(height: 1.v);
             },
-            itemCount: envelope!.totalNumberRecipients ?? 0,
+            itemCount: envelope!.requiredApprovals?.length ?? 0,
             itemBuilder: (context, index) {
               return ListTile(
-                title: _buildFrameEightySeven(context, index,
+                title: _buildReciepientCard(context, index,
                     envelope!.requiredApprovals!.elementAt(index)),
                 onTap: () {
                   // Navigator.push(context,MaterialPageRoute(builder: (_) => WebView(envelope!.id)));
@@ -405,7 +403,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
   }
 
   /// Section Widget
-  Widget _buildFrameEightySeven(
+  Widget _buildReciepientCard(
       BuildContext context, int index, RequiredApproval reciepient) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Padding(
@@ -426,7 +424,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
                         borderRadius: BorderRadius.horizontal(
                             left: Radius.circular(8.h)))),
                 Expanded(
-                    child: _buildFrameSeventyOne(context,
+                    child: _buildReciepientListData(context,
                         userName: reciepient.recipientName ?? "",
                         email: reciepient.recipientEmail ?? "",
                         recAction: reciepient.recipientAction ?? false,
@@ -437,7 +435,7 @@ class EnvelopedetailsScreen extends StatelessWidget {
   }
 
   /// Common widget
-  Widget _buildFrameSeventyOne(
+  Widget _buildReciepientListData(
     BuildContext context, {
     required String userName,
     required String email,
@@ -517,7 +515,6 @@ class EnvelopedetailsScreen extends StatelessWidget {
   double calculatePercentage(
       int totalSignedDocuments, int totalNumberDocuments) {
     final value = (totalSignedDocuments / totalNumberDocuments);
-    print('value: $value, $totalSignedDocuments, $totalNumberDocuments');
     return value;
   }
 }

@@ -3,10 +3,10 @@ import 'dart:ui' as ui;
 import 'dart:io';
 
 
-import 'package:DigiSign/constants/app_constants.dart';
-import 'package:DigiSign/model/profile.dart';
-import 'package:DigiSign/pages/camera_screen.dart';
-import 'package:DigiSign/pages/image_picker_gallery.dart';
+import 'package:GreenSigner/constants/app_constants.dart';
+import 'package:GreenSigner/model/profile.dart';
+import 'package:GreenSigner/pages/camera_screen.dart';
+import 'package:GreenSigner/pages/image_picker_gallery.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';

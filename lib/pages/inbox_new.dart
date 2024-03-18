@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:developer';
 
-import 'package:DigiSign/constants/app_constants.dart';
-import 'package:DigiSign/core/mock_responses.dart';
-import 'package:DigiSign/core/utils/image_constant.dart';
-import 'package:DigiSign/core/utils/size_utils.dart';
-import 'package:DigiSign/pages/envelopedetails_screen.dart';
+import 'package:GreenSigner/constants/app_constants.dart';
+import 'package:GreenSigner/core/mock_responses.dart';
+import 'package:GreenSigner/core/utils/image_constant.dart';
+import 'package:GreenSigner/core/utils/size_utils.dart';
+import 'package:GreenSigner/pages/envelopedetails_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,6 +17,7 @@ import '../widgets/emaillist_item_widget.dart';
 import '../widgets/manageenvelope_screen.dart';
 import '../widgets/manageenvelope_screen.dart';
 import 'package:http/http.dart' as http;
+
 
 class InboxNew extends StatefulWidget {
   int type = 0;
@@ -180,35 +182,46 @@ class _InboxState extends State<InboxNew> {
           )
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Stack(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32.0),
-            // Adjust the value as needed
-            child: TextField(
-              controller: _searchController,
-              onChanged: (value) {
-                onSearch(value);
-              },
-              decoration: InputDecoration(
-                hintText: 'Search by envelope name',
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.all(10),
-              child: SingleChildScrollView(child: _buildEnvelopeList(context)),
-            ),
-          ),
           Container(
-            child: Center(
-              child: isLoading ? CircularProgressIndicator() : Text(''),
-            ),
+            child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32.0),
+                // Adjust the value as needed
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    onSearch(value);
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search by envelope name',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  child: SingleChildScrollView(child: _buildEnvelopeList(context)),
+                ),
+              ),
+            ],
+                    ),
           ),
+          if (isLoading)
+            Center(
+              child: CircularProgressIndicator(),
+            ),
+          if (isLoading)
+            ModalBarrier(
+              color: Colors.transparent, // Make the barrier transparent
+              dismissible: false, // Prevent dismissing by tapping outside the loader
+            ),
         ],
+
       ),
     );
   }
@@ -228,6 +241,7 @@ class _InboxState extends State<InboxNew> {
             return ListTile(
               title: EmaillistItemWidget(_filteredList![index], envelope_type,envelope_icon),
               onTap: () {
+
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -278,6 +292,7 @@ class _InboxState extends State<InboxNew> {
         final jsonResponse = jsonDecode(response.body);
         if (jsonResponse != null && jsonResponse is Map<String, dynamic>) {
           print(jsonResponse);
+          log(response.body);
           Map<String, dynamic>? data = jsonResponse['data'];
           List<dynamic>? resultList = data?['result'];
           final envelopesList = resultList

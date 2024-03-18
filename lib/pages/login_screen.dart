@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:DigiSign/constants/app_constants.dart';
-import 'package:DigiSign/pages/forgot_password_screen_new.dart';
-import 'package:DigiSign/pages/web_view_screen.dart';
+import 'package:GreenSigner/constants/app_constants.dart';
+import 'package:GreenSigner/pages/forgot_password_screen_new.dart';
+import 'package:GreenSigner/pages/web_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;

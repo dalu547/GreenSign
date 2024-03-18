@@ -1,4 +1,4 @@
-import 'package:DigiSign/core/utils/size_utils.dart';
+import 'package:GreenSigner/core/utils/size_utils.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'dart:io';

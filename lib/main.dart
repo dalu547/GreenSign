@@ -1,5 +1,5 @@
-import 'package:DigiSign/pages/sfpdf_viewer_demo.dart';
-import 'package:DigiSign/pages/splash_screen.dart';
+import 'package:GreenSigner/pages/sfpdf_viewer_demo.dart';
+import 'package:GreenSigner/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 
